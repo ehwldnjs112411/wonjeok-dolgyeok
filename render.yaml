@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: wonjeok-dolgyuk
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: wonjeok-dolgyuk-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: NODE_ENV
+        value: production
+
+databases:
+  - name: wonjeok-dolgyuk-db
+    plan: free
