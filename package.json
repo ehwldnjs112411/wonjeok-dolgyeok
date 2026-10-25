@@ -1,8 +1,8 @@
 {
   "name": "wonjeok-dolgyeok",
-  "version": "1.0.2",
+  "version": "1.3.1",
   "private": true,
-  "description": "원격돌격 online game server",
+  "description": "원격돌격 online game server with Adam, Bujijik update and multiplayer combat fixes",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
