@@ -151,31 +151,71 @@ function removeFromQueue(socketId) {
 }
 io.on("connection", socket => {
   socket.emit("queue:status", { message: "온라인 서버에 연결됨" });
-  socket.on("queue:join", () => {
+  socket.on("queue:join", payload => {
     removeFromQueue(socket.id);
-    if (waiting.length) {
+    const user = {
+      socketId: socket.id,
+      since: Date.now(),
+      name: String(payload?.name || "플레이어").slice(0, 24),
+      hero: ["spider", "hammer", "meto"].includes(payload?.hero) ? payload.hero : "spider"
+    };
+    while (waiting.length) {
       const other = waiting.shift();
+      const peer = io.sockets.sockets.get(other.socketId);
+      if (!peer || !peer.connected) continue;
       const roomCode = `arena-${Math.random().toString(36).slice(2, 8)}`;
       socket.join(roomCode);
-      const peer = io.sockets.sockets.get(other.socketId);
-      if (peer) {
-        peer.join(roomCode);
-        peer.emit("match:found", { roomCode, opponent: "온라인 플레이어" });
-        socket.emit("match:found", { roomCode, opponent: "온라인 플레이어" });
-      } else {
-        waiting.push({ socketId: socket.id, since: Date.now() });
-        socket.emit("queue:status", { message: "상대를 찾는 중…" });
-      }
-    } else {
-      waiting.push({ socketId: socket.id, since: Date.now() });
-      socket.emit("queue:status", { message: "상대를 찾는 중…" });
+      peer.join(roomCode);
+      socketUsers.set(socket.id, { roomCode, ...user });
+      socketUsers.set(peer.id, { roomCode, ...other });
+      peer.emit("match:found", { roomCode, opponentName: user.name, opponentHero: user.hero, side: "right" });
+      socket.emit("match:found", { roomCode, opponentName: other.name, opponentHero: other.hero, side: "left" });
+      return;
     }
+    waiting.push(user);
+    socket.emit("queue:status", { message: "실제 온라인 상대를 찾는 중…" });
   });
   socket.on("queue:leave", () => {
     removeFromQueue(socket.id);
     socket.emit("queue:status", { message: "매칭 대기 취소" });
   });
-  socket.on("disconnect", () => { removeFromQueue(socket.id); socketUsers.delete(socket.id); });
+  socket.on("battle:state", data => {
+    const match = socketUsers.get(socket.id);
+    if (!match?.roomCode || !data || typeof data !== "object") return;
+    const safe = {
+      x: Math.max(48, Math.min(852, Number(data.x) || 450)),
+      y: Math.max(48, Math.min(852, Number(data.y) || 450)),
+      facing: { x: Math.max(-1, Math.min(1, Number(data.facing?.x) || 0)), y: Math.max(-1, Math.min(1, Number(data.facing?.y) || 0)) },
+      hp: Math.max(0, Math.min(200, Number(data.hp) || 0)),
+      maxHp: Math.max(1, Math.min(200, Number(data.maxHp) || 100)),
+      alive: Boolean(data.alive), heroId: ["spider", "hammer", "meto"].includes(data.heroId) ? data.heroId : "spider",
+      name: String(data.name || "플레이어").slice(0, 24),
+      buffTime: Math.max(0, Math.min(10, Number(data.buffTime) || 0)),
+      stunTime: Math.max(0, Math.min(5, Number(data.stunTime) || 0)),
+      ultCharge: Math.max(0, Math.min(100, Number(data.ultCharge) || 0)),
+      ammo: Math.max(0, Math.min(3, Number(data.ammo) || 0))
+    };
+    socket.to(match.roomCode).emit("battle:state", safe);
+  });
+  socket.on("battle:damage", data => {
+    const match = socketUsers.get(socket.id);
+    const amount = Math.max(0, Math.min(100, Number(data?.amount) || 0));
+    if (match?.roomCode && amount > 0) socket.to(match.roomCode).emit("battle:damage", { amount });
+  });
+  socket.on("battle:leave", () => {
+    const match = socketUsers.get(socket.id);
+    if (match?.roomCode) {
+      socket.to(match.roomCode).emit("battle:opponent-left");
+      socket.leave(match.roomCode);
+      socketUsers.delete(socket.id);
+    }
+  });
+  socket.on("disconnect", () => {
+    removeFromQueue(socket.id);
+    const match = socketUsers.get(socket.id);
+    if (match?.roomCode) socket.to(match.roomCode).emit("battle:opponent-left");
+    socketUsers.delete(socket.id);
+  });
 });
 setInterval(() => {
   const now = Date.now();
