@@ -49,7 +49,7 @@ async function initDb() {
       wins INTEGER NOT NULL DEFAULT 0,
       losses INTEGER NOT NULL DEFAULT 0,
       selected_hero VARCHAR(16) NOT NULL DEFAULT 'spider',
-      unlocked JSONB NOT NULL DEFAULT '{"spider":true,"hammer":false,"meto":false}'::jsonb,
+      unlocked JSONB NOT NULL DEFAULT '{"spider":true,"hammer":false,"meto":false,"bujijik":true}'::jsonb,
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     );
   `);
@@ -115,7 +115,7 @@ app.get("/api/profile", authRequired, async (req, res) => {
 app.put("/api/profile", authRequired, async (req, res) => {
   try {
     await dbReady();
-    const allowedHeroes = new Set(["spider", "hammer", "meto"]);
+    const allowedHeroes = new Set(["spider", "hammer", "meto", "bujijik"]);
     const selected = allowedHeroes.has(req.body.selectedHero) ? req.body.selectedHero : "spider";
     const result = await pool.query("SELECT trophies, unlocked FROM players WHERE id=$1", [req.user.id]);
     if (!result.rows[0]) return res.status(404).json({ error: "계정을 찾을 수 없습니다." });
@@ -124,7 +124,8 @@ app.put("/api/profile", authRequired, async (req, res) => {
     const unlocked = {
       spider: true,
       hammer: Boolean(old.hammer || trophies >= 50),
-      meto: Boolean(old.meto || trophies >= 100)
+      meto: Boolean(old.meto || trophies >= 100),
+      bujijik: true
     };
     const safeSelected = unlocked[selected] ? selected : "spider";
     const saved = await pool.query(
@@ -157,7 +158,7 @@ io.on("connection", socket => {
       socketId: socket.id,
       since: Date.now(),
       name: String(payload?.name || "플레이어").slice(0, 24),
-      hero: ["spider", "hammer", "meto"].includes(payload?.hero) ? payload.hero : "spider"
+      hero: ["spider", "hammer", "meto", "bujijik"].includes(payload?.hero) ? payload.hero : "spider"
     };
     while (waiting.length) {
       const other = waiting.shift();
@@ -188,14 +189,41 @@ io.on("connection", socket => {
       facing: { x: Math.max(-1, Math.min(1, Number(data.facing?.x) || 0)), y: Math.max(-1, Math.min(1, Number(data.facing?.y) || 0)) },
       hp: Math.max(0, Math.min(200, Number(data.hp) || 0)),
       maxHp: Math.max(1, Math.min(200, Number(data.maxHp) || 100)),
-      alive: Boolean(data.alive), heroId: ["spider", "hammer", "meto"].includes(data.heroId) ? data.heroId : "spider",
+      alive: Boolean(data.alive), heroId: ["spider", "hammer", "meto", "bujijik"].includes(data.heroId) ? data.heroId : "spider",
       name: String(data.name || "플레이어").slice(0, 24),
       buffTime: Math.max(0, Math.min(10, Number(data.buffTime) || 0)),
       stunTime: Math.max(0, Math.min(5, Number(data.stunTime) || 0)),
-      ultCharge: Math.max(0, Math.min(100, Number(data.ultCharge) || 0)),
-      ammo: Math.max(0, Math.min(3, Number(data.ammo) || 0))
+      summons: Array.isArray(data.summons) ? data.summons.slice(0, 8).map(s => ({ id: String(s?.id || "").slice(0, 80), x: Math.max(48, Math.min(852, Number(s?.x) || 450)), y: Math.max(48, Math.min(852, Number(s?.y) || 450)), hp: Math.max(0, Math.min(45, Number(s?.hp) || 0)), alive: Boolean(s?.alive), facing: { x: Math.max(-1, Math.min(1, Number(s?.facing?.x) || 0)), y: Math.max(-1, Math.min(1, Number(s?.facing?.y) || 0)) } })) : []
     };
     socket.to(match.roomCode).emit("battle:state", safe);
+  });
+  socket.on("battle:attack", data => {
+    const match = socketUsers.get(socket.id);
+    if (!match?.roomCode || !data || typeof data !== "object") return;
+    const allowed = new Set(["projectiles", "melee", "spider-ultimate", "ultimate-shield", "summon", "summon-swing"]);
+    if (!allowed.has(data.kind)) return;
+    const safe = {
+      kind: data.kind,
+      heroId: ["spider", "hammer", "meto", "bujijik"].includes(data.heroId) ? data.heroId : "spider",
+      id: String(data.id || "").slice(0, 80),
+      x: Math.max(48, Math.min(852, Number(data.x) || 450)),
+      y: Math.max(48, Math.min(852, Number(data.y) || 450)),
+      facing: { x: Math.max(-1, Math.min(1, Number(data.facing?.x) || 0)), y: Math.max(-1, Math.min(1, Number(data.facing?.y) || 0)) },
+      bullets: Array.isArray(data.bullets) ? data.bullets.slice(0, 20).map(b => ({
+        x: Math.max(0, Math.min(900, Number(b?.x) || 0)), y: Math.max(0, Math.min(900, Number(b?.y) || 0)),
+        vx: Math.max(-600, Math.min(600, Number(b?.vx) || 0)), vy: Math.max(-600, Math.min(600, Number(b?.vy) || 0)),
+        r: Math.max(2, Math.min(18, Number(b?.r) || 5)), life: Math.max(.1, Math.min(3, Number(b?.life) || 1)),
+        color: /^#[0-9a-fA-F]{3,8}$/.test(String(b?.color || "")) ? String(b.color) : "#ffffff",
+        kind: String(b?.kind || "bullet").slice(0, 24), stun: Math.max(0, Math.min(2, Number(b?.stun) || 0))
+      })) : []
+    };
+    socket.to(match.roomCode).emit("battle:attack", safe);
+  });
+  socket.on("battle:summon-damage", data => {
+    const match = socketUsers.get(socket.id);
+    const id = String(data?.id || "").slice(0, 80);
+    const amount = Math.max(0, Math.min(45, Number(data?.amount) || 0));
+    if (match?.roomCode && id && amount > 0) socket.to(match.roomCode).emit("battle:summon-damage", { id, amount });
   });
   socket.on("battle:damage", data => {
     const match = socketUsers.get(socket.id);
@@ -205,8 +233,16 @@ io.on("connection", socket => {
   socket.on("battle:leave", () => {
     const match = socketUsers.get(socket.id);
     if (match?.roomCode) {
-      socket.to(match.roomCode).emit("battle:opponent-left");
-      socket.leave(match.roomCode);
+      const roomCode = match.roomCode;
+      socket.to(roomCode).emit("battle:opponent-left");
+      for (const [peerId, peerMatch] of socketUsers) {
+        if (peerId !== socket.id && peerMatch.roomCode === roomCode) {
+          socketUsers.delete(peerId);
+          const peer = io.sockets.sockets.get(peerId);
+          if (peer) peer.leave(roomCode);
+        }
+      }
+      socket.leave(roomCode);
       socketUsers.delete(socket.id);
     }
   });
