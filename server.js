@@ -50,14 +50,14 @@ async function initDb() {
       losses INTEGER NOT NULL DEFAULT 0,
       selected_hero VARCHAR(16) NOT NULL DEFAULT 'spider',
       unlocked JSONB NOT NULL DEFAULT '{"spider":true,"hammer":false,"meto":false,"bujijik":false,"adam":false}'::jsonb,
-      progression_version INTEGER NOT NULL DEFAULT 2,
+      progression_version INTEGER NOT NULL DEFAULT 3,
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     );
   `);
   // Existing installations need a one-time migration because older versions gave Bujijik away for free.
   await pool.query("ALTER TABLE players ADD COLUMN IF NOT EXISTS progression_version INTEGER NOT NULL DEFAULT 1");
-  await pool.query(`UPDATE players SET unlocked = jsonb_set(jsonb_set(COALESCE(unlocked, '{}'::jsonb), '{bujijik}', to_jsonb(trophies >= 100), true), '{adam}', to_jsonb(trophies >= 150), true), progression_version=2 WHERE progression_version < 2`);
-  await pool.query("ALTER TABLE players ALTER COLUMN progression_version SET DEFAULT 2");
+  await pool.query(`UPDATE players SET unlocked = jsonb_set(jsonb_set(COALESCE(unlocked, '{}'::jsonb), '{bujijik}', to_jsonb(trophies >= 150), true), '{adam}', to_jsonb(trophies >= 200), true), progression_version=3 WHERE progression_version < 3`);
+  await pool.query("ALTER TABLE players ALTER COLUMN progression_version SET DEFAULT 3");
 }
 function publicProfile(row) {
   return {
@@ -130,8 +130,8 @@ app.put("/api/profile", authRequired, async (req, res) => {
       spider: true,
       hammer: Boolean(old.hammer || trophies >= 50),
       meto: Boolean(old.meto || trophies >= 100),
-      bujijik: Boolean(old.bujijik || trophies >= 100),
-      adam: Boolean(old.adam || trophies >= 150)
+      bujijik: Boolean(old.bujijik || trophies >= 150),
+      adam: Boolean(old.adam || trophies >= 200)
     };
     const safeSelected = unlocked[selected] ? selected : "spider";
     const saved = await pool.query(
@@ -236,7 +236,7 @@ io.on("connection", socket => {
   socket.on("battle:damage", data => {
     const match = socketUsers.get(socket.id);
     const amount = Math.max(0, Math.min(100, Number(data?.amount) || 0));
-    if (match?.roomCode && amount > 0) socket.to(match.roomCode).emit("battle:damage", { amount });
+    if (match?.roomCode && amount > 0) socket.to(match.roomCode).emit("battle:damage", { amount, stun: Math.max(0, Math.min(2, Number(data?.stun) || 0)) });
   });
   socket.on("battle:leave", () => {
     const match = socketUsers.get(socket.id);
