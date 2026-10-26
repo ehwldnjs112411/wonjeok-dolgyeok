@@ -49,20 +49,30 @@ async function initDb() {
       wins INTEGER NOT NULL DEFAULT 0,
       losses INTEGER NOT NULL DEFAULT 0,
       selected_hero VARCHAR(16) NOT NULL DEFAULT 'spider',
-      unlocked JSONB NOT NULL DEFAULT '{"spider":true,"hammer":false,"meto":false,"bujijik":false,"adam":false}'::jsonb,
-      progression_version INTEGER NOT NULL DEFAULT 3,
+      unlocked JSONB NOT NULL DEFAULT '{"spider":true,"hammer":false,"meto":false,"bujijik":false,"adam":false,"yure":false}'::jsonb,
+      coins INTEGER NOT NULL DEFAULT 0 CHECK (coins >= 0),
+      mail_reward_claimed BOOLEAN NOT NULL DEFAULT FALSE,
+      mail_reward_read BOOLEAN NOT NULL DEFAULT FALSE,
+      progression_version INTEGER NOT NULL DEFAULT 4,
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     );
   `);
   // Existing installations need a one-time migration because older versions gave Bujijik away for free.
   await pool.query("ALTER TABLE players ADD COLUMN IF NOT EXISTS progression_version INTEGER NOT NULL DEFAULT 1");
+  await pool.query("ALTER TABLE players ADD COLUMN IF NOT EXISTS coins INTEGER NOT NULL DEFAULT 0 CHECK (coins >= 0)");
+  await pool.query("ALTER TABLE players ADD COLUMN IF NOT EXISTS mail_reward_claimed BOOLEAN NOT NULL DEFAULT FALSE");
+  await pool.query("ALTER TABLE players ADD COLUMN IF NOT EXISTS mail_reward_read BOOLEAN NOT NULL DEFAULT FALSE");
   await pool.query(`UPDATE players SET unlocked = jsonb_set(jsonb_set(COALESCE(unlocked, '{}'::jsonb), '{bujijik}', to_jsonb(trophies >= 150), true), '{adam}', to_jsonb(trophies >= 200), true), progression_version=3 WHERE progression_version < 3`);
-  await pool.query("ALTER TABLE players ALTER COLUMN progression_version SET DEFAULT 3");
+  await pool.query(`UPDATE players SET unlocked = jsonb_set(COALESCE(unlocked, '{}'::jsonb), '{yure}', COALESCE(unlocked->'yure', 'false'::jsonb), true), progression_version=4 WHERE progression_version < 4`);
+  await pool.query("ALTER TABLE players ALTER COLUMN progression_version SET DEFAULT 4");
 }
 function publicProfile(row) {
   return {
     id: row.id, name: row.username, trophies: row.trophies, wins: row.wins, losses: row.losses,
-    selectedHero: row.selected_hero, unlocked: row.unlocked
+    selectedHero: row.selected_hero, unlocked: row.unlocked,
+    coins: Number(row.coins) || 0,
+    mailRewardClaimed: Boolean(row.mail_reward_claimed),
+    mailRewardRead: Boolean(row.mail_reward_read)
   };
 }
 app.get("/api/health", async (_req, res) => {
@@ -85,7 +95,7 @@ app.post("/api/auth/register", async (req, res) => {
     const hash = await bcrypt.hash(password, 12);
     const result = await pool.query(
       `INSERT INTO players(username, username_key, password_hash) VALUES($1,$2,$3)
-       RETURNING id, username, trophies, wins, losses, selected_hero, unlocked`,
+       RETURNING id, username, trophies, coins, wins, losses, selected_hero, unlocked, mail_reward_claimed, mail_reward_read`,
       [name, key, hash]
     );
     const row = result.rows[0];
@@ -112,7 +122,7 @@ app.post("/api/auth/login", async (req, res) => {
 app.get("/api/profile", authRequired, async (req, res) => {
   try {
     await dbReady();
-    const result = await pool.query("SELECT id, username, trophies, wins, losses, selected_hero, unlocked FROM players WHERE id=$1", [req.user.id]);
+    const result = await pool.query("SELECT id, username, trophies, coins, wins, losses, selected_hero, unlocked, mail_reward_claimed, mail_reward_read FROM players WHERE id=$1", [req.user.id]);
     if (!result.rows[0]) return res.status(404).json({ error: "계정을 찾을 수 없습니다." });
     res.json({ profile: publicProfile(result.rows[0]) });
   } catch (e) { console.error(e); res.status(500).json({ error: "프로필을 불러오지 못했습니다." }); }
@@ -120,7 +130,7 @@ app.get("/api/profile", authRequired, async (req, res) => {
 app.put("/api/profile", authRequired, async (req, res) => {
   try {
     await dbReady();
-    const allowedHeroes = new Set(["spider", "hammer", "meto", "bujijik", "adam"]);
+    const allowedHeroes = new Set(["spider", "hammer", "meto", "bujijik", "adam", "yure"]);
     const selected = allowedHeroes.has(req.body.selectedHero) ? req.body.selectedHero : "spider";
     const result = await pool.query("SELECT trophies, unlocked FROM players WHERE id=$1", [req.user.id]);
     if (!result.rows[0]) return res.status(404).json({ error: "계정을 찾을 수 없습니다." });
@@ -131,11 +141,12 @@ app.put("/api/profile", authRequired, async (req, res) => {
       hammer: Boolean(old.hammer || trophies >= 50),
       meto: Boolean(old.meto || trophies >= 100),
       bujijik: Boolean(old.bujijik || trophies >= 150),
-      adam: Boolean(old.adam || trophies >= 200)
+      adam: Boolean(old.adam || trophies >= 200),
+      yure: Boolean(old.yure)
     };
     const safeSelected = unlocked[selected] ? selected : "spider";
     const saved = await pool.query(
-      "UPDATE players SET selected_hero=$1, unlocked=$2::jsonb WHERE id=$3 RETURNING id, username, trophies, wins, losses, selected_hero, unlocked",
+      "UPDATE players SET selected_hero=$1, unlocked=$2::jsonb WHERE id=$3 RETURNING id, username, trophies, coins, wins, losses, selected_hero, unlocked, mail_reward_claimed, mail_reward_read",
       [safeSelected, JSON.stringify(unlocked), req.user.id]
     );
     res.json({ profile: publicProfile(saved.rows[0]) });
@@ -164,7 +175,7 @@ io.on("connection", socket => {
       socketId: socket.id,
       since: Date.now(),
       name: String(payload?.name || "플레이어").slice(0, 24),
-      hero: ["spider", "hammer", "meto", "bujijik", "adam"].includes(payload?.hero) ? payload.hero : "spider"
+      hero: ["spider", "hammer", "meto", "bujijik", "adam", "yure"].includes(payload?.hero) ? payload.hero : "spider"
     };
     while (waiting.length) {
       const other = waiting.shift();
@@ -195,7 +206,7 @@ io.on("connection", socket => {
       facing: { x: Math.max(-1, Math.min(1, Number(data.facing?.x) || 0)), y: Math.max(-1, Math.min(1, Number(data.facing?.y) || 0)) },
       hp: Math.max(0, Math.min(200, Number(data.hp) || 0)),
       maxHp: Math.max(1, Math.min(200, Number(data.maxHp) || 100)),
-      alive: Boolean(data.alive), heroId: ["spider", "hammer", "meto", "bujijik", "adam"].includes(data.heroId) ? data.heroId : "spider",
+      alive: Boolean(data.alive), heroId: ["spider", "hammer", "meto", "bujijik", "adam", "yure"].includes(data.heroId) ? data.heroId : "spider",
       name: String(data.name || "플레이어").slice(0, 24),
       buffTime: Math.max(0, Math.min(10, Number(data.buffTime) || 0)),
       stunTime: Math.max(0, Math.min(5, Number(data.stunTime) || 0)),
@@ -212,14 +223,15 @@ io.on("connection", socket => {
     const safe = {
       kind: data.kind,
       hit: Boolean(data.hit),
-      heroId: ["spider", "hammer", "meto", "bujijik", "adam"].includes(data.heroId) ? data.heroId : "spider",
+      punchSide: Number(data.punchSide) === 1 ? 1 : 0,
+      heroId: ["spider", "hammer", "meto", "bujijik", "adam", "yure"].includes(data.heroId) ? data.heroId : "spider",
       id: String(data.id || "").slice(0, 80),
       x: Math.max(48, Math.min(852, Number(data.x) || 450)),
       y: Math.max(48, Math.min(852, Number(data.y) || 450)),
       facing: { x: Math.max(-1, Math.min(1, Number(data.facing?.x) || 0)), y: Math.max(-1, Math.min(1, Number(data.facing?.y) || 0)) },
       bullets: Array.isArray(data.bullets) ? data.bullets.slice(0, 20).map(b => ({
         x: Math.max(0, Math.min(900, Number(b?.x) || 0)), y: Math.max(0, Math.min(900, Number(b?.y) || 0)),
-        vx: Math.max(-600, Math.min(600, Number(b?.vx) || 0)), vy: Math.max(-600, Math.min(600, Number(b?.vy) || 0)),
+        vx: Math.max(-800, Math.min(800, Number(b?.vx) || 0)), vy: Math.max(-800, Math.min(800, Number(b?.vy) || 0)),
         r: Math.max(2, Math.min(18, Number(b?.r) || 5)), life: Math.max(.1, Math.min(3, Number(b?.life) || 1)),
         color: /^#[0-9a-fA-F]{3,8}$/.test(String(b?.color || "")) ? String(b.color) : "#ffffff",
         kind: String(b?.kind || "bullet").slice(0, 24), stun: Math.max(0, Math.min(2, Number(b?.stun) || 0))
