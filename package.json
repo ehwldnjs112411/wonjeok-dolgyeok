@@ -1,8 +1,8 @@
 {
   "name": "wonjeok-dolgyeok",
-  "version": "1.4.0",
+  "version": "1.8.0",
   "private": true,
-  "description": "원격돌격 online game server with Yure, coins, shop, mail rewards, burst attacks and online combat fixes",
+  "description": "원격돌격: AI 매칭 레이아웃 수정, 조키 아트 복구, 음악 루프/재개, 온라인 Socket.IO 연결, 탑 보스 밸런스",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"

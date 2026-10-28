@@ -39,6 +39,25 @@ button,input{font:inherit}button{cursor:pointer;border:0;color:var(--text);font-
 .yure-orb{width:86px;height:86px;border-radius:50%;background:linear-gradient(145deg,#ffe65e 0 48%,#ff922c 49% 100%);border:5px solid #fff0a0;box-shadow:0 0 0 9px #ffb52b1e;position:relative;overflow:hidden}.yure-orb:before{content:"";position:absolute;left:15px;top:27px;width:18px;height:8px;background:#fff8d6;clip-path:polygon(0 0,100% 50%,0 100%);box-shadow:27px 0 #fff8d6}.yure-orb:after{content:"";position:absolute;left:20px;bottom:16px;width:32px;height:7px;border-bottom:4px solid #a84a16;border-radius:0 0 50% 50%;transform:rotate(-4deg)}.fighter-art .yure-orb{width:86px;height:86px}.reward-art .yure-orb{transform:scale(.72)}
 #shop-screen,#mail-screen{min-height:100vh}.shop-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,360px));gap:18px;margin-top:8px}.shop-card{display:grid;grid-template-columns:100px minmax(0,1fr);gap:17px;align-items:center;border:1px solid #8a672b;background:linear-gradient(145deg,#302843,#171d30);border-radius:20px;padding:20px;position:relative;overflow:hidden}.shop-card.owned{border-color:#42bd9a;box-shadow:inset 0 0 0 1px #42bd9a33}.shop-art{height:100px;display:grid;place-items:center;border-radius:14px;background:#11192d}.shop-card h2{margin:0 0 7px;font-size:23px}.shop-card p{color:#aab7d2;font-size:12px;line-height:1.6;margin:0 0 12px}.shop-price{font-size:14px;font-weight:1000;color:#ffe08a;margin-bottom:12px}.shop-buy{background:linear-gradient(100deg,#e5a92e,#ffcf5b);color:#231907;border-radius:10px;padding:11px 14px;font-size:12px;width:100%}.shop-buy:disabled{background:#273450;color:#93a2c2;cursor:not-allowed}.shop-notice{min-height:24px;color:#ffe08a;font-size:12px;font-weight:800;margin:0 0 8px}.mail-list{display:grid;gap:14px;max-width:820px}.mail-card{border:1px solid #344565;background:linear-gradient(145deg,#1b2744,#11192d);border-radius:18px;padding:22px;display:grid;grid-template-columns:52px minmax(0,1fr);gap:15px}.mail-icon{width:50px;height:50px;display:grid;place-items:center;border-radius:14px;background:#4c3a2355;border:1px solid #a67b3b66;font-size:25px}.mail-card h2{margin:0 0 7px;font-size:18px}.mail-card p{color:#a9b7d2;line-height:1.7;font-size:12px;margin:0 0 12px}.mail-rewards{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}.mail-reward{border-radius:9px;background:#111a2d;border:1px solid #344665;padding:8px 10px;font-size:12px;font-weight:900;color:#ffe08a}.mail-claim{background:linear-gradient(100deg,#5578ff,#685bff);border-radius:10px;padding:11px 15px;font-size:12px}.mail-claim:disabled{background:#253550;color:#95a3c1;cursor:not-allowed}.mail-read{font-size:10px;color:#7be0b7;font-weight:900;margin-left:7px}
 @media(max-width:600px){#menu-screen,#collection-screen,#trophy-screen,#shop-screen,#mail-screen{padding:12px 12px 25px}.shop-grid{grid-template-columns:1fr}.shop-card{grid-template-columns:78px minmax(0,1fr);padding:13px;gap:12px}.shop-art{height:84px}.shop-art .yure-orb{width:68px;height:68px}.mail-card{padding:15px;grid-template-columns:42px minmax(0,1fr);gap:11px}.mail-icon{width:40px;height:40px;font-size:20px}.profile{flex-wrap:wrap;justify-content:flex-end}.profile-chip{padding:7px 8px;font-size:11px}}
+
+/* v1.8 layout repair: AI mode cards must inherit the dark game theme */
+#ai-mode-screen{display:none;flex-direction:column;padding:20px clamp(16px,4vw,54px) 36px;max-width:1400px;margin:0 auto;width:100%;min-height:100vh}
+#ai-mode-screen.active{display:flex}
+.ai-mode-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;width:100%;margin:8px 0 0}
+.ai-mode-card{display:flex;flex-direction:column;align-items:flex-start;gap:12px;min-width:0;min-height:270px;padding:clamp(20px,3vw,32px);text-align:left;white-space:normal;color:var(--text);border:1px solid #30415f;border-radius:22px;background:linear-gradient(145deg,#1a2541,#11192d);box-shadow:0 14px 34px #0002}
+.ai-mode-card h2{margin:0;font-size:clamp(20px,2.5vw,28px);line-height:1.2;color:#f3f6ff}
+.ai-mode-card p{margin:0;color:#aab8d4;font-size:14px;line-height:1.7;max-width:62ch}
+.ai-mode-icon{display:grid;place-items:center;width:48px;height:48px;border-radius:15px;background:#ffffff0d;border:1px solid #ffffff12;font-size:25px}
+.ai-mode-cta{display:inline-flex;align-items:center;margin-top:auto;padding:11px 15px;border-radius:10px;background:linear-gradient(100deg,#5578ff,#685bff);color:white;font-size:13px;font-weight:900}
+.ai-mode-card.tower-card{border-color:#3b6684;background:radial-gradient(ellipse at 100% 0%,#53e0e817,transparent 48%),linear-gradient(145deg,#1b2b49,#11192d)}
+.tower-progress{color:var(--cyan);font-size:12px;font-weight:900;margin-top:4px}
+#ai-mode-screen .server-note{margin-top:18px}
+.joki-orb{width:86px;height:86px;border-radius:50%;position:relative;background:radial-gradient(circle at 30% 25%,#fff5a8 0 7%,transparent 8%),linear-gradient(145deg,#ff9ed6 0 45%,#b94c9d 46% 100%);border:5px solid #ffe5f6;box-shadow:0 0 0 9px #ff8dcc18,0 12px 28px #0006}
+.joki-orb:before{content:"";position:absolute;left:17px;top:25px;width:12px;height:15px;border-radius:50%;background:#fff;box-shadow:28px 0 #fff}
+.joki-orb:after{content:"";position:absolute;left:22px;top:31px;width:5px;height:7px;border-radius:50%;background:#53224d;box-shadow:28px 0 #53224d}
+@media(max-width:900px){#ai-mode-screen{padding:16px 18px 28px}.ai-mode-grid{grid-template-columns:1fr}.ai-mode-card{min-height:220px}}
+@media(max-width:600px){#ai-mode-screen{padding:12px 12px 24px}.ai-mode-grid{gap:12px}.ai-mode-card{padding:18px;min-height:205px}.ai-mode-card p{font-size:12px}}
+
 </style>
 </head>
 <body>
@@ -79,7 +98,7 @@ button,input{font:inherit}button{cursor:pointer;border:0;color:var(--text);font-
     <button class="ai-mode-card" id="ai-basic-btn"><span class="ai-mode-icon">⚔️</span><h2>일반 · AI 기본</h2><p>지금처럼 AI 전사 한 명과 대전해. 승리하면 기존 대전 보상을 받아.</p><span class="ai-mode-cta">일반 AI 시작 ↗</span></button>
     <button class="ai-mode-card tower-card" id="ai-tower-btn"><span class="ai-mode-icon">🏰</span><h2>탑 모드</h2><p>층을 이길 때마다 원코인을 받고, 층이 올라갈수록 AI가 더 똑똑해져. 21층부터는 AI 두 명이 함께 싸워.</p><div class="tower-progress" id="tower-progress-text">최고 기록 0 / 40층</div><span class="ai-mode-cta" id="tower-button-label">1층 도전 ↗</span></button>
   </div>
-  <div class="server-note">탑 모드 첫 클리어 보상: 일반 층 100 원코인 · 10/20/30층 500 원코인 · 40층 최종 보상 1000 원코인. 각 층 보상은 계정당 한 번 지급돼.</div>
+  <div class="server-note">탑 모드 첫 클리어 보상: 일반 층 100 원코인 · 10/20/30층 보스 클리어 500 원코인 · 40층 보스 최종 보상 1000 원코인. 각 층 보상은 계정당 한 번 지급돼.</div>
 </section>
 
 <section id="collection-screen" class="screen" data-screen>
@@ -133,6 +152,27 @@ button,input{font:inherit}button{cursor:pointer;border:0;color:var(--text);font-
 </section>
 
 
+<script src="/socket.io/socket.io.js">
+// v1.8 online matchmaking bootstrap: connect to this Render origin and bind server events.
+(function initWonjeokOnline(){
+ if(!window.io){const status=$('#match-search-status');if(status)status.textContent='온라인 연결 스크립트를 불러오지 못했어. 서버의 /socket.io 경로를 확인해 줘.';return}
+ try{
+  const socket=window.io({transports:['websocket','polling'],reconnection:true,timeout:10000});
+  window.wonjeokSocket=socket;
+  socket.on('connect',()=>{if($('#match-search-status')&&$('#matchmaking-screen')?.classList.contains('active'))$('#match-search-status').textContent='서버 연결 완료. 상대를 찾는 중…'});
+  socket.on('connect_error',()=>{if($('#match-search-status')&&$('#matchmaking-screen')?.classList.contains('active'))$('#match-search-status').textContent='서버 연결 실패. Render 서버 상태와 배포 파일을 확인해 줘.'});
+  socket.on('queue:status',data=>{const status=$('#match-search-status');if(status&&$('#matchmaking-screen')?.classList.contains('active'))status.textContent=data?.message||'온라인 상대를 찾는 중…'});
+  socket.on('match:found',info=>{handleOnlineMatchFound(info||{})});
+  socket.on('battle:state',data=>{if(!game||game.mode!=='user'||!data)return;let enemy=game.enemy;if(!enemy)return;enemy.x=Number(data.x)||enemy.x;enemy.y=Number(data.y)||enemy.y;enemy.facing=data.facing||enemy.facing;enemy.hp=Number(data.hp??enemy.hp);enemy.maxHp=Number(data.maxHp)||enemy.maxHp;enemy.alive=!!data.alive;enemy.heroId=data.heroId||enemy.heroId;enemy.name=data.name||enemy.name;enemy.buffTime=Number(data.buffTime)||0;enemy.stunTime=Number(data.stunTime)||0;enemy.invulnTime=Number(data.invulnTime)||0;enemy.adamAwakenTime=Number(data.adamAwakenTime)||0;enemy.jokiDamageTime=Number(data.jokiDamageTime)||0;enemy.jokiHealTime=Number(data.jokiHealTime)||0;game.remoteSummons=data.summons||[]});
+  socket.on('battle:attack',data=>{if(!game||game.mode!=='user'||!data)return;if(Array.isArray(data.bullets)){for(const b of data.bullets){game.projectiles.push({x:Number(b.x)||0,y:Number(b.y)||0,vx:Number(b.vx)||0,vy:Number(b.vy)||0,r:Number(b.r)||5,damage:1,life:Number(b.life)||1,color:b.color||'#fff',kind:b.kind||'bullet',stun:Number(b.stun)||0,owner:game.enemy,remote:true})}}else if(data.kind==='melee'&&game.player.alive){const dx=game.player.x-(Number(data.x)||0),dy=game.player.y-(Number(data.y)||0);if(Math.hypot(dx,dy)<90)damage(game.player,4,game.enemy,true)}});
+  socket.on('battle:damage',data=>{if(game?.mode==='user'&&game.player?.alive)damage(game.player,Number(data?.amount)||0,game.enemy,!!data?.stun)});
+  socket.on('battle:opponent-left',()=>{if(game?.mode==='user'&&!game.ended){showToast('상대 플레이어가 연결을 종료했어.');endMatch('win','opponent-left')}});
+  window.wonjeokJoinOnlineQueue=function(){if(!socket.connected){const status=$('#match-search-status');if(status)status.textContent='온라인 서버에 연결하는 중…';socket.connect();socket.once('connect',()=>socket.emit('queue:join',{name:currentUser?.name||'플레이어',hero:currentUser?.selectedHero||'spider'}));socket.once('connect_error',()=>{const status=$('#match-search-status');if(status)status.textContent='서버 연결에 실패했어. Render 로그와 /socket.io 연결을 확인해 줘.'})}else socket.emit('queue:join',{name:currentUser?.name||'플레이어',hero:currentUser?.selectedHero||'spider'})};
+  window.wonjeokLeaveOnlineQueue=function(){if(socket.connected)socket.emit('queue:leave')};
+ }catch(err){console.error('Online matchmaking init failed',err);const status=$('#match-search-status');if(status)status.textContent='온라인 매칭 초기화에 실패했어.'}
+})();
+
+</script>
 <script>
 'use strict';
 const $ = (s)=>document.querySelector(s);
@@ -168,14 +208,24 @@ function playHeroSound(heroId,action='attack'){const ctx=getSfxContext();if(!ctx
 
 const PRE_GAME_TRACK='nRrXhgEqJMI';
 const GAME_TRACKS=['ZXG66exDoho','KK3KXAECte4','xV4pZgTe94E','pMXxxFeZAPg','OEs6SGTkXMo','wbO3p7_Mf30'];
-const TOWER_TRACKS=['C_5enfN8V8w','mLsWDkF_LIc','e9YJ1D6HbAU'];const BOSS_TRACK='wbO3p7_Mf30';const FINAL_BOSS_TRACK='KK3KXAECte4';let musicEnabled=true;
-let musicPlaying=false, currentTrackId=PRE_GAME_TRACK;
-function playBackgroundMusic(videoId,title){const frame=$('#music-frame');if(!frame)return;const safeId=String(videoId||PRE_GAME_TRACK).replace(/[^a-zA-Z0-9_-]/g,'');if(!safeId)return;currentTrackId=safeId;musicPlaying=true;frame.src='https://www.youtube-nocookie.com/embed/'+safeId+'?autoplay='+(musicEnabled?'1':'0')+'&enablejsapi=1&playsinline=1&rel=0&controls=0&modestbranding=1';$('#music-title').textContent=title||'배경 음악';$('#music-caption').textContent=musicEnabled?'배경 음악 재생 중':'배경 음악 꺼짐';$('#music-toggle-btn').textContent=musicEnabled?'음악 끄기':'음악 켜기';$('#music-toggle-btn').setAttribute('aria-label',musicEnabled?'음악 끄기':'음악 켜기');}
-function toggleBackgroundMusic(){musicEnabled=!musicEnabled;const frame=$('#music-frame');if(musicEnabled){playBackgroundMusic(currentTrackId,game&&!game.ended?'전투 배경 음악':'대기 음악')}else{musicPlaying=false;if(frame?.contentWindow)frame.contentWindow.postMessage(JSON.stringify({event:'command',func:'pauseVideo',args:[]}), '*');$('#music-title').textContent='배경 음악';$('#music-caption').textContent='배경 음악 꺼짐';$('#music-toggle-btn').textContent='음악 켜기';$('#music-toggle-btn').setAttribute('aria-label','음악 켜기')}}
+const TOWER_TRACKS=['C_5enfN8V8w','mLsWDkF_LIc','e9YJ1D6HbAU'];const BOSS_TRACK='wbO3p7_Mf30';const FINAL_BOSS_TRACK='KK3KXAECte4';
+let musicEnabled=true,musicPlaying=false,currentTrackId=PRE_GAME_TRACK,ytPlayer=null,ytReady=false;
+let menuMusicTime=0,menuMusicStarted=false,currentMusicContext='menu',currentCombatTrack='';
+function updateMusicControls(title){const t=$('#music-title'),c=$('#music-caption'),b=$('#music-toggle-btn');if(t)t.textContent=title||'배경 음악';if(c)c.textContent=musicEnabled?'배경 음악 재생 중':'배경 음악 꺼짐';if(b){b.textContent=musicEnabled?'음악 끄기':'음악 켜기';b.setAttribute('aria-label',musicEnabled?'음악 끄기':'음악 켜기')}}
+function ensureYouTubePlayer(){if(ytPlayer||!window.YT||!YT.Player)return;try{ytPlayer=new YT.Player('music-frame',{events:{onReady:()=>{ytReady=true;if(musicEnabled)playBackgroundMusic(currentTrackId,'대기 음악')},onStateChange:(event)=>{if(!window.YT)return;if(event.data===YT.PlayerState.ENDED&&musicEnabled&&ytPlayer){try{ytPlayer.seekTo(0,true);ytPlayer.playVideo()}catch(_){}}},onError:()=>{const c=$('#music-caption');if(c)c.textContent='이 기기에서 음악을 재생할 수 없어. 음악 켜기를 다시 눌러 봐.'}}})}catch(_){}}
+window.onYouTubeIframeAPIReady=function(){ensureYouTubePlayer()};
+(function loadYouTubeAPI(){if(document.querySelector('script[data-youtube-iframe-api]'))return;const sc=document.createElement('script');sc.src='https://www.youtube.com/iframe_api';sc.async=true;sc.dataset.youtubeIframeApi='1';document.head.appendChild(sc)})();
+function playBackgroundMusic(videoId,title,options={}){const safeId=String(videoId||PRE_GAME_TRACK).replace(/[^a-zA-Z0-9_-]/g,'');if(!safeId)return;currentTrackId=safeId;musicPlaying=!!musicEnabled;updateMusicControls(title||'배경 음악');if(!musicEnabled)return;
+ ensureYouTubePlayer();
+ if(ytReady&&ytPlayer){try{if(options.resumeAt!=null){ytPlayer.loadVideoById({videoId:safeId,startSeconds:Math.max(0,Number(options.resumeAt)||0)});}else{ytPlayer.loadVideoById(safeId)}ytPlayer.setVolume(75);ytPlayer.playVideo();return}catch(_){}}
+ const frame=$('#music-frame');if(frame){const origin=encodeURIComponent(location.origin);frame.src='https://www.youtube-nocookie.com/embed/'+safeId+'?autoplay=1&enablejsapi=1&playsinline=1&rel=0&controls=0&modestbranding=1&loop=1&playlist='+safeId+'&origin='+origin;}
+}
+function toggleBackgroundMusic(){musicEnabled=!musicEnabled;if(musicEnabled){playBackgroundMusic(currentTrackId,currentMusicContext==='menu'?'대기 음악':'전투 배경 음악',currentMusicContext==='menu'&&menuMusicStarted?{resumeAt:menuMusicTime}:{})}else{musicPlaying=false;try{if(ytReady&&ytPlayer)ytPlayer.pauseVideo();else $('#music-frame')?.contentWindow?.postMessage(JSON.stringify({event:'command',func:'pauseVideo',args:[]}), '*')}catch(_){}updateMusicControls('배경 음악')}}
 $('#music-toggle-btn').addEventListener('click',toggleBackgroundMusic);
-function startRandomGameTrack(mode='ai',floor=null){let choices=GAME_TRACKS;if(mode==='tower'){if(floor===40)choices=[FINAL_BOSS_TRACK];else if([10,20,30].includes(floor))choices=[BOSS_TRACK];else choices=TOWER_TRACKS;}const id=choices[Math.floor(Math.random()*choices.length)]||GAME_TRACKS[0];playBackgroundMusic(id,mode==='tower'&&[10,20,30,40].includes(floor)?`${floor}층 보스전 음악`:'전투 배경 음악');}
+function startRandomGameTrack(mode='ai',floor=null){if(currentMusicContext==='menu'&&ytReady&&ytPlayer){try{menuMusicTime=ytPlayer.getCurrentTime()||menuMusicTime;menuMusicStarted=true;ytPlayer.pauseVideo()}catch(_){}}let choices=GAME_TRACKS;if(mode==='tower'){if(floor===40)choices=[FINAL_BOSS_TRACK];else if([10,20,30].includes(floor))choices=[BOSS_TRACK];else choices=TOWER_TRACKS;}const id=choices[Math.floor(Math.random()*choices.length)]||GAME_TRACKS[0];currentMusicContext='combat';currentCombatTrack=id;playBackgroundMusic(id,mode==='tower'&&[10,20,30,40].includes(floor)?`${floor}층 보스전 음악`:'전투 배경 음악');}
+function returnToMenuMusic(){if(game?.mode==='user'&&window.wonjeokSocket?.connected)try{window.wonjeokSocket.emit('battle:leave')}catch(_){}currentMusicContext='menu';currentCombatTrack='';if(musicEnabled){playBackgroundMusic(PRE_GAME_TRACK,'대기 음악',{resumeAt:menuMusicStarted?menuMusicTime:0})}else{musicPlaying=false;updateMusicControls('배경 음악')}}
 function renderTowerMenu(){if(!currentUser)return;$('#ai-mode-coins').textContent=currentUser.coins||0;const completed=Math.max(0,Number(currentUser.towerCompleted)||0);const floor=Math.max(1,Math.min(40,Number(currentUser.towerFloor)||1));$('#tower-progress-text').textContent=`최고 기록 ${completed} / 40층 · 다음 도전 ${floor}층`;$('#tower-button-label').textContent=completed>=40?'40층 다시 도전 ↗':`${floor}층 도전 ↗`;}
-function towerEnemySpecs(floor){const inPhase=((floor-1)%10)+1;const damage=floor>=31?9:floor>=11&&floor<=20?10:6;const bossHp=({10:250,20:300,30:350,40:500})[floor];const levels=bossHp?[inPhase]:(floor<=20?[inPhase]:floor<=30?[inPhase,1]:[inPhase,inPhase]);return levels.map((aiLevel,index)=>({hero:'shooter',aiLevel,aiDamage:damage,spawnY:levels.length===1?450:(index===0?320:580),towerEnemyIndex:index+1,maxHp:bossHp||(100+((floor-1)%10)*10),name:[10,20,30,40].includes(floor)?`${floor}층 보스`:`탑 AI ${index+1}`}));}
+function towerEnemySpecs(floor){const inPhase=((floor-1)%10)+1;const damage=floor>=31?9:floor>=11&&floor<=20?10:6;const bossHp=({10:130,20:140,30:150,40:160})[floor];const isBoss=!!bossHp;const levels=isBoss?[inPhase]:(floor<=19?[inPhase]:floor<=29?[inPhase,1]:[inPhase,1]);const normalHp=floor<=19?100:50;return levels.map((aiLevel,index)=>({hero:'shooter',aiLevel,aiDamage:damage,spawnY:levels.length===1?450:(index===0?320:580),towerEnemyIndex:index+1,maxHp:isBoss?bossHp:normalHp,name:isBoss?`${floor}층 보스`:`탑 AI ${index+1}`}));}
 function towerRewardForFloor(floor){if(floor===40)return 1000;if(floor===10||floor===20||floor===30)return 500;return 100;}
 function readAccounts(){try{return JSON.parse(localStorage.getItem(ACCOUNT_KEY)||'{}')}catch(e){return {}}}
 function writeAccounts(){try{localStorage.setItem(ACCOUNT_KEY,JSON.stringify(accountStore));return true}catch(e){return false}}
@@ -258,8 +308,8 @@ function startMatch(mode,onlineInfo=null,towerFloor=null){
 }
 function startTowerMode(floor){const f=Math.max(1,Math.min(40,Math.floor(Number(floor)||Number(currentUser?.towerFloor)||1)));if(currentUser){currentUser.towerFloor=f;saveProfile()}startMatch('tower',null,f)}
 function stopGame(){if(raf)cancelAnimationFrame(raf);raf=0;if(game?.mode==='user'&&window.wonjeokSocket?.connected)window.wonjeokSocket.emit('battle:leave');game=null;mouse.down=false;inputGesture=null;mobile.attackHeld=false;keys.clear();$('#battle-countdown')?.classList.add('hidden')}
-$('#leave-game-btn').addEventListener('click',()=>{stopGame();refreshMenu();showScreen('menu-screen');if(musicEnabled)playBackgroundMusic(PRE_GAME_TRACK,'대기 음악')});
-$('#result-menu-btn').addEventListener('click',()=>{stopGame();refreshMenu();showScreen('menu-screen');if(musicEnabled)playBackgroundMusic(PRE_GAME_TRACK,'대기 음악')});
+$('#leave-game-btn').addEventListener('click',()=>{stopGame();refreshMenu();showScreen('menu-screen');returnToMenuMusic()});
+$('#result-menu-btn').addEventListener('click',()=>{stopGame();refreshMenu();showScreen('menu-screen');returnToMenuMusic()});
 $('#result-rematch-btn').addEventListener('click',()=>{const mode=game?game.mode:'ai';const floor=game?.towerFloor||1;const win=game?.finishResult==='win';if(mode==='user')beginUserMatch();else if(mode==='tower'){if(win&&floor>=40){stopGame();refreshMenu();renderTowerMenu();showScreen('ai-mode-screen')}else startTowerMode(win?floor+1:floor)}else startMatch('ai')});
 $('#match-cancel-btn').addEventListener('click',()=>{if(pendingMatchTimer)clearTimeout(pendingMatchTimer);pendingMatchTimer=0;queuedOnlineInfo=null;if(window.wonjeokSocket?.connected){window.wonjeokSocket.emit('queue:leave');window.wonjeokSocket.emit('battle:leave')}stopGame();refreshMenu();showScreen('menu-screen')});
 function showToast(msg){const el=$('#game-toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),1450)}
@@ -348,7 +398,7 @@ function endMatch(result,reason='ko',force=false){if(!game||(game.ended&&!force)
  const title=isTower?(win?`${game.towerFloor}층 클리어!`:'탑 도전 실패'):win?'승리!':'패배…';$('#result-icon').textContent=win?'🏆':'💫';$('#result-title').textContent=title;$('#result-title').style.color=win?'var(--gold)':'#ff8297';
  if(isTower){if(win&&game.towerFloor===40){$('#result-description').textContent='축하합니다. 모든 층을 이겼습니다.';$('#trophy-change').textContent=(towerFirstClear?'+1000':'보상 수령 완료')+' 🪙';$('#result-rematch-btn').textContent='탑 모드 완료';}else if(win){$('#result-description').textContent=`${game.towerFloor}층 클리어! ${towerFirstClear?`원코인 ${towerReward}개를 받았어.`:'이미 받은 층 보상이야.'} 다음은 ${Math.min(40,game.towerFloor+1)}층이야.`;$('#trophy-change').textContent=towerFirstClear?`+${towerReward} 🪙`:'보상 수령 완료';$('#result-rematch-btn').textContent='다음 층';}else{$('#result-description').textContent=`${game.towerFloor}층에서 패배했어. 보상은 층을 처음 클리어했을 때 지급돼. 다시 도전해 봐!` ;$('#trophy-change').textContent='층 보상: 첫 클리어 시 지급';$('#result-rematch-btn').textContent='다시 도전';}}
  else{const milestoneText=trophyMilestones.length?` 트로피 보상으로 원코인 ${trophyMilestones.length*500}개 추가 지급! (${trophyMilestones.map(v=>v+'개').join(', ')} 달성)`:'';$('#result-description').textContent=(reason==='time'?'시간 종료! 남은 체력 비율로 승부를 결정했어.':win?'상대를 쓰러뜨렸어! 트로피 8개와 원코인 100개를 받았어.':'아쉽게 패배했어. 트로피는 줄지만 원코인은 잃지 않아.')+milestoneText;$('#trophy-change').textContent=(win?'+8':'−4')+' 🏆'+(win?'  · +100 🪙':'')+(trophyMilestones.length?' · +'+(trophyMilestones.length*500)+' 🪙':'');$('#result-rematch-btn').textContent='다시 대전';}
- $('#result-overlay').classList.remove('hidden');refreshMenu();renderTowerMenu();if(musicEnabled)playBackgroundMusic(PRE_GAME_TRACK,'대기 음악');updateHUD()}
+ $('#result-overlay').classList.remove('hidden');refreshMenu();renderTowerMenu();returnToMenuMusic();updateHUD()}
 function drawGame(t){if(!game)return;ctx.clearRect(0,0,900,900);const bg=ctx.createLinearGradient(0,0,900,900);bg.addColorStop(0,'#182744');bg.addColorStop(1,'#0c1426');ctx.fillStyle=bg;ctx.fillRect(0,0,900,900);ctx.save();ctx.beginPath();ctx.rect(ARENA.min,ARENA.min,ARENA.max-ARENA.min,ARENA.max-ARENA.min);ctx.clip();ctx.fillStyle='#101d33';ctx.fillRect(ARENA.min,ARENA.min,ARENA.max-ARENA.min,ARENA.max-ARENA.min);
  ctx.strokeStyle='#31446655';ctx.lineWidth=1;for(let x=ARENA.min+32;x<ARENA.max;x+=32){ctx.beginPath();ctx.moveTo(x,ARENA.min);ctx.lineTo(x,ARENA.max);ctx.stroke()}for(let y=ARENA.min+32;y<ARENA.max;y+=32){ctx.beginPath();ctx.moveTo(ARENA.min,y);ctx.lineTo(ARENA.max,y);ctx.stroke()}
  ctx.strokeStyle='#56dce52a';ctx.lineWidth=2;for(let i=0;i<8;i++){const x=ARENA.min+16+i*106;ctx.beginPath();ctx.arc(x,ARENA.min+10,2,0,Math.PI*2);ctx.stroke()}
@@ -403,7 +453,7 @@ setAuthMode('login');
 #music-dock{display:flex;align-items:center;gap:10px;max-width:100%;padding:8px 12px;border:1px solid #344363;border-radius:12px;background:#141e35;color:#c4d2ed;font-size:11px}
 #music-title{font-weight:800;color:#eaf1ff}
 #music-toggle-btn{padding:7px 11px;border:1px solid #3b4e70;border-radius:8px;background:#263656;font-size:11px;font-weight:800;color:#fff;white-space:nowrap}
-#music-frame{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;border:0;left:-10000px;top:-10000px}
+#music-frame{position:fixed;width:200px;height:200px;opacity:.001;pointer-events:none;border:0;left:-10000px;top:0}
 .music-status{color:#8fa2c5;font-size:10px}
 @media(max-width:700px){.menu-music-slot{margin-top:8px}#music-dock{gap:7px;padding:7px 9px;flex-wrap:wrap}#music-toggle-btn{padding:6px 8px}}
 </style>
