@@ -1,8 +1,8 @@
 {
   "name": "wonjeok-dolgyeok",
-  "version": "1.9.0",
+  "version": "1.9.1",
   "private": true,
-  "description": "원격돌격 v1.9: 50층 탑 모드, 보스 패턴, 아담 리워크, 음악 전환 및 반복 재생",
+  "description": "원격돌격 v1.9.1: Socket.IO 유저 매칭 초기화 버그 수정",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"

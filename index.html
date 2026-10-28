@@ -152,10 +152,12 @@ button,input{font:inherit}button{cursor:pointer;border:0;color:var(--text);font-
 </section>
 
 
-<script src="/socket.io/socket.io.js">
-// v1.8 online matchmaking bootstrap: connect to this Render origin and bind server events.
+<script src="/socket.io/socket.io.js"></script>
+<script>
+// v1.9.1 matchmaking fix: external script tags must not contain inline code.
+// Keep the Socket.IO client load separate from this bootstrap so it actually executes.
 (function initWonjeokOnline(){
- if(!window.io){const status=$('#match-search-status');if(status)status.textContent='온라인 연결 스크립트를 불러오지 못했어. 서버의 /socket.io 경로를 확인해 줘.';return}
+ if(!window.io){const status=document.querySelector('#match-search-status');if(status)status.textContent='온라인 연결 스크립트를 불러오지 못했어. 서버의 /socket.io 경로를 확인해 줘.';return}
  try{
   const socket=window.io({transports:['websocket','polling'],reconnection:true,timeout:10000});
   window.wonjeokSocket=socket;
@@ -169,7 +171,7 @@ button,input{font:inherit}button{cursor:pointer;border:0;color:var(--text);font-
   socket.on('battle:opponent-left',()=>{if(game?.mode==='user'&&!game.ended){showToast('상대 플레이어가 연결을 종료했어.');endMatch('win','opponent-left')}});
   window.wonjeokJoinOnlineQueue=function(){if(!socket.connected){const status=$('#match-search-status');if(status)status.textContent='온라인 서버에 연결하는 중…';socket.connect();socket.once('connect',()=>socket.emit('queue:join',{name:currentUser?.name||'플레이어',hero:currentUser?.selectedHero||'spider'}));socket.once('connect_error',()=>{const status=$('#match-search-status');if(status)status.textContent='서버 연결에 실패했어. Render 로그와 /socket.io 연결을 확인해 줘.'})}else socket.emit('queue:join',{name:currentUser?.name||'플레이어',hero:currentUser?.selectedHero||'spider'})};
   window.wonjeokLeaveOnlineQueue=function(){if(socket.connected)socket.emit('queue:leave')};
- }catch(err){console.error('Online matchmaking init failed',err);const status=$('#match-search-status');if(status)status.textContent='온라인 매칭 초기화에 실패했어.'}
+ }catch(err){console.error('Online matchmaking init failed',err);const status=document.querySelector('#match-search-status');if(status)status.textContent='온라인 매칭 초기화에 실패했어.'}
 })();
 
 </script>
