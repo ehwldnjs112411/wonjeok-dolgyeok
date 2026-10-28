@@ -1,8 +1,8 @@
 {
   "name": "wonjeok-dolgyeok",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "private": true,
-  "description": "원격돌격 online game v1.5: dashboard layout, trophy coin milestone rewards, character rebalance, and synthesized fighter sound effects",
+  "description": "원격돌격 online game with Joki, 40-floor tower mode, tower rewards, YouTube music, and character reworks",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
