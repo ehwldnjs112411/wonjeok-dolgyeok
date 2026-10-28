@@ -1,8 +1,8 @@
 {
   "name": "wonjeok-dolgyeok",
-  "version": "1.6.0",
+  "version": "1.4.0",
   "private": true,
-  "description": "원격돌격 online game with Joki, 40-floor tower mode, tower rewards, YouTube music, and character reworks",
+  "description": "원격돌격 online game server with Yure, coins, shop, mail rewards, burst attacks and online combat fixes",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
