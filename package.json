@@ -1,8 +1,8 @@
 {
   "name": "wonjeok-dolgyeok",
-  "version": "1.9.1",
+  "version": "2.1.0",
   "private": true,
-  "description": "원격돌격 v1.9.1: Socket.IO 유저 매칭 초기화 버그 수정",
+  "description": "원격돌격: 온라인 좌표 보정, 탑 모드 100층 보스 스킬, 구미/조키 효과, 할로윈 우편함",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
