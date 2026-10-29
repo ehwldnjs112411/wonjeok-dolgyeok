@@ -49,11 +49,11 @@ async function initDb() {
       wins INTEGER NOT NULL DEFAULT 0,
       losses INTEGER NOT NULL DEFAULT 0,
       selected_hero VARCHAR(16) NOT NULL DEFAULT 'spider',
-      unlocked JSONB NOT NULL DEFAULT '{"spider":true,"hammer":false,"meto":false,"bujijik":false,"adam":false,"yure":false,"joki":false,"gumi":false}'::jsonb,
+      unlocked JSONB NOT NULL DEFAULT '{"spider":true,"hammer":false,"meto":false,"bujijik":false,"adam":false,"yure":false,"joki":true}'::jsonb,
       coins INTEGER NOT NULL DEFAULT 0 CHECK (coins >= 0),
       mail_reward_claimed BOOLEAN NOT NULL DEFAULT FALSE,
       mail_reward_read BOOLEAN NOT NULL DEFAULT FALSE,
-      progression_version INTEGER NOT NULL DEFAULT 6,
+      progression_version INTEGER NOT NULL DEFAULT 5,
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     );
   `);
@@ -64,9 +64,8 @@ async function initDb() {
   await pool.query("ALTER TABLE players ADD COLUMN IF NOT EXISTS mail_reward_read BOOLEAN NOT NULL DEFAULT FALSE");
   await pool.query(`UPDATE players SET unlocked = jsonb_set(jsonb_set(COALESCE(unlocked, '{}'::jsonb), '{bujijik}', to_jsonb(trophies >= 150), true), '{adam}', to_jsonb(trophies >= 200), true), progression_version=3 WHERE progression_version < 3`);
   await pool.query(`UPDATE players SET unlocked = jsonb_set(COALESCE(unlocked, '{}'::jsonb), '{yure}', COALESCE(unlocked->'yure', 'false'::jsonb), true), progression_version=4 WHERE progression_version < 4`);
-  await pool.query(`UPDATE players SET unlocked = jsonb_set(COALESCE(unlocked, '{}'::jsonb), '{joki}', COALESCE(unlocked->'jokiPurchased', 'false'::jsonb), true), progression_version=5 WHERE progression_version < 5`);
-  await pool.query(`UPDATE players SET unlocked = jsonb_set(COALESCE(unlocked, '{}'::jsonb), '{joki}', COALESCE(unlocked->'jokiPurchased', 'false'::jsonb), true), progression_version=6 WHERE progression_version < 6`);
-  await pool.query("ALTER TABLE players ALTER COLUMN progression_version SET DEFAULT 6");
+  await pool.query(`UPDATE players SET unlocked = jsonb_set(COALESCE(unlocked, '{}'::jsonb), '{joki}', 'true'::jsonb, true), progression_version=5 WHERE progression_version < 5`);
+  await pool.query("ALTER TABLE players ALTER COLUMN progression_version SET DEFAULT 5");
 }
 function publicProfile(row) {
   return {
@@ -132,7 +131,7 @@ app.get("/api/profile", authRequired, async (req, res) => {
 app.put("/api/profile", authRequired, async (req, res) => {
   try {
     await dbReady();
-    const allowedHeroes = new Set(["spider", "hammer", "meto", "bujijik", "adam", "yure", "joki", "gumi"]);
+    const allowedHeroes = new Set(["spider", "hammer", "meto", "bujijik", "adam", "yure", "joki"]);
     const selected = allowedHeroes.has(req.body.selectedHero) ? req.body.selectedHero : "spider";
     const result = await pool.query("SELECT trophies, unlocked FROM players WHERE id=$1", [req.user.id]);
     if (!result.rows[0]) return res.status(404).json({ error: "계정을 찾을 수 없습니다." });
@@ -145,8 +144,7 @@ app.put("/api/profile", authRequired, async (req, res) => {
       bujijik: Boolean(old.bujijik || trophies >= 150),
       adam: Boolean(old.adam || trophies >= 200),
       yure: Boolean(old.yure),
-      joki: Boolean(old.joki),
-      gumi: Boolean(old.gumi)
+      joki: true
     };
     const safeSelected = unlocked[selected] ? selected : "spider";
     const saved = await pool.query(
@@ -179,7 +177,7 @@ io.on("connection", socket => {
       socketId: socket.id,
       since: Date.now(),
       name: String(payload?.name || "플레이어").slice(0, 24),
-      hero: ["spider", "hammer", "meto", "bujijik", "adam", "yure", "joki", "gumi"].includes(payload?.hero) ? payload.hero : "spider"
+      hero: ["spider", "hammer", "meto", "bujijik", "adam", "yure", "joki"].includes(payload?.hero) ? payload.hero : "spider"
     };
     while (waiting.length) {
       const other = waiting.shift();
@@ -210,7 +208,7 @@ io.on("connection", socket => {
       facing: { x: Math.max(-1, Math.min(1, Number(data.facing?.x) || 0)), y: Math.max(-1, Math.min(1, Number(data.facing?.y) || 0)) },
       hp: Math.max(0, Math.min(200, Number(data.hp) || 0)),
       maxHp: Math.max(1, Math.min(200, Number(data.maxHp) || 100)),
-      alive: Boolean(data.alive), heroId: ["spider", "hammer", "meto", "bujijik", "adam", "yure", "joki", "gumi"].includes(data.heroId) ? data.heroId : "spider",
+      alive: Boolean(data.alive), heroId: ["spider", "hammer", "meto", "bujijik", "adam", "yure", "joki"].includes(data.heroId) ? data.heroId : "spider",
       name: String(data.name || "플레이어").slice(0, 24),
       buffTime: Math.max(0, Math.min(10, Number(data.buffTime) || 0)),
       stunTime: Math.max(0, Math.min(5, Number(data.stunTime) || 0)),
@@ -218,7 +216,6 @@ io.on("connection", socket => {
       adamAwakenTime: Math.max(0, Math.min(3, Number(data.adamAwakenTime) || 0)),
       jokiDamageTime: Math.max(0, Math.min(3, Number(data.jokiDamageTime) || 0)),
       jokiHealTime: Math.max(0, Math.min(8, Number(data.jokiHealTime) || 0)),
-      charmTime: Math.max(0, Math.min(2, Number(data.charmTime) || 0)),
       summons: Array.isArray(data.summons) ? data.summons.slice(0, 8).map(s => ({ id: String(s?.id || "").slice(0, 80), x: Math.max(48, Math.min(852, Number(s?.x) || 450)), y: Math.max(48, Math.min(852, Number(s?.y) || 450)), hp: Math.max(0, Math.min(20, Number(s?.hp) || 0)), alive: Boolean(s?.alive), facing: { x: Math.max(-1, Math.min(1, Number(s?.facing?.x) || 0)), y: Math.max(-1, Math.min(1, Number(s?.facing?.y) || 0)) } })) : []
     };
     socket.to(match.roomCode).emit("battle:state", safe);
@@ -232,7 +229,7 @@ io.on("connection", socket => {
       kind: data.kind,
       hit: Boolean(data.hit),
       punchSide: Number(data.punchSide) === 1 ? 1 : 0,
-      heroId: ["spider", "hammer", "meto", "bujijik", "adam", "yure", "joki", "gumi"].includes(data.heroId) ? data.heroId : "spider",
+      heroId: ["spider", "hammer", "meto", "bujijik", "adam", "yure", "joki"].includes(data.heroId) ? data.heroId : "spider",
       id: String(data.id || "").slice(0, 80),
       x: Math.max(48, Math.min(852, Number(data.x) || 450)),
       y: Math.max(48, Math.min(852, Number(data.y) || 450)),
@@ -240,10 +237,9 @@ io.on("connection", socket => {
       bullets: Array.isArray(data.bullets) ? data.bullets.slice(0, 20).map(b => ({
         x: Math.max(0, Math.min(900, Number(b?.x) || 0)), y: Math.max(0, Math.min(900, Number(b?.y) || 0)),
         vx: Math.max(-800, Math.min(800, Number(b?.vx) || 0)), vy: Math.max(-800, Math.min(800, Number(b?.vy) || 0)),
-        r: Math.max(2, Math.min(24, Number(b?.r) || 5)), life: Math.max(.1, Math.min(4, Number(b?.life) || 1)),
-        damage: Math.max(0, Math.min(30, b?.damage == null ? 1 : Number(b.damage) || 0)),
+        r: Math.max(2, Math.min(18, Number(b?.r) || 5)), life: Math.max(.1, Math.min(3, Number(b?.life) || 1)),
         color: /^#[0-9a-fA-F]{3,8}$/.test(String(b?.color || "")) ? String(b.color) : "#ffffff",
-        kind: String(b?.kind || "bullet").slice(0, 24), stun: Math.max(0, Math.min(2, Number(b?.stun) || 0)), charm: Math.max(0, Math.min(2, Number(b?.charm) || 0))
+        kind: String(b?.kind || "bullet").slice(0, 24), stun: Math.max(0, Math.min(2, Number(b?.stun) || 0))
       })) : []
     };
     socket.to(match.roomCode).emit("battle:attack", safe);
@@ -257,9 +253,7 @@ io.on("connection", socket => {
   socket.on("battle:damage", data => {
     const match = socketUsers.get(socket.id);
     const amount = Math.max(0, Math.min(100, Number(data?.amount) || 0));
-    const stun = Math.max(0, Math.min(2, Number(data?.stun) || 0));
-    const charm = Math.max(0, Math.min(2, Number(data?.charm) || 0));
-    if (match?.roomCode && (amount > 0 || stun > 0 || charm > 0)) socket.to(match.roomCode).emit("battle:damage", { amount, stun, charm });
+    if (match?.roomCode && amount > 0) socket.to(match.roomCode).emit("battle:damage", { amount, stun: Math.max(0, Math.min(2, Number(data?.stun) || 0)) });
   });
   socket.on("battle:leave", () => {
     const match = socketUsers.get(socket.id);
