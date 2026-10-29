@@ -328,7 +328,7 @@ $('#ai-match-btn').addEventListener('click',()=>{renderTowerMenu();showScreen('a
 $('#ai-basic-btn').addEventListener('click',()=>startMatch('ai'));
 $('#ai-tower-btn').addEventListener('click',()=>{const floor=Math.max(1,Math.min(100,Number(currentUser?.towerFloor)||1));startMatch('tower',null,floor)});
 $('#user-match-btn').addEventListener('click',()=>beginUserMatch());
-$('#collection-btn').addEventListener('click',()=>{refreshMenu();showScreen('collection-screen')});
+$('#collection-btn').addEventListener('click',()=>{refreshMenu();renderCollection();showScreen('collection-screen')});
 $('#trophy-btn').addEventListener('click',()=>{refreshMenu();showScreen('trophy-screen')});
 $('#shop-btn').addEventListener('click',()=>{refreshMenu();renderShop();showScreen('shop-screen')});
 $('#mail-btn').addEventListener('click',()=>{if(currentUser){currentUser.mailRewardRead=true;saveProfile()}refreshMenu();renderMail();showScreen('mail-screen')});
