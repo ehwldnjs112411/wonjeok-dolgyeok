@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 <meta name="theme-color" content="#0b1020" />
-<title>원격돌격 v2.0</title>
+<title>원격돌격 v2.1.2</title>
 <style>
 :root{--bg:#0b1020;--panel:#131b31;--panel2:#1a2541;--line:#2c3b5d;--text:#f3f6ff;--muted:#9ba9c8;--cyan:#53e0e8;--blue:#5d7cff;--gold:#ffc857;--pink:#ff557f;--green:#5be3a0}
 *{box-sizing:border-box}html,body{margin:0;width:100%;min-height:100%;font-family:Inter,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;background:radial-gradient(ellipse at 50% -15%,#24345d 0%,#10172a 42%,var(--bg) 78%);color:var(--text)}
@@ -301,11 +301,27 @@ $('#tab-login').addEventListener('click',()=>setAuthMode('login'));
 $('#tab-register').addEventListener('click',()=>setAuthMode('register'));
 $('#auth-form').addEventListener('submit',async e=>{e.preventDefault();const name=$('#auth-name').value.trim();const password=$('#auth-password').value;const confirm=$('#auth-confirm').value;const key=name.toLocaleLowerCase();const notice=$('#auth-notice');notice.style.color='var(--gold)';try{
  if(name.length<2){notice.textContent='이름은 두 글자 이상 입력해줘.';return} if(password.length<4){notice.textContent='비밀번호는 4자 이상으로 설정해줘.';return}
- if(authMode==='register'){if(password!==confirm){notice.textContent='비밀번호가 서로 달라.';return}if(accountStore[key]){notice.textContent='이미 사용 중인 이름이야.';return}const salt=makeSalt();const digest=await hashPassword(password,salt);accountStore[key]={name,salt,passHash:digest,trophies:0,coins:0,wins:0,losses:0,selectedHero:'spider',unlocked:{spider:true,hammer:false,meto:false,bujijik:false,adam:false,yure:false,joki:false,gumi:false},trophyCoinRewardsClaimed:[],unlockVersion:6,towerFloor:1,towerCompleted:0,towerRewardsClaimed:[],jokiPurchased:false,mailRewardClaimed:false,mailRewardRead:false,createdAt:Date.now()};writeAccounts();loginUser(key);}
- else{const acc=accountStore[key];if(!acc){notice.textContent='계정을 찾을 수 없어. 회원가입을 먼저 해줘.';return}const digest=await hashPassword(password,acc.salt);if(digest!==acc.passHash){notice.textContent='이름 또는 비밀번호가 맞지 않아.';return}loginUser(key)}
- }catch(err){console.error('Auth submit failed:',err);notice.style.color='#ff8297';notice.textContent='로그인 처리 중 오류가 발생했어. 입력을 확인하고 다시 시도해 줘.'}
+ if(authMode==='register'){
+  if(password!==confirm){notice.textContent='비밀번호가 서로 달라.';return}
+  if(accountStore[key]){notice.textContent='이미 사용 중인 이름이야.';return}
+  const salt=makeSalt();const digest=await hashPassword(password,salt);
+  accountStore[key]={name,salt,passHash:digest,trophies:0,coins:0,wins:0,losses:0,selectedHero:'spider',unlocked:{spider:true,hammer:false,meto:false,bujijik:false,adam:false,yure:false,joki:false,gumi:false},trophyCoinRewardsClaimed:[],unlockVersion:6,towerFloor:1,towerCompleted:0,towerRewardsClaimed:[],jokiPurchased:false,mailRewardClaimed:false,mailRewardRead:false,createdAt:Date.now()};
+  if(!writeAccounts())throw new Error('브라우저 저장소에 계정을 저장하지 못했어. 시크릿 모드가 아닌 창에서 다시 시도해 줘.');
+  loginUser(key);
+ } else {
+  const acc=accountStore[key];if(!acc){notice.textContent='계정을 찾을 수 없어. 회원가입을 먼저 해줘.';return}
+  if(!acc.salt||!acc.passHash)throw new Error('저장된 계정 정보가 오래된 형식이야. 회원가입으로 새 계정을 만들어 줘.');
+  const digest=await hashPassword(password,acc.salt);if(digest!==acc.passHash){notice.textContent='이름 또는 비밀번호가 맞지 않아.';return}loginUser(key)
+ }
+ }catch(err){console.error('Auth submit failed:',err);notice.style.color='#ff8297';notice.textContent=(err&&err.message&&/브라우저 저장소|오래된 형식/.test(err.message))?err.message:'로그인 처리 중 오류가 발생했어. 페이지를 새로고침하고 다시 시도해 줘.'}
 });
 function syncUnlocks(){if(!currentUser)return;const t=Number(currentUser.trophies)||0;currentUser.coins=Math.max(0,Math.floor(Number(currentUser.coins)||0));currentUser.mailRewardClaimed=!!currentUser.mailRewardClaimed;currentUser.mailRewardRead=!!currentUser.mailRewardRead;currentUser.trophyCoinRewardsClaimed=Array.isArray(currentUser.trophyCoinRewardsClaimed)?currentUser.trophyCoinRewardsClaimed.map(Number).filter(n=>[250,300,400,500].includes(n)):[];currentUser.unlocked=Object.assign({spider:true,hammer:false,meto:false,bujijik:false,adam:false,yure:false,joki:false,gumi:false},currentUser.unlocked||{});currentUser.halloweenGiftClaimed=!!(currentUser.halloweenGiftClaimed||currentUser.unlocked.halloweenGiftClaimed);currentUser.unlocked.halloweenGiftClaimed=currentUser.halloweenGiftClaimed;currentUser.jokiPurchased=!!currentUser.jokiPurchased;if(!currentUser.jokiPurchased)currentUser.unlocked.joki=false;currentUser.towerFloor=Math.max(1,Math.min(100,Math.floor(Number(currentUser.towerFloor)||1)));currentUser.towerCompleted=Math.max(0,Math.min(100,Math.floor(Number(currentUser.towerCompleted)||0)));currentUser.towerRewardsClaimed=Array.isArray(currentUser.towerRewardsClaimed)?currentUser.towerRewardsClaimed.map(Number).filter(n=>Number.isInteger(n)&&n>=1&&n<=100):[];const version=Number(currentUser.unlockVersion)||0;if(version<3){currentUser.unlocked.bujijik=t>=150;currentUser.unlocked.adam=t>=200}currentUser.unlockVersion=6;currentUser.unlocked.spider=true;if(t>=50)currentUser.unlocked.hammer=true;if(t>=100)currentUser.unlocked.meto=true;if(t>=150)currentUser.unlocked.bujijik=true;if(t>=200)currentUser.unlocked.adam=true;currentUser.unlocked.yure=!!currentUser.unlocked.yure;currentUser.unlocked.joki=!!currentUser.unlocked.joki;currentUser.unlocked.gumi=!!currentUser.unlocked.gumi;if(!currentUser.selectedHero||!HEROES[currentUser.selectedHero]||!currentUser.unlocked[currentUser.selectedHero])currentUser.selectedHero='spider'}
+// Restore the per-character portrait class helper used by the login/menu refresh.
+// Without this function, loginUser() throws while renderFeatured() updates the menu.
+function heroOrbClass(id){
+ const classes={spider:'fighter-orb',hammer:'hammer-orb',meto:'meto-orb',bujijik:'poop-orb',adam:'adam-orb',yure:'yure-orb',joki:'joki-orb',gumi:'gumi-orb'};
+ return classes[id]||'fighter-orb';
+}
 function renderFeatured(){if(!currentUser)return;const h=HEROES[currentUser.selectedHero]||HEROES.spider;const orb=$('#featured-orb');orb.className=heroOrbClass(h.id);$('#featured-name').textContent=h.name;$('#featured-desc').textContent=h.short+' · '+(h.id==='spider'?'거미줄 이동 궁극기':h.id==='hammer'?'자기 강화 궁극기':h.id==='meto'?'기절 탄환 궁극기':h.id==='adam'?'3초 흡혈 강화':h.id==='yure'?'콜트식 연속 사격 궁극기':h.id==='joki'?'무작위 궁극기':'똥 소환 궁극기');$('#featured-status').textContent=h.id==='yure'?'상점 구매 전용':h.unlockAt===0?'기본 지급':'영구 잠금 해제'}
 $('#logout-btn').addEventListener('click',()=>{stopGame();window.__wonjeokLoggedIn=false;activeAccountKey=null;currentUser=null;$('#auth-name').value='';$('#auth-password').value='';$('#auth-confirm').value='';setAuthMode('login');showScreen('auth-screen')});
 $('#ai-match-btn').addEventListener('click',()=>{renderTowerMenu();showScreen('ai-mode-screen')});
