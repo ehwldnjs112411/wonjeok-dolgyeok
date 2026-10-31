@@ -49,7 +49,7 @@ async function initDb() {
       wins INTEGER NOT NULL DEFAULT 0,
       losses INTEGER NOT NULL DEFAULT 0,
       selected_hero VARCHAR(16) NOT NULL DEFAULT 'spider',
-      unlocked JSONB NOT NULL DEFAULT '{"spider":true,"hammer":false,"meto":false,"bujijik":false,"adam":false,"yure":false,"joki":true}'::jsonb,
+      unlocked JSONB NOT NULL DEFAULT '{"spider":true,"hammer":false,"meto":false,"bujijik":false,"adam":false,"yure":false,"joki":true,"gumi":false,"sniff":false,"kuro":false}'::jsonb,
       coins INTEGER NOT NULL DEFAULT 0 CHECK (coins >= 0),
       mail_reward_claimed BOOLEAN NOT NULL DEFAULT FALSE,
       mail_reward_read BOOLEAN NOT NULL DEFAULT FALSE,
@@ -131,7 +131,7 @@ app.get("/api/profile", authRequired, async (req, res) => {
 app.put("/api/profile", authRequired, async (req, res) => {
   try {
     await dbReady();
-    const allowedHeroes = new Set(["spider", "hammer", "meto", "bujijik", "adam", "yure", "joki", "gumi", "sniff"]);
+    const allowedHeroes = new Set(["spider", "hammer", "meto", "bujijik", "adam", "yure", "joki", "gumi", "sniff", "kuro"]);
     const selected = allowedHeroes.has(req.body.selectedHero) ? req.body.selectedHero : "spider";
     const result = await pool.query("SELECT trophies, unlocked FROM players WHERE id=$1", [req.user.id]);
     if (!result.rows[0]) return res.status(404).json({ error: "계정을 찾을 수 없습니다." });
@@ -146,7 +146,8 @@ app.put("/api/profile", authRequired, async (req, res) => {
       yure: Boolean(old.yure),
       joki: true,
       gumi: Boolean(old.gumi),
-      sniff: Boolean(old.sniff)
+      sniff: Boolean(old.sniff),
+      kuro: Boolean(old.kuro)
     };
     const safeSelected = unlocked[selected] ? selected : "spider";
     const saved = await pool.query(
@@ -179,7 +180,7 @@ io.on("connection", socket => {
       socketId: socket.id,
       since: Date.now(),
       name: String(payload?.name || "플레이어").slice(0, 24),
-      hero: ["spider", "hammer", "meto", "bujijik", "adam", "yure", "joki", "gumi", "sniff"].includes(payload?.hero) ? payload.hero : "spider"
+      hero: ["spider", "hammer", "meto", "bujijik", "adam", "yure", "joki", "gumi", "sniff", "kuro"].includes(payload?.hero) ? payload.hero : "spider"
     };
     while (waiting.length) {
       const other = waiting.shift();
@@ -210,7 +211,7 @@ io.on("connection", socket => {
       facing: { x: Math.max(-1, Math.min(1, Number(data.facing?.x) || 0)), y: Math.max(-1, Math.min(1, Number(data.facing?.y) || 0)) },
       hp: Math.max(0, Math.min(200, Number(data.hp) || 0)),
       maxHp: Math.max(1, Math.min(200, Number(data.maxHp) || 100)),
-      alive: Boolean(data.alive), heroId: ["spider", "hammer", "meto", "bujijik", "adam", "yure", "joki", "gumi", "sniff"].includes(data.heroId) ? data.heroId : "spider",
+      alive: Boolean(data.alive), heroId: ["spider", "hammer", "meto", "bujijik", "adam", "yure", "joki", "gumi", "sniff", "kuro"].includes(data.heroId) ? data.heroId : "spider",
       name: String(data.name || "플레이어").slice(0, 24),
       buffTime: Math.max(0, Math.min(10, Number(data.buffTime) || 0)),
       stunTime: Math.max(0, Math.min(5, Number(data.stunTime) || 0)),
@@ -219,6 +220,7 @@ io.on("connection", socket => {
       jokiDamageTime: Math.max(0, Math.min(3, Number(data.jokiDamageTime) || 0)),
       jokiHealTime: Math.max(0, Math.min(8, Number(data.jokiHealTime) || 0)),
       charmTime: Math.max(0, Math.min(2, Number(data.charmTime) || 0)),
+      kuroStealthTime: Math.max(0, Math.min(1, Number(data.kuroStealthTime) || 0)),
       summons: Array.isArray(data.summons) ? data.summons.slice(0, 8).map(s => ({ id: String(s?.id || "").slice(0, 80), x: Math.max(48, Math.min(852, Number(s?.x) || 450)), y: Math.max(48, Math.min(852, Number(s?.y) || 450)), hp: Math.max(0, Math.min(20, Number(s?.hp) || 0)), alive: Boolean(s?.alive), facing: { x: Math.max(-1, Math.min(1, Number(s?.facing?.x) || 0)), y: Math.max(-1, Math.min(1, Number(s?.facing?.y) || 0)) } })) : []
     };
     socket.to(match.roomCode).emit("battle:state", safe);
@@ -226,13 +228,13 @@ io.on("connection", socket => {
   socket.on("battle:attack", data => {
     const match = socketUsers.get(socket.id);
     if (!match?.roomCode || !data || typeof data !== "object") return;
-    const allowed = new Set(["projectiles", "melee", "spider-ultimate", "ultimate-shield", "adam-ultimate", "joki-stun-ultimate", "joki-heal-ultimate", "joki-damage-ultimate", "summon", "summon-swing"]);
+    const allowed = new Set(["projectiles", "melee", "spider-ultimate", "ultimate-shield", "kuro-stealth-ultimate", "adam-ultimate", "joki-stun-ultimate", "joki-heal-ultimate", "joki-damage-ultimate", "summon", "summon-swing"]);
     if (!allowed.has(data.kind)) return;
     const safe = {
       kind: data.kind,
       hit: Boolean(data.hit),
       punchSide: Number(data.punchSide) === 1 ? 1 : 0,
-      heroId: ["spider", "hammer", "meto", "bujijik", "adam", "yure", "joki", "gumi", "sniff"].includes(data.heroId) ? data.heroId : "spider",
+      heroId: ["spider", "hammer", "meto", "bujijik", "adam", "yure", "joki", "gumi", "sniff", "kuro"].includes(data.heroId) ? data.heroId : "spider",
       id: String(data.id || "").slice(0, 80),
       x: Math.max(48, Math.min(852, Number(data.x) || 450)),
       y: Math.max(48, Math.min(852, Number(data.y) || 450)),
