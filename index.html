@@ -54,29 +54,39 @@ button,input{font:inherit}button{cursor:pointer;border:0;color:var(--text);font-
 #ai-mode-screen .server-note{margin-top:18px}
 .joki-orb{width:86px;height:86px;border-radius:50%;position:relative;background:radial-gradient(circle at 30% 25%,#fff5a8 0 7%,transparent 8%),linear-gradient(145deg,#ff9ed6 0 45%,#b94c9d 46% 100%);border:5px solid #ffe5f6;box-shadow:0 0 0 9px #ff8dcc18,0 12px 28px #0006}
 .joki-orb:before{content:"";position:absolute;left:17px;top:25px;width:12px;height:15px;border-radius:50%;background:#fff;box-shadow:28px 0 #fff}
-.joki-orb:after{content:"";position:absolute;left:22px;top:31px;width:5px;height:7px;border-radius:50%;background:#53224d;box-shadow:28px 0 #53224d}.gumi-orb{width:86px;height:86px;border-radius:50%;position:relative;background:radial-gradient(circle at 30% 20%,#fff 0 9%,transparent 10%),linear-gradient(145deg,#ffb1d7,#ed4a9e);border:5px solid #ffe4f5;box-shadow:0 0 0 9px #ff80c218,0 12px 28px #0006}.gumi-orb:before{content:"♥";position:absolute;left:19px;top:15px;font-size:40px;color:#fff5fa;text-shadow:0 2px 7px #ba2d78}
+.joki-orb:after{content:"";position:absolute;left:22px;top:31px;width:5px;height:7px;border-radius:50%;background:#53224d;box-shadow:28px 0 #53224d}.gumi-orb{width:86px;height:86px;border-radius:50%;position:relative;overflow:visible;isolation:isolate;
+ background:
+  radial-gradient(ellipse 2.2px 3.5px at 37% 49%,#fff 0 95%,transparent 100%),
+  radial-gradient(ellipse 2.2px 3.5px at 66% 49%,#fff 0 95%,transparent 100%),
+  radial-gradient(ellipse 2.5px 3.4px at 38% 51%,#4a283a 0 95%,transparent 100%),
+  radial-gradient(ellipse 2.5px 3.4px at 67% 51%,#4a283a 0 95%,transparent 100%),
+  radial-gradient(circle 1.2px at 39% 48%,#fff 0 95%,transparent 100%),
+  radial-gradient(circle 1.2px at 68% 48%,#fff 0 95%,transparent 100%),
+  radial-gradient(ellipse 11px 5px at 23% 68%,#f47aa65c 0 98%,transparent 100%),
+  radial-gradient(ellipse 11px 5px at 77% 68%,#f47aa65c 0 98%,transparent 100%),
+  radial-gradient(ellipse 7px 3.5px at 50% 77%,#cf477d 0 95%,transparent 100%),
+  radial-gradient(ellipse 5px 1.5px at 50% 75%,#ffb3d0 0 95%,transparent 100%),
+  radial-gradient(circle at 35% 22%,#fff9 0 5%,transparent 6%),
+  radial-gradient(circle at 42% 38%,#ffe4f0 0 2%,transparent 3%),
+  radial-gradient(circle at 50% 46%,#ffd0e2 0 50%,#f38ab8 100%);
+ border:4px solid #ffe7f3;box-shadow:0 0 0 8px #ff80c21c,0 10px 24px #0005;}
+.gumi-orb:before{content:"";position:absolute;z-index:2;pointer-events:none;left:-5px;top:-9px;width:calc(100% + 10px);height:61%;border-radius:52% 52% 30% 30%;
+ background:
+  radial-gradient(circle at 5% 91%,#60302f 0 8px,transparent 8.8px),
+  radial-gradient(circle at 10% 69%,#87453c 0 9px,transparent 9.8px),
+  radial-gradient(circle at 14% 48%,#9b5748 0 8px,transparent 8.8px),
+  radial-gradient(circle at 95% 91%,#60302f 0 8px,transparent 8.8px),
+  radial-gradient(circle at 90% 69%,#87453c 0 9px,transparent 9.8px),
+  radial-gradient(circle at 86% 48%,#9b5748 0 8px,transparent 8.8px),
+  radial-gradient(ellipse at 50% 25%,#a35b4b 0 48%,transparent 50%),
+  radial-gradient(ellipse at 50% 17%,#713831 0 37%,transparent 39%);
+ filter:drop-shadow(0 2px 2px #4d263c88);}
+.gumi-orb:after{content:"";position:absolute;z-index:3;pointer-events:none;left:31%;top:5%;width:38%;height:22%;border-top:2px solid #d7957f;border-radius:50%;transform:rotate(-7deg);box-shadow:0 -2px 0 #6f3b37;}
 @media(max-width:900px){#ai-mode-screen{padding:16px 18px 28px}.ai-mode-grid{grid-template-columns:1fr}.ai-mode-card{min-height:220px}}
 @media(max-width:600px){#ai-mode-screen{padding:12px 12px 24px}.ai-mode-grid{gap:12px}.ai-mode-card{padding:18px;min-height:205px}.ai-mode-card p{font-size:12px}}
 
 
-/* 구미 신규 해피펌 헤어: 메뉴·도감·상점 초상화 공통 적용 */
-.gumi-orb:before{z-index:1}
-.gumi-orb:after{
- content:"";position:absolute;z-index:2;pointer-events:none;
- left:-4px;top:-12px;width:calc(100% + 8px);height:55px;
- background:
-  radial-gradient(circle at 5% 72%,#63302f 0 9px,transparent 10px),
-  radial-gradient(circle at 10% 47%,#874139 0 10px,transparent 11px),
-  radial-gradient(circle at 21% 30%,#a55749 0 11px,transparent 12px),
-  radial-gradient(circle at 34% 12%,#8b443b 0 15px,transparent 16px),
-  radial-gradient(circle at 51% 4%,#713630 0 19px,transparent 20px),
-  radial-gradient(circle at 68% 12%,#9c5145 0 15px,transparent 16px),
-  radial-gradient(circle at 82% 30%,#804038 0 11px,transparent 12px),
-  radial-gradient(circle at 91% 48%,#a05245 0 10px,transparent 11px),
-  radial-gradient(circle at 96% 73%,#61302f 0 9px,transparent 10px),
-  radial-gradient(ellipse at 50% 15%,#7c3b35 0 48%,transparent 50%);
- filter:drop-shadow(0 2px 2px #4c213c99);
-}
+/* 구미 초상화: 해피펌 실루엣과 메이크업은 위 .gumi-orb 규칙에서 표현 */
 </style>
 <style id="v2-1-side-panel">#game-screen .side-panel{display:block!important;width:min(100%,850px)!important;min-height:0!important;padding:0!important;margin:3px 0 0!important;background:transparent!important;border:0!important;box-shadow:none!important;grid-template-columns:1fr!important;gap:0!important}#game-screen .side-panel>h3,#game-screen .side-panel>.ability-card:not(:has(#ult-charge-fill)),#game-screen .side-panel>.control-list{display:none!important}#game-screen .side-panel>.ability-card:has(#ult-charge-fill){display:block!important;margin:0!important;padding:0!important;border:0!important;background:transparent!important}#game-screen .side-panel>.ability-card:has(#ult-charge-fill)>.ability-title:first-of-type,#game-screen .side-panel>#ult-desc,#game-screen #ult-ready-label{display:none!important}#game-screen .side-panel .charge-rail{height:7px;margin:6px 0 3px}#game-screen #ult-charge-text{font-size:11px;color:#c8d4ed}#game-screen .side-panel:empty{display:none!important}</style>
 </head>
@@ -571,6 +581,92 @@ function drawGame(t){if(!game)return;ctx.clearRect(0,0,900,900);const bg=ctx.cre
  // Corner markers
  for(const [x,y,sx,sy] of [[ARENA.min,ARENA.min,1,1],[ARENA.max,ARENA.min,-1,1],[ARENA.min,ARENA.max,1,-1],[ARENA.max,ARENA.max,-1,-1]]){ctx.strokeStyle='#d9ffff';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(x+sx*3,y+sy*34);ctx.lineTo(x+sx*3,y+sy*3);ctx.lineTo(x+sx*34,y+sy*3);ctx.stroke()}
 }
+function drawGumi(f,t){
+ const r=f.r,look=vecNorm(f.facing?.x||1,f.facing?.y||0);
+ ctx.save();ctx.translate(f.x,f.y);
+ // Soft pink skin base, with a warm luminous center.
+ const skin=ctx.createRadialGradient(-r*.34,-r*.42,r*.03,0,0,r*1.12);
+ skin.addColorStop(0,'#ffe5f0');skin.addColorStop(.52,'#ffbed8');skin.addColorStop(1,'#ed79b0');
+ ctx.fillStyle=skin;ctx.beginPath();ctx.arc(0,0,r,0,Math.PI*2);ctx.fill();
+ // Side locks and rounded happy-perm curls sit behind the face.
+ const hair=ctx.createLinearGradient(0,-r*1.12,0,r*.78);
+ hair.addColorStop(0,'#bd8069');hair.addColorStop(.34,'#985246');hair.addColorStop(.72,'#743b37');hair.addColorStop(1,'#512b35');
+ ctx.fillStyle=hair;ctx.strokeStyle='#512b35';ctx.lineWidth=Math.max(1,r*.055);
+ for(const side of [-1,1]){
+  ctx.beginPath();
+  ctx.moveTo(side*r*.56,-r*.56);
+  ctx.bezierCurveTo(side*r*1.02,-r*.57,side*r*1.11,r*.02,side*r*.82,r*.39);
+  ctx.bezierCurveTo(side*r*1.08,r*.56,side*r*.78,r*.87,side*r*.43,r*.72);
+  ctx.bezierCurveTo(side*r*.63,r*.57,side*r*.59,r*.31,side*r*.56,r*.08);
+  ctx.closePath();ctx.fill();ctx.stroke();
+  // Rounded curl tips, deliberately restrained so they read as soft waves at game scale.
+  for(const [cy,cr] of [[-.23,.17],[.20,.18],[.53,.15]]){
+   ctx.beginPath();ctx.arc(side*r*.78,cy*r,cr*r,0,Math.PI*2);ctx.fillStyle=hair;ctx.fill();ctx.stroke();
+  }
+ }
+ // Delicate face oval gives the hair a clean frame.
+ const face=ctx.createRadialGradient(-r*.2,-r*.25,1,0,r*.12,r*.88);
+ face.addColorStop(0,'#fff0f5');face.addColorStop(.62,'#ffd0e2');face.addColorStop(1,'#f5a6c8');
+ ctx.fillStyle=face;ctx.beginPath();ctx.ellipse(0,r*.05,r*.76,r*.84,0,0,Math.PI*2);ctx.fill();
+ // Face-framing top cap and soft side-swept fringe.
+ ctx.fillStyle=hair;ctx.strokeStyle='#512b35';ctx.lineWidth=Math.max(1,r*.055);
+ ctx.beginPath();ctx.moveTo(-r*.91,-r*.18);
+ ctx.bezierCurveTo(-r*1.03,-r*.78,-r*.58,-r*1.14,-r*.10,-r*1.01);
+ ctx.bezierCurveTo(r*.40,-r*1.17,r*1.02,-r*.82,r*.91,-r*.16);
+ ctx.bezierCurveTo(r*.72,-r*.34,r*.62,-r*.43,r*.46,-r*.31);
+ ctx.bezierCurveTo(r*.28,-r*.16,r*.12,-r*.43,-r*.04,-r*.31);
+ ctx.bezierCurveTo(-r*.22,-r*.13,-r*.31,-r*.40,-r*.47,-r*.29);
+ ctx.bezierCurveTo(-r*.62,-r*.17,-r*.77,-r*.30,-r*.91,-r*.18);
+ ctx.closePath();ctx.fill();ctx.stroke();
+ // Curl highlights: fine strokes rather than large bright blocks.
+ ctx.strokeStyle='#d69a82';ctx.lineWidth=Math.max(1,r*.035);ctx.lineCap='round';
+ for(const side of [-1,1]){
+  ctx.beginPath();ctx.moveTo(side*r*.65,-r*.79);ctx.bezierCurveTo(side*r*.43,-r*.96,side*r*.27,-r*.82,side*r*.36,-r*.66);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(side*r*.83,-r*.10);ctx.bezierCurveTo(side*r*1.00,r*.08,side*r*.69,r*.16,side*r*.78,r*.34);ctx.stroke();
+ }
+ // Petite gold hair clip with a pearl center.
+ ctx.save();ctx.translate(-r*.52,-r*.47);ctx.rotate(-.38);
+ ctx.strokeStyle='#f7d58e';ctx.lineWidth=Math.max(1,r*.055);ctx.beginPath();ctx.moveTo(-r*.13,0);ctx.lineTo(r*.13,0);ctx.stroke();
+ ctx.fillStyle='#fff1cb';ctx.beginPath();ctx.arc(0,0,r*.055,0,Math.PI*2);ctx.fill();ctx.restore();
+ // Refined brows, almond eyes, eyeliner and lashes. Pupils follow aim slightly.
+ const gx=look.x*r*.045,gy=look.y*r*.045;
+ for(const side of [-1,1]){
+  const ex=side*r*.31,ey=-r*.035;
+  ctx.strokeStyle='#70404a';ctx.lineWidth=Math.max(1,r*.055);ctx.lineCap='round';
+  ctx.beginPath();ctx.moveTo(ex-side*r*.16,ey-r*.205);ctx.quadraticCurveTo(ex,ey-r*.30,ex+side*r*.16,ey-r*.205);ctx.stroke();
+  ctx.fillStyle='#fffdfd';ctx.beginPath();ctx.ellipse(ex,ey,r*.175,r*.205,side*-.08,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle='#5c3040';ctx.lineWidth=Math.max(1.1,r*.065);ctx.beginPath();
+  ctx.moveTo(ex-r*.18,ey);ctx.quadraticCurveTo(ex,ey-r*.23,ex+r*.18,ey-r*.01);ctx.stroke();
+  ctx.fillStyle='#6c3c48';ctx.beginPath();ctx.ellipse(ex+gx,ey+gy,r*.092,r*.13,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#211b2b';ctx.beginPath();ctx.arc(ex+gx,ey+gy,r*.055,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(ex+gx-r*.025,ey+gy-r*.045,r*.035,0,Math.PI*2);ctx.fill();
+  // outer lashes
+  ctx.strokeStyle='#4a2938';ctx.lineWidth=Math.max(1,r*.045);ctx.beginPath();
+  ctx.moveTo(ex+side*r*.13,ey-r*.12);ctx.lineTo(ex+side*r*.22,ey-r*.23);
+  ctx.moveTo(ex+side*r*.16,ey-r*.08);ctx.lineTo(ex+side*r*.25,ey-r*.15);ctx.stroke();
+ }
+ // Rosy blush with a soft edge, not hard dots.
+ for(const side of [-1,1]){
+  const cheek=ctx.createRadialGradient(side*r*.57,r*.30,1,side*r*.57,r*.30,r*.24);
+  cheek.addColorStop(0,'#f47ca7a8');cheek.addColorStop(1,'#f47ca700');
+  ctx.fillStyle=cheek;ctx.beginPath();ctx.arc(side*r*.57,r*.30,r*.24,0,Math.PI*2);ctx.fill();
+  ctx.globalAlpha=.30;ctx.strokeStyle='#fff0f5';ctx.lineWidth=Math.max(.7,r*.025);
+  for(let i=0;i<3;i++){ctx.beginPath();ctx.moveTo(side*r*(.48+i*.07),r*(.29+i*.025));ctx.lineTo(side*r*(.52+i*.07),r*(.29+i*.025));ctx.stroke();}
+  ctx.globalAlpha=1;
+ }
+ // Tiny nose highlight and glossy rose lips.
+ ctx.fillStyle='#e99ab8';ctx.beginPath();ctx.ellipse(0,r*.28,r*.045,r*.027,0,0,Math.PI*2);ctx.fill();
+ const lip=ctx.createLinearGradient(0,r*.43,0,r*.63);lip.addColorStop(0,'#f38aae');lip.addColorStop(.55,'#d94c83');lip.addColorStop(1,'#a92f69');
+ ctx.fillStyle=lip;ctx.beginPath();ctx.moveTo(-r*.19,r*.51);
+ ctx.bezierCurveTo(-r*.12,r*.42,-r*.04,r*.47,0,r*.49);
+ ctx.bezierCurveTo(r*.05,r*.45,r*.13,r*.43,r*.19,r*.51);
+ ctx.bezierCurveTo(r*.12,r*.65,-r*.12,r*.65,-r*.19,r*.51);ctx.closePath();ctx.fill();
+ ctx.strokeStyle='#a9376a';ctx.lineWidth=Math.max(.8,r*.035);ctx.beginPath();ctx.moveTo(-r*.17,r*.51);ctx.quadraticCurveTo(0,r*.54,r*.17,r*.51);ctx.stroke();
+ ctx.strokeStyle='#ffd9e6';ctx.lineWidth=Math.max(.8,r*.035);ctx.beginPath();ctx.moveTo(-r*.055,r*.57);ctx.quadraticCurveTo(0,r*.59,r*.055,r*.57);ctx.stroke();
+ // Bright but thin outer ring keeps the character legible in the arena.
+ ctx.strokeStyle='#ffe6f2';ctx.lineWidth=Math.max(1.5,r*.12);ctx.beginPath();ctx.arc(0,0,r*.96,0,Math.PI*2);ctx.stroke();
+ ctx.restore();
+}
 function drawFighter(f,t){if(!f.alive)return;ctx.save();if(f.flash>0){ctx.globalAlpha=.5+.5*Math.sin(t*55)}if(f.buffTime>0){ctx.save();ctx.strokeStyle='#a98cff';ctx.lineWidth=4;ctx.shadowColor='#a98cff';ctx.shadowBlur=18;ctx.beginPath();ctx.arc(f.x,f.y,f.r+9+Math.sin(t*9)*2,0,Math.PI*2);ctx.stroke();ctx.restore()}if(f.sniffUltTime>0){ctx.save();for(let i=0;i<4;i++){const a=t*5+i*Math.PI/2;ctx.font='22px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.shadowColor='#ff8c2a';ctx.shadowBlur=14;ctx.fillText('🎃',f.x+Math.cos(a)*(f.r+19),f.y+Math.sin(a)*(f.r+19))}ctx.restore()}
  // soft shadow
  ctx.fillStyle='#0008';ctx.beginPath();ctx.ellipse(f.x+3,f.y+f.r*.6,f.r*1.08,f.r*.55,0,0,Math.PI*2);ctx.fill();
@@ -579,50 +675,7 @@ function drawFighter(f,t){if(!f.alive)return;ctx.save();if(f.flash>0){ctx.global
  }else if(f.heroId==='hammer'){
   ctx.fillStyle='#f0f3fb';ctx.beginPath();ctx.arc(f.x,f.y,f.r,0,Math.PI*2);ctx.fill();ctx.save();ctx.beginPath();ctx.arc(f.x,f.y,f.r,0,Math.PI*2);ctx.clip();ctx.fillStyle='#111522';ctx.fillRect(f.x-f.r,f.y-f.r,f.r,f.r*2);ctx.restore();ctx.strokeStyle='#b6c3da';ctx.lineWidth=2.5;ctx.beginPath();ctx.arc(f.x,f.y,f.r-1,0,Math.PI*2);ctx.stroke();const a=Math.atan2(f.facing.y,f.facing.x);for(const sign of [-1,1]){const ex=f.x+Math.cos(a)*8-Math.sin(a)*sign*6,ey=f.y+Math.sin(a)*8+Math.cos(a)*sign*6;ctx.fillStyle='#eaf1ff';ctx.beginPath();ctx.ellipse(ex,ey,5,3,0,0,Math.PI*2);ctx.fill()}
   if(f.attackAnim>0){ctx.save();ctx.translate(f.x,f.y);ctx.rotate(a);const prog=f.attackAnim/.25;ctx.strokeStyle='#f8fafc';ctx.lineWidth=8;ctx.shadowColor='#fff';ctx.shadowBlur=7;ctx.beginPath();ctx.arc(0,0,53,-Math.PI/2,Math.PI/2);ctx.stroke();ctx.shadowBlur=0;ctx.fillStyle='#aebbd1';ctx.fillRect(29,-5,32,10);ctx.fillStyle='#edf2fb';ctx.fillRect(49,-15,17,30);ctx.strokeStyle='#56627c';ctx.lineWidth=2;ctx.strokeRect(49,-15,17,30);ctx.restore()}
- }else if(f.heroId==='meto'){const a=Math.atan2(f.facing.y,f.facing.x);ctx.fillStyle='#528d78';ctx.beginPath();ctx.arc(f.x,f.y,f.r,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#c1f5d9';ctx.lineWidth=2.5;ctx.beginPath();ctx.arc(f.x,f.y,f.r-1,0,Math.PI*2);ctx.stroke();ctx.save();ctx.translate(f.x,f.y);ctx.rotate(a);ctx.fillStyle='#1c2c3a';ctx.fillRect(4,-5,29,10);ctx.fillStyle='#c7f5d9';ctx.fillRect(25,-3,12,6);ctx.fillStyle='#effff4';ctx.beginPath();ctx.ellipse(-5,-3,3.5,2.5,0,0,Math.PI*2);ctx.ellipse(-5,4,3.5,2.5,0,0,Math.PI*2);ctx.fill();ctx.restore();if(f.attackAnim>0){ctx.save();ctx.translate(f.x,f.y);ctx.rotate(a);ctx.strokeStyle='#a9f3ce';ctx.lineWidth=4;ctx.globalAlpha=f.attackAnim/.14;ctx.beginPath();ctx.moveTo(16,0);ctx.lineTo(38,0);ctx.stroke();ctx.restore()}}else if(f.heroId==='bujijik'){ctx.fillStyle='#995f3c';ctx.beginPath();ctx.arc(f.x,f.y,f.r,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#d7a67e';ctx.lineWidth=3;ctx.beginPath();ctx.arc(f.x,f.y,f.r-1,0,Math.PI*2);ctx.stroke();const eyeDir=vecNorm(f.facing?.x||1,f.facing?.y||0);ctx.fillStyle='#fff0df';ctx.beginPath();ctx.ellipse(f.x-7,f.y-4,5.2,6,0,0,Math.PI*2);ctx.ellipse(f.x+7,f.y-4,5.2,6,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#4b2b1b';ctx.beginPath();ctx.arc(f.x-7+eyeDir.x*2.1,f.y-3+eyeDir.y*2.1,2.2,0,Math.PI*2);ctx.arc(f.x+7+eyeDir.x*2.1,f.y-3+eyeDir.y*2.1,2.2,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#4b2b1b';ctx.lineWidth=3;ctx.beginPath();ctx.arc(f.x,f.y+5,7,.15,Math.PI-.15);ctx.stroke();if(f.attackAnim>0){ctx.strokeStyle='#d7a67e';ctx.lineWidth=3;ctx.beginPath();ctx.arc(f.x,f.y,f.r+6,Math.atan2(f.facing.y,f.facing.x)-.8,Math.atan2(f.facing.y,f.facing.x)+.8);ctx.stroke()}}else if(f.heroId==='adam'){const a=Math.atan2(f.facing.y,f.facing.x);ctx.save();ctx.translate(f.x,f.y);ctx.rotate(a);if(f.adamAwakenTime>0){ctx.shadowColor='#ff334f';ctx.shadowBlur=24;ctx.strokeStyle='#ff3855';ctx.lineWidth=4;ctx.beginPath();ctx.arc(0,0,f.r+8+Math.sin(t*18)*2,0,Math.PI*2);ctx.stroke()}ctx.fillStyle='#090b13';ctx.beginPath();ctx.arc(0,0,f.r,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#e8324c';ctx.lineWidth=3;ctx.beginPath();ctx.arc(0,0,f.r-1,-Math.PI/2,Math.PI/2);ctx.stroke();ctx.fillStyle='#f63b52';ctx.beginPath();ctx.moveTo(-f.r,0);ctx.lineTo(f.r,0);ctx.lineTo(0,f.r);ctx.closePath();ctx.fill();ctx.fillStyle='#ffebee';ctx.beginPath();ctx.moveTo(-12,-6);ctx.lineTo(-3,-3);ctx.lineTo(-12,0);ctx.closePath();ctx.fill();ctx.beginPath();ctx.moveTo(3,-3);ctx.lineTo(12,-6);ctx.lineTo(12,0);ctx.closePath();ctx.fill();ctx.fillStyle='#111';if(f.attackAnim>0){const progress=1-f.attackAnim/.16;const reach=28+progress*23;ctx.save();ctx.globalAlpha=.9;ctx.strokeStyle='#ff7185';ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(18,-5);ctx.lineTo(reach+12,-5);ctx.moveTo(18,5);ctx.lineTo(reach+9,5);ctx.stroke();ctx.fillStyle='#171b26';ctx.fillRect(10,-4,reach-7,8);ctx.strokeStyle='#ff5268';ctx.lineWidth=2;ctx.strokeRect(10,-4,reach-7,8);ctx.fillStyle='#ffb4c0';ctx.beginPath();ctx.ellipse(reach+2,0,8,6,0,0,Math.PI*2);ctx.fill();ctx.restore()}ctx.restore()}else if(f.heroId==='joki'){const a=Math.atan2(f.facing.y,f.facing.x);ctx.fillStyle='#ff8dcc';ctx.beginPath();ctx.arc(f.x,f.y,f.r,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#ffe4f5';ctx.lineWidth=3;ctx.beginPath();ctx.arc(f.x,f.y,f.r-1,0,Math.PI*2);ctx.stroke();ctx.fillStyle='#53224d';ctx.beginPath();ctx.ellipse(f.x-6+a*0.0+Math.cos(a)*2,f.y-3+Math.sin(a)*2,3,4,0,0,Math.PI*2);ctx.ellipse(f.x+6+Math.cos(a)*2,f.y-3+Math.sin(a)*2,3,4,0,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#7d214e';ctx.lineWidth=2;ctx.beginPath();ctx.arc(f.x,f.y+5,6,.15,Math.PI-.15);ctx.stroke();if(f.attackAnim>0){ctx.save();ctx.translate(f.x,f.y);ctx.rotate(a);for(let ci=0;ci<Math.min(4,f.jokiCandyCount||1);ci++){ctx.fillStyle=['#ff557f','#ffd45c','#7ee4ff','#b58bff'][ci%4];ctx.beginPath();ctx.arc(30+ci*13,(ci%2?9:-9),5,0,Math.PI*2);ctx.fill()}ctx.restore()}}else if(f.heroId==='yure'){const a=Math.atan2(f.facing.y,f.facing.x);ctx.fillStyle='#ffd43e';ctx.beginPath();ctx.arc(f.x,f.y,f.r,0,Math.PI*2);ctx.fill();ctx.save();ctx.beginPath();ctx.arc(f.x,f.y,f.r,0,Math.PI*2);ctx.clip();ctx.fillStyle='#ff8b28';ctx.beginPath();ctx.ellipse(f.x+f.r*.12,f.y+f.r*.67,f.r*1.25,f.r*.62,0,Math.PI,Math.PI*2);ctx.fill();ctx.restore();ctx.strokeStyle='#fff0a0';ctx.lineWidth=2.5;ctx.beginPath();ctx.arc(f.x,f.y,f.r-1,0,Math.PI*2);ctx.stroke();ctx.save();ctx.translate(f.x,f.y);ctx.rotate(a);ctx.fillStyle='#9f4a17';ctx.fillRect(5,-5,30,10);ctx.fillStyle='#ffb53b';ctx.fillRect(25,-3,13,6);ctx.fillStyle='#fff8da';ctx.beginPath();ctx.ellipse(-5,-4,4,3,0,0,Math.PI*2);ctx.ellipse(-5,4,4,3,0,0,Math.PI*2);ctx.fill();ctx.restore();if(f.attackAnim>0){ctx.save();ctx.translate(f.x,f.y);ctx.rotate(a);ctx.strokeStyle='#ffb84a';ctx.lineWidth=4;ctx.globalAlpha=f.attackAnim/.14;ctx.beginPath();ctx.moveTo(17,0);ctx.lineTo(41,0);ctx.stroke();ctx.restore()}}else if(f.heroId==='gumi'){
- const a=Math.atan2(f.facing.y,f.facing.x);
- // 핑크 구미 본체
- ctx.fillStyle='#ff8dcb';ctx.beginPath();ctx.arc(f.x,f.y,f.r,0,Math.PI*2);ctx.fill();
- // 귀 옆으로 내려오는 해피펌 컬과 둥근 윗머리
- ctx.save();ctx.translate(f.x,f.y);
- const r=f.r;
- const hairGrad=ctx.createLinearGradient(0,-r*1.18,0,r*.35);
- hairGrad.addColorStop(0,'#bd7963');hairGrad.addColorStop(.38,'#874239');hairGrad.addColorStop(1,'#542b32');
- ctx.fillStyle=hairGrad;ctx.strokeStyle='#4b2630';ctx.lineWidth=Math.max(1.2,r*.075);
- // 양옆의 풍성한 컬: 얼굴 바깥쪽에 세 겹씩 배치
- for(const side of [-1,1]){
-  const curls=[[-.42,.22],[-.02,.25],[.39,.22]];
-  for(let ci=0;ci<curls.length;ci++){
-   const [cy,cr]=curls[ci],cx=side*r*.82,yy=cy*r,rr=cr*r;
-   ctx.beginPath();ctx.arc(cx,yy,rr,0,Math.PI*2);ctx.fillStyle=ci===1?'#8e473e':'#713630';ctx.fill();ctx.stroke();
-   ctx.beginPath();ctx.arc(cx-side*rr*.18,yy-rr*.12,rr*.57,Math.PI*.9,Math.PI*1.82);
-   ctx.strokeStyle='#c47a62';ctx.lineWidth=Math.max(1,r*.055);ctx.stroke();
-   ctx.strokeStyle='#4b2630';ctx.lineWidth=Math.max(1.2,r*.075);
-  }
- }
- // 머리 윗부분과 자연스럽게 흐르는 앞머리
- ctx.beginPath();
- ctx.moveTo(-r*.92,-r*.14);
- ctx.bezierCurveTo(-r*1.02,-r*.82,-r*.60,-r*1.14,-r*.10,-r*1.02);
- ctx.bezierCurveTo(r*.38,-r*1.17,r*1.02,-r*.88,r*.92,-r*.16);
- ctx.bezierCurveTo(r*.76,-r*.34,r*.64,-r*.48,r*.48,-r*.34);
- ctx.bezierCurveTo(r*.29,-r*.17,r*.16,-r*.49,-r*.02,-r*.35);
- ctx.bezierCurveTo(-r*.20,-r*.18,-r*.29,-r*.47,-r*.44,-r*.33);
- ctx.bezierCurveTo(-r*.61,-r*.19,-r*.76,-r*.34,-r*.92,-r*.14);
- ctx.closePath();ctx.fillStyle=hairGrad;ctx.fill();ctx.strokeStyle='#4b2630';ctx.lineWidth=Math.max(1.2,r*.075);ctx.stroke();
- // 컬의 윤기와 웨이브 결
- ctx.strokeStyle='#d18b70';ctx.lineWidth=Math.max(1,r*.06);ctx.lineCap='round';
- for(const side of [-1,1]){
-  ctx.beginPath();ctx.moveTo(side*r*.68,-r*.78);ctx.bezierCurveTo(side*r*.48,-r*.95,side*r*.28,-r*.83,side*r*.34,-r*.66);ctx.stroke();
-  ctx.beginPath();ctx.moveTo(side*r*.83,-r*.18);ctx.bezierCurveTo(side*r*1.02,r*.02,side*r*.70,r*.15,side*r*.78,r*.34);ctx.stroke();
- }
- ctx.restore();
- // 머리카락 위로 원 테두리를 다시 그려 캐릭터 외곽을 또렷하게 유지
- ctx.strokeStyle='#ffe0f2';ctx.lineWidth=3;ctx.beginPath();ctx.arc(f.x,f.y,f.r-1,0,Math.PI*2);ctx.stroke();
- // 눈과 하트 표정은 기존 조준 방향을 그대로 유지
- ctx.save();ctx.translate(f.x,f.y);ctx.rotate(a);ctx.fillStyle='#fff';ctx.beginPath();ctx.ellipse(-6,-4,4.8,5.2,0,0,Math.PI*2);ctx.ellipse(6,-4,4.8,5.2,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#a82a72';ctx.beginPath();ctx.arc(-4,-4,2.2,0,Math.PI*2);ctx.arc(8,-4,2.2,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff4fa';ctx.font='bold 15px system-ui';ctx.textAlign='center';ctx.fillText('♥',0,13);ctx.restore();
- if(f.attackAnim>0){ctx.save();ctx.translate(f.x,f.y);ctx.rotate(a);ctx.shadowColor='#ff74c6';ctx.shadowBlur=15;ctx.fillStyle='#ffb6df';ctx.font='bold 18px system-ui';ctx.fillText('♥',f.r+13,0);ctx.restore()}
-}else if(f.heroId==='sniff'){const a=Math.atan2(f.facing.y,f.facing.x);ctx.fillStyle='#f28a2b';ctx.beginPath();ctx.arc(f.x,f.y,f.r,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#ffd18a';ctx.lineWidth=3;ctx.beginPath();ctx.arc(f.x,f.y,f.r-1,0,Math.PI*2);ctx.stroke();ctx.save();ctx.translate(f.x,f.y);ctx.rotate(a);ctx.font='29px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('🎃',0,1);if(f.attackAnim>0){ctx.font='24px system-ui';ctx.fillText('🎃',f.r+17,0)}ctx.restore()}else{const a=Math.atan2(f.facing.y,f.facing.x);ctx.fillStyle='#e9b647';ctx.beginPath();ctx.arc(f.x,f.y,f.r,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#fff0b1';ctx.lineWidth=2.5;ctx.beginPath();ctx.arc(f.x,f.y,f.r-1,0,Math.PI*2);ctx.stroke();ctx.save();ctx.translate(f.x,f.y);ctx.rotate(a);ctx.fillStyle='#35415a';ctx.fillRect(8,-5,24,10);ctx.fillStyle='#ffe7a0';ctx.fillRect(26,-3,10,6);ctx.fillStyle='#fff8da';ctx.beginPath();ctx.arc(-5,-3,3,0,Math.PI*2);ctx.arc(-5,4,3,0,Math.PI*2);ctx.fill();ctx.restore();if(f.attackAnim>0){ctx.save();ctx.translate(f.x,f.y);ctx.rotate(a);ctx.strokeStyle='#ffc857';ctx.lineWidth=4;ctx.globalAlpha=f.attackAnim/.14;ctx.beginPath();ctx.moveTo(16,0);ctx.lineTo(38,0);ctx.stroke();ctx.restore()}}
+ }else if(f.heroId==='meto'){const a=Math.atan2(f.facing.y,f.facing.x);ctx.fillStyle='#528d78';ctx.beginPath();ctx.arc(f.x,f.y,f.r,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#c1f5d9';ctx.lineWidth=2.5;ctx.beginPath();ctx.arc(f.x,f.y,f.r-1,0,Math.PI*2);ctx.stroke();ctx.save();ctx.translate(f.x,f.y);ctx.rotate(a);ctx.fillStyle='#1c2c3a';ctx.fillRect(4,-5,29,10);ctx.fillStyle='#c7f5d9';ctx.fillRect(25,-3,12,6);ctx.fillStyle='#effff4';ctx.beginPath();ctx.ellipse(-5,-3,3.5,2.5,0,0,Math.PI*2);ctx.ellipse(-5,4,3.5,2.5,0,0,Math.PI*2);ctx.fill();ctx.restore();if(f.attackAnim>0){ctx.save();ctx.translate(f.x,f.y);ctx.rotate(a);ctx.strokeStyle='#a9f3ce';ctx.lineWidth=4;ctx.globalAlpha=f.attackAnim/.14;ctx.beginPath();ctx.moveTo(16,0);ctx.lineTo(38,0);ctx.stroke();ctx.restore()}}else if(f.heroId==='bujijik'){ctx.fillStyle='#995f3c';ctx.beginPath();ctx.arc(f.x,f.y,f.r,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#d7a67e';ctx.lineWidth=3;ctx.beginPath();ctx.arc(f.x,f.y,f.r-1,0,Math.PI*2);ctx.stroke();const eyeDir=vecNorm(f.facing?.x||1,f.facing?.y||0);ctx.fillStyle='#fff0df';ctx.beginPath();ctx.ellipse(f.x-7,f.y-4,5.2,6,0,0,Math.PI*2);ctx.ellipse(f.x+7,f.y-4,5.2,6,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#4b2b1b';ctx.beginPath();ctx.arc(f.x-7+eyeDir.x*2.1,f.y-3+eyeDir.y*2.1,2.2,0,Math.PI*2);ctx.arc(f.x+7+eyeDir.x*2.1,f.y-3+eyeDir.y*2.1,2.2,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#4b2b1b';ctx.lineWidth=3;ctx.beginPath();ctx.arc(f.x,f.y+5,7,.15,Math.PI-.15);ctx.stroke();if(f.attackAnim>0){ctx.strokeStyle='#d7a67e';ctx.lineWidth=3;ctx.beginPath();ctx.arc(f.x,f.y,f.r+6,Math.atan2(f.facing.y,f.facing.x)-.8,Math.atan2(f.facing.y,f.facing.x)+.8);ctx.stroke()}}else if(f.heroId==='adam'){const a=Math.atan2(f.facing.y,f.facing.x);ctx.save();ctx.translate(f.x,f.y);ctx.rotate(a);if(f.adamAwakenTime>0){ctx.shadowColor='#ff334f';ctx.shadowBlur=24;ctx.strokeStyle='#ff3855';ctx.lineWidth=4;ctx.beginPath();ctx.arc(0,0,f.r+8+Math.sin(t*18)*2,0,Math.PI*2);ctx.stroke()}ctx.fillStyle='#090b13';ctx.beginPath();ctx.arc(0,0,f.r,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#e8324c';ctx.lineWidth=3;ctx.beginPath();ctx.arc(0,0,f.r-1,-Math.PI/2,Math.PI/2);ctx.stroke();ctx.fillStyle='#f63b52';ctx.beginPath();ctx.moveTo(-f.r,0);ctx.lineTo(f.r,0);ctx.lineTo(0,f.r);ctx.closePath();ctx.fill();ctx.fillStyle='#ffebee';ctx.beginPath();ctx.moveTo(-12,-6);ctx.lineTo(-3,-3);ctx.lineTo(-12,0);ctx.closePath();ctx.fill();ctx.beginPath();ctx.moveTo(3,-3);ctx.lineTo(12,-6);ctx.lineTo(12,0);ctx.closePath();ctx.fill();ctx.fillStyle='#111';if(f.attackAnim>0){const progress=1-f.attackAnim/.16;const reach=28+progress*23;ctx.save();ctx.globalAlpha=.9;ctx.strokeStyle='#ff7185';ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(18,-5);ctx.lineTo(reach+12,-5);ctx.moveTo(18,5);ctx.lineTo(reach+9,5);ctx.stroke();ctx.fillStyle='#171b26';ctx.fillRect(10,-4,reach-7,8);ctx.strokeStyle='#ff5268';ctx.lineWidth=2;ctx.strokeRect(10,-4,reach-7,8);ctx.fillStyle='#ffb4c0';ctx.beginPath();ctx.ellipse(reach+2,0,8,6,0,0,Math.PI*2);ctx.fill();ctx.restore()}ctx.restore()}else if(f.heroId==='joki'){const a=Math.atan2(f.facing.y,f.facing.x);ctx.fillStyle='#ff8dcc';ctx.beginPath();ctx.arc(f.x,f.y,f.r,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#ffe4f5';ctx.lineWidth=3;ctx.beginPath();ctx.arc(f.x,f.y,f.r-1,0,Math.PI*2);ctx.stroke();ctx.fillStyle='#53224d';ctx.beginPath();ctx.ellipse(f.x-6+a*0.0+Math.cos(a)*2,f.y-3+Math.sin(a)*2,3,4,0,0,Math.PI*2);ctx.ellipse(f.x+6+Math.cos(a)*2,f.y-3+Math.sin(a)*2,3,4,0,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#7d214e';ctx.lineWidth=2;ctx.beginPath();ctx.arc(f.x,f.y+5,6,.15,Math.PI-.15);ctx.stroke();if(f.attackAnim>0){ctx.save();ctx.translate(f.x,f.y);ctx.rotate(a);for(let ci=0;ci<Math.min(4,f.jokiCandyCount||1);ci++){ctx.fillStyle=['#ff557f','#ffd45c','#7ee4ff','#b58bff'][ci%4];ctx.beginPath();ctx.arc(30+ci*13,(ci%2?9:-9),5,0,Math.PI*2);ctx.fill()}ctx.restore()}}else if(f.heroId==='yure'){const a=Math.atan2(f.facing.y,f.facing.x);ctx.fillStyle='#ffd43e';ctx.beginPath();ctx.arc(f.x,f.y,f.r,0,Math.PI*2);ctx.fill();ctx.save();ctx.beginPath();ctx.arc(f.x,f.y,f.r,0,Math.PI*2);ctx.clip();ctx.fillStyle='#ff8b28';ctx.beginPath();ctx.ellipse(f.x+f.r*.12,f.y+f.r*.67,f.r*1.25,f.r*.62,0,Math.PI,Math.PI*2);ctx.fill();ctx.restore();ctx.strokeStyle='#fff0a0';ctx.lineWidth=2.5;ctx.beginPath();ctx.arc(f.x,f.y,f.r-1,0,Math.PI*2);ctx.stroke();ctx.save();ctx.translate(f.x,f.y);ctx.rotate(a);ctx.fillStyle='#9f4a17';ctx.fillRect(5,-5,30,10);ctx.fillStyle='#ffb53b';ctx.fillRect(25,-3,13,6);ctx.fillStyle='#fff8da';ctx.beginPath();ctx.ellipse(-5,-4,4,3,0,0,Math.PI*2);ctx.ellipse(-5,4,4,3,0,0,Math.PI*2);ctx.fill();ctx.restore();if(f.attackAnim>0){ctx.save();ctx.translate(f.x,f.y);ctx.rotate(a);ctx.strokeStyle='#ffb84a';ctx.lineWidth=4;ctx.globalAlpha=f.attackAnim/.14;ctx.beginPath();ctx.moveTo(17,0);ctx.lineTo(41,0);ctx.stroke();ctx.restore()}}else if(f.heroId==='gumi'){drawGumi(f,t);}else if(f.heroId==='sniff'){const a=Math.atan2(f.facing.y,f.facing.x);ctx.fillStyle='#f28a2b';ctx.beginPath();ctx.arc(f.x,f.y,f.r,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#ffd18a';ctx.lineWidth=3;ctx.beginPath();ctx.arc(f.x,f.y,f.r-1,0,Math.PI*2);ctx.stroke();ctx.save();ctx.translate(f.x,f.y);ctx.rotate(a);ctx.font='29px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('🎃',0,1);if(f.attackAnim>0){ctx.font='24px system-ui';ctx.fillText('🎃',f.r+17,0)}ctx.restore()}else{const a=Math.atan2(f.facing.y,f.facing.x);ctx.fillStyle='#e9b647';ctx.beginPath();ctx.arc(f.x,f.y,f.r,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#fff0b1';ctx.lineWidth=2.5;ctx.beginPath();ctx.arc(f.x,f.y,f.r-1,0,Math.PI*2);ctx.stroke();ctx.save();ctx.translate(f.x,f.y);ctx.rotate(a);ctx.fillStyle='#35415a';ctx.fillRect(8,-5,24,10);ctx.fillStyle='#ffe7a0';ctx.fillRect(26,-3,10,6);ctx.fillStyle='#fff8da';ctx.beginPath();ctx.arc(-5,-3,3,0,Math.PI*2);ctx.arc(-5,4,3,0,Math.PI*2);ctx.fill();ctx.restore();if(f.attackAnim>0){ctx.save();ctx.translate(f.x,f.y);ctx.rotate(a);ctx.strokeStyle='#ffc857';ctx.lineWidth=4;ctx.globalAlpha=f.attackAnim/.14;ctx.beginPath();ctx.moveTo(16,0);ctx.lineTo(38,0);ctx.stroke();ctx.restore()}}
  if(f.isBoss){ctx.save();const halloweenBoss=game.mode==='halloween',lastBoss=game.mode==='tower'&&game.towerFloor===100;ctx.fillStyle=halloweenBoss?'#f28a1d':lastBoss?'#171018':'#7136ae';ctx.strokeStyle=halloweenBoss?'#eaff39':lastBoss?'#f04455':'#d3a1ff';ctx.lineWidth=halloweenBoss?5:4;ctx.shadowColor=halloweenBoss?'#eaff39':lastBoss?'#f04455':'#a855f7';ctx.shadowBlur=halloweenBoss?32:22;ctx.beginPath();ctx.arc(f.x,f.y,f.r-2,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.shadowBlur=0;if(halloweenBoss){ctx.fillStyle='#ffb52d';ctx.beginPath();ctx.arc(f.x-f.r*.28,f.y-f.r*.3,9,0,Math.PI*2);ctx.arc(f.x+f.r*.28,f.y-f.r*.3,9,0,Math.PI*2);ctx.fill();ctx.fillStyle='#391522';ctx.beginPath();ctx.ellipse(f.x-8,f.y-3,4,6,0,0,Math.PI*2);ctx.ellipse(f.x+8,f.y-3,4,6,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#5a2117';ctx.beginPath();ctx.moveTo(f.x-12,f.y+10);ctx.lineTo(f.x,f.y+17);ctx.lineTo(f.x+12,f.y+10);ctx.strokeStyle='#5a2117';ctx.lineWidth=3;ctx.stroke();ctx.fillStyle='#ffb52d';ctx.fillRect(f.x-4,f.y+f.r*.45,8,5);/* Halloween witch hat */ctx.save();ctx.translate(f.x,f.y-f.r+3);ctx.rotate(-.1);ctx.shadowColor='#eaff39';ctx.shadowBlur=12;ctx.fillStyle='#26152f';ctx.strokeStyle='#f1ff56';ctx.lineWidth=2.5;ctx.beginPath();ctx.ellipse(0,7,29,7,0,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.beginPath();ctx.moveTo(-17,7);ctx.lineTo(-7,-21);ctx.quadraticCurveTo(0,-27,8,-21);ctx.lineTo(17,7);ctx.closePath();ctx.fill();ctx.stroke();ctx.shadowBlur=0;ctx.fillStyle='#ff9a28';ctx.fillRect(-13,1,26,5);ctx.fillStyle='#f1ff56';ctx.fillRect(4,1,5,5);ctx.restore()}else{ctx.fillStyle=lastBoss?'#ff344f':'#f4d8ff';ctx.beginPath();ctx.ellipse(f.x-7,f.y-3,4,6,0,0,Math.PI*2);ctx.ellipse(f.x+7,f.y-3,4,6,0,0,Math.PI*2);ctx.fill();ctx.strokeStyle=lastBoss?'#ff5d6d':'#3b165c';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(f.x-7,f.y+9);ctx.lineTo(f.x+7,f.y+9);ctx.stroke();}ctx.restore()}
  // nameplate
  if(f.stunTime>0){ctx.save();ctx.strokeStyle='#b6fff0';ctx.lineWidth=3;ctx.shadowColor='#7bffe0';ctx.shadowBlur=15;ctx.beginPath();ctx.arc(f.x,f.y,f.r+8+Math.sin(t*18)*2,0,Math.PI*2);ctx.stroke();ctx.fillStyle='#dffff5';for(let i=0;i<3;i++){const a=t*4+i*Math.PI*2/3;ctx.beginPath();ctx.arc(f.x+Math.cos(a)*(f.r+12),f.y-f.r-8+Math.sin(a)*6,3,0,Math.PI*2);ctx.fill()}ctx.restore()}const label=f.isPlayer?currentUser.name:(game.mode==='user'?`${game.onlineInfo?.opponentName||'온라인 상대'} · ${HEROES[f.heroId]?.name||'전사'}`:(f.heroId==='shooter'?'AI':`${HEROES[f.heroId]?.name||'전사'} AI`));ctx.font='800 13px system-ui';ctx.textAlign='center';ctx.fillStyle='#071020dd';ctx.fillRect(f.x-74,f.y-f.r-43,148,19);ctx.fillStyle=f.isPlayer?'#c9fff6':'#ffd4dd';ctx.fillText(label.slice(0,23),f.x,f.y-f.r-29);
