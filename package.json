@@ -1,8 +1,8 @@
 {
   "name": "wonjeok-dolgyeok",
-  "version": "1.8.0",
+  "version": "2.2.0",
   "private": true,
-  "description": "원격돌격: AI 매칭 레이아웃 수정, 조키 아트 복구, 음악 루프/재개, 온라인 Socket.IO 연결, 탑 보스 밸런스",
+  "description": "원격돌격 할로윈 이벤트, 킁킁 한정 전사, 보스 연출 개선, 구미 온라인 매혹 수정",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
