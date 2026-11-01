@@ -158,6 +158,52 @@ button,input{font:inherit}button{cursor:pointer;border:0;color:var(--text);font-
 @media(max-width:600px){.fighter-art .poop-orb,.shop-art .poop-orb,.fighter-art .meto-orb,.shop-art .meto-orb{width:66px;height:66px}}
 </style>
 
+
+<style id="tablet-landscape-control-comfort">
+/* Landscape tablets/gamepads: spread controls to the outer sides, lower them,
+   and enlarge touch targets for more comfortable play. */
+@media (hover:none) and (orientation:landscape), (pointer:coarse) and (orientation:landscape) {
+  #game-screen .arena-column {
+    grid-template-columns: clamp(112px, 13vw, 148px) minmax(0, min(76vw, 72vh)) clamp(126px, 15vw, 164px) !important;
+    column-gap: clamp(8px, 1.5vw, 18px) !important;
+    width: min(100%, calc(min(76vw, 72vh) + clamp(112px, 13vw, 148px) + clamp(126px, 15vw, 164px) + 36px)) !important;
+  }
+  /* Keep the left movement pad on the far-left side, near the lower edge. */
+  #game-screen .mobile-controls .stick.move {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+    justify-self: start !important;
+    align-self: end !important;
+    width: clamp(104px, 11vw, 124px) !important;
+    height: clamp(104px, 11vw, 124px) !important;
+    margin: 0 0 clamp(18px, 4vh, 38px) 0 !important;
+  }
+  #game-screen .mobile-controls .stick-knob {
+    width: clamp(48px, 5vw, 58px) !important;
+    height: clamp(48px, 5vw, 58px) !important;
+  }
+  /* Put attack/ultimate at the far-right side, also lower, with larger targets. */
+  #game-screen .mobile-controls .touch-actions {
+    grid-column: 3 !important;
+    grid-row: 2 !important;
+    justify-self: end !important;
+    align-self: end !important;
+    margin: 0 0 clamp(18px, 4vh, 38px) 0 !important;
+    gap: clamp(10px, 1.5vh, 16px) !important;
+  }
+  #game-screen .mobile-controls .touch-btn.attack {
+    width: clamp(72px, 8vw, 86px) !important;
+    height: clamp(72px, 8vw, 86px) !important;
+    font-size: clamp(12px, 1.5vw, 15px) !important;
+  }
+  #game-screen .mobile-controls .touch-btn.ult {
+    width: clamp(64px, 7vw, 76px) !important;
+    height: clamp(64px, 7vw, 76px) !important;
+    font-size: clamp(11px, 1.3vw, 13px) !important;
+  }
+}
+</style>
+
 </head>
 <body>
 <section id="auth-screen" class="screen active" data-screen>
@@ -311,7 +357,7 @@ const HEROES={
  kuro:{id:'kuro',name:'쿠로',hp:85,speed:265,r:22,ultMax:10,ultMode:'self',reloadInterval:1.5,short:'연속 표창 투척',basic:'중거리보다 길고 원거리보다 짧은 사거리에서 표창 2개를 차례로 던져. 표창 하나당 피해 4.',ult:'일반 공격 10회 적중으로 충전. 궁극기를 누르면 즉시 1초 동안 은신해 모든 적 공격과 상태이상을 무시해. 은신 후 첫 공격의 표창은 하나당 피해 8.',desc:'쿠로는 어릴때부터 닌자의 길을 걸었으며 지금도 어디선가 누구를 암살하고 있다.',unlock:'상점에서 원코인 1500개로 구매',unlockAt:-1,price:1500,currency:'coins'},
  glover:{id:'glover',name:'글러버',hp:125,speed:235,r:23,ultMax:100,ultMode:'aim',reloadInterval:1.2,short:'복싱 3연타',basic:'근거리에서 주먹을 3번 연속으로 날려. 주먹 한 번당 피해 3, 세 번 모두 맞히면 총 9 피해.',ult:'주먹 한 번 적중마다 20% 충전되고, 피해를 받을 때마다 궁극기가 5% 추가 충전돼. 궁극기를 쓰면 조준 방향으로 빠르게 돌진해. 적과 충돌하면 9 피해를 주고 강하게 밀쳐내.',desc:'유명한 격투가이고 매번 대회에서 모두 우승한다.',unlock:'상점에서 원코인 1500개로 구매',unlockAt:-1,price:1500,currency:'coins',passive:'적에게 피해를 받을 때마다 궁극기 5% 충전'},
  sniff:{id:'sniff',name:'킁킁',hp:95,speed:235,r:22,ultMax:5,ultMode:'self',reloadInterval:1.9,short:'대형 저속 호박포',basic:'크고 묵직한 호박탄을 발사해. 탄환 속도는 느리지만 명중 피해 6, 탄창 3발.',ult:'일반 공격 5회 적중으로 충전. 궁극기를 쓰면 호박 표창 4개가 서로 떨어진 위치에서 각각 날아가 적을 유도해. 표창 하나당 피해 4.',desc:'할로윈 밤에 사탕을 찾아 전장을 누비는 장난꾸러기. 느리지만 커다란 호박탄으로 압박하고, 궁극기에는 호박 표창 4개를 각각 적에게 유도해.',unlock:'할로윈 미션 사탕 20개 수집 후 잠금 해제 버튼 누르기',unlockAt:-2,eventOnly:true},
- ellie:{id:'ellie',name:'엘리',hp:100,speed:235,r:22,ultMax:10,ultMode:'place',reloadInterval:1.6,short:'눈꽃 3연사',basic:'원거리에서 눈 모양의 눈꽃을 3번 연속으로 던져. 눈꽃 하나당 피해 3이며, 적중하면 0.5초 동안 둔화돼.',ult:'일반 공격 눈꽃 10회 적중으로 충전. E를 눌러 조준한 뒤 전장 위치를 클릭하면 반경이 큰 눈사태를 5초 동안 생성해. 범위 안의 적은 둔화되고 초당 1 피해를 받아. 사거리는 스피디 기본 공격의 절반이야.',desc:'엘리는 눈을 아주 좋아하는 소녀이다, 맨날 눈을 연구하며 살았다.',unlock:'상점에서 원코인 1500개로 구매',unlockAt:-1,price:1500,currency:'coins'}
+ ellie:{id:'ellie',name:'엘리',hp:100,speed:235,r:22,ultMax:10,ultMode:'place',reloadInterval:1.6,short:'눈꽃 3연사',basic:'원거리에서 눈 모양의 눈꽃을 3번 연속으로 던져. 눈꽃 하나당 피해 3이며, 적중하면 0.5초 동안 둔화돼.',ult:'일반 공격 눈꽃 10회 적중으로 충전. PC는 E로 조준한 뒤 마우스로 위치를 클릭해. 모바일·패드는 궁극기 버튼을 누른 채 전장으로 슬라이딩해 위치를 조절하고 손을 떼면 눈사태를 설치해. 반경이 큰 눈사태는 5초 동안 지속되며 범위 안의 적은 둔화되고 초당 1 피해를 받아. 사거리는 스피디 기본 공격의 절반이야.',desc:'엘리는 눈을 아주 좋아하는 소녀이다, 맨날 눈을 연구하며 살았다.',unlock:'상점에서 원코인 1500개로 구매',unlockAt:-1,price:1500,currency:'coins'}
 };
 const RANGED_AI={id:'shooter',name:'원거리 AI',hp:100,speed:118,r:22,ultMax:0,short:'원거리 총격',basic:'멀리서 총알을 발사해. 총알 하나당 피해 6.',reloadInterval:1.25};
 let sfxContext=null;
@@ -586,14 +632,75 @@ canvas.addEventListener('pointermove',e=>{if(e.pointerType==='mouse'||!game||!ga
 canvas.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse'||!game||game.ended||!game.ultArmed)return;if(game.player.heroId==='ellie'){e.preventDefault();const pt=canvasPointFromEvent(e);placeEllieUltimate(game.player,pt.x,pt.y);}});
 window.addEventListener('mouseup',e=>{if(e.button===0)mouse.down=false});
 canvas.addEventListener('contextmenu',e=>e.preventDefault());
-function beginInputGesture(kind,source,pointerId=null,x=0,y=0,element=null){if(!game||game.ended)return;if(kind==='ult'&&game.player.heroId==='ellie'){armUltimate();return;}if(element&&pointerId!==null)element.setPointerCapture?.(pointerId);inputGesture={kind,source,pointerId,startX:x,startY:y,dir:null,dragged:false};$('#touch-'+kind).classList.add('aiming');const dir=autoAim();game.aimPreview={kind,dir};game.player.facing=dir;}
-function moveInputGesture(e){const g=inputGesture;if(!g||g.source!=='touch'||g.pointerId!==e.pointerId||!game)return;const dx=e.clientX-g.startX,dy=e.clientY-g.startY,len=Math.hypot(dx,dy);if(len>20){g.dragged=true;g.dir=vecNorm(dx,dy);game.player.facing=g.dir;game.aimPreview={kind:g.kind,dir:g.dir}}}
-function finishInputGesture(pointerId=null){const g=inputGesture;if(!g||!game||(pointerId!==null&&g.pointerId!==pointerId))return;inputGesture=null;$('#touch-'+g.kind).classList.remove('aiming');game.aimPreview=null;const dir=g.dragged&&g.dir?g.dir:(g.source==='gamepad'&&g.dir?g.dir:autoAim());if(g.kind==='ult')useUltimate(game.player,dir);else fireBasic(game.player,dir);}
-function cancelInputGesture(pointerId=null){if(inputGesture&&(pointerId===null||inputGesture.pointerId===pointerId)){const prior=inputGesture;inputGesture=null;if(prior?.kind)$('#touch-'+prior.kind)?.classList.remove('aiming');if(game)game.aimPreview=null}}
-function bindAimButton(id,kind){const el=$('#'+id);el.addEventListener('pointerdown',e=>{e.preventDefault();if(!game)return;beginInputGesture(kind,'touch',e.pointerId,e.clientX,e.clientY,el)});el.addEventListener('pointermove',moveInputGesture);el.addEventListener('pointerup',e=>{e.preventDefault();finishInputGesture(e.pointerId)});el.addEventListener('pointercancel',e=>cancelInputGesture(e.pointerId));el.addEventListener('lostpointercapture',e=>cancelInputGesture(e.pointerId))}
+function beginInputGesture(kind,source,pointerId=null,x=0,y=0,element=null){
+ if(!game||game.ended)return;
+ if(kind==='ult'&&game.player.heroId==='ellie'){
+  if(!game.ultArmed)armUltimate();
+  if(!game.ultArmed)return;
+  if(element&&pointerId!==null)element.setPointerCapture?.(pointerId);
+  inputGesture={kind,source,pointerId,startX:x,startY:y,dir:null,dragged:false,elliePlace:true,hasTarget:false,elliePoint:null};
+  const button=$('#touch-ult');
+  button?.classList.add('aiming');
+  if(source==='touch'&&button)button.textContent='조준 중';
+  game.ellieAimPoint=null;
+  return;
+ }
+ if(element&&pointerId!==null)element.setPointerCapture?.(pointerId);
+ inputGesture={kind,source,pointerId,startX:x,startY:y,dir:null,dragged:false};
+ $('#touch-'+kind).classList.add('aiming');
+ const dir=autoAim();game.aimPreview={kind,dir};game.player.facing=dir;
+}
+function moveInputGesture(e){
+ const g=inputGesture;if(!g||g.source!=='touch'||g.pointerId!==e.pointerId||!game)return;
+ if(g.elliePlace){
+  const rect=canvas.getBoundingClientRect();
+  const nx=(e.clientX-rect.left)/rect.width,ny=(e.clientY-rect.top)/rect.height;
+  if(nx<0||nx>1||ny<0||ny>1){g.hasTarget=false;g.elliePoint=null;game.ellieAimPoint=null;return;}
+  const point={x:nx*900,y:ny*900};
+  const dx=point.x-game.player.x,dy=point.y-game.player.y;
+  if(Math.hypot(e.clientX-g.startX,e.clientY-g.startY)>10)g.dragged=true;
+  if(!g.dragged)return;
+  g.hasTarget=true;g.elliePoint=point;game.ellieAimPoint=point;
+  const dir=vecNorm(dx,dy);if(dir.x||dir.y)game.player.facing=dir;
+  return;
+ }
+ const dx=e.clientX-g.startX,dy=e.clientY-g.startY,len=Math.hypot(dx,dy);
+ if(len>20){g.dragged=true;g.dir=vecNorm(dx,dy);game.player.facing=g.dir;game.aimPreview={kind:g.kind,dir:g.dir}}
+}
+function finishInputGesture(pointerId=null){
+ const g=inputGesture;if(!g||!game||(pointerId!==null&&g.pointerId!==pointerId))return;
+ inputGesture=null;
+ $('#touch-'+g.kind)?.classList.remove('aiming');
+ game.aimPreview=null;
+ if(g.elliePlace){
+  const button=$('#touch-ult');if(button&&g.source==='touch')button.textContent='궁극기';
+  if(g.hasTarget&&g.elliePoint)placeEllieUltimate(game.player,g.elliePoint.x,g.elliePoint.y);
+  else{game.ultArmed=false;game.ellieAimPoint=null;updateHUD();}
+  return;
+ }
+ const dir=g.dragged&&g.dir?g.dir:(g.source==='gamepad'&&g.dir?g.dir:autoAim());
+ if(g.kind==='ult')useUltimate(game.player,dir);else fireBasic(game.player,dir);
+}
+function cancelInputGesture(pointerId=null){
+ if(inputGesture&&(pointerId===null||inputGesture.pointerId===pointerId)){
+  const prior=inputGesture;inputGesture=null;
+  if(prior?.kind)$('#touch-'+prior.kind)?.classList.remove('aiming');
+  if(prior?.elliePlace&&game){game.ultArmed=false;game.ellieAimPoint=null;const button=$('#touch-ult');if(button)button.textContent='궁극기';updateHUD();}
+  if(game)game.aimPreview=null;
+ }
+}
+function bindAimButton(id,kind){const el=$('#'+id);el.addEventListener('pointerdown',e=>{e.preventDefault();if(!game)return;beginInputGesture(kind,'touch',e.pointerId,e.clientX,e.clientY,el)});el.addEventListener('pointermove',moveInputGesture);el.addEventListener('pointerup',e=>{e.preventDefault();if(kind==='ult'&&game?.player?.heroId==='ellie')moveInputGesture(e);finishInputGesture(e.pointerId)});el.addEventListener('pointercancel',e=>cancelInputGesture(e.pointerId));el.addEventListener('lostpointercapture',e=>cancelInputGesture(e.pointerId))}
 bindAimButton('touch-attack','attack');bindAimButton('touch-ult','ult');
 $$('[data-stick="move"]').forEach(el=>{const knob=el.querySelector('.stick-knob');let activeId=null;function update(e){const r=el.getBoundingClientRect();const cx=r.left+r.width/2,cy=r.top+r.height/2;let dx=e.clientX-cx,dy=e.clientY-cy;const max=r.width*.32;const len=Math.hypot(dx,dy);if(len>max){dx=dx/len*max;dy=dy/len*max}knob.style.transform=`translate(${dx}px,${dy}px)`;mobile.move={x:dx/max,y:dy/max}}el.addEventListener('pointerdown',e=>{e.preventDefault();activeId=e.pointerId;el.setPointerCapture(e.pointerId);update(e)});el.addEventListener('pointermove',e=>{if(activeId===e.pointerId)update(e)});function end(e){if(activeId!==e.pointerId)return;activeId=null;knob.style.transform='translate(0,0)';mobile.move={x:0,y:0}}el.addEventListener('pointerup',end);el.addEventListener('pointercancel',end)});
-function pollGamepad(){const pads=navigator.getGamepads?.()||[];let pad=null;for(const p of pads)if(p&&p.connected){pad=p;break}gamepadState.move={x:0,y:0};gamepadState.aim={x:0,y:0};gamepadState.attack=false;if(!pad){if(gamepadState.attackPrev){finishInputGesture();gamepadState.attackPrev=false}if(gamepadState.ultPrev){finishInputGesture();gamepadState.ultPrev=false}return}const dz=v=>Math.abs(v)<.18?0:v;gamepadState.move={x:dz(pad.axes?.[0]||0),y:dz(pad.axes?.[1]||0)};gamepadState.aim={x:dz(pad.axes?.[2]||0),y:dz(pad.axes?.[3]||0)};if(Math.hypot(gamepadState.aim.x,gamepadState.aim.y)>.2)aimSource='gamepad';const ap=!!pad.buttons?.[0]?.pressed,up=!!pad.buttons?.[1]?.pressed;if(ap&&!gamepadState.attackPrev)beginInputGesture('attack','gamepad');if(ap&&inputGesture?.source==='gamepad'&&inputGesture.kind==='attack'&&Math.hypot(gamepadState.aim.x,gamepadState.aim.y)>.2){inputGesture.dir=vecNorm(gamepadState.aim.x,gamepadState.aim.y);inputGesture.dragged=true;game.aimPreview={kind:'attack',dir:inputGesture.dir};game.player.facing=inputGesture.dir}if(!ap&&gamepadState.attackPrev&&inputGesture?.source==='gamepad'&&inputGesture.kind==='attack')finishInputGesture();if(up&&!gamepadState.ultPrev)beginInputGesture('ult','gamepad');if(up&&inputGesture?.source==='gamepad'&&inputGesture.kind==='ult'&&Math.hypot(gamepadState.aim.x,gamepadState.aim.y)>.2){inputGesture.dir=vecNorm(gamepadState.aim.x,gamepadState.aim.y);inputGesture.dragged=true;game.aimPreview={kind:'ult',dir:inputGesture.dir};game.player.facing=inputGesture.dir}if(!up&&gamepadState.ultPrev&&inputGesture?.source==='gamepad'&&inputGesture.kind==='ult')finishInputGesture();gamepadState.attack=ap;gamepadState.attackPrev=ap;gamepadState.ultPrev=up}
+function pollGamepad(){const pads=navigator.getGamepads?.()||[];let pad=null;for(const p of pads)if(p&&p.connected){pad=p;break}gamepadState.move={x:0,y:0};gamepadState.aim={x:0,y:0};gamepadState.attack=false;if(!pad){if(gamepadState.attackPrev){finishInputGesture();gamepadState.attackPrev=false}if(gamepadState.ultPrev){finishInputGesture();gamepadState.ultPrev=false}return}const dz=v=>Math.abs(v)<.18?0:v;gamepadState.move={x:dz(pad.axes?.[0]||0),y:dz(pad.axes?.[1]||0)};gamepadState.aim={x:dz(pad.axes?.[2]||0),y:dz(pad.axes?.[3]||0)};if(Math.hypot(gamepadState.aim.x,gamepadState.aim.y)>.2)aimSource='gamepad';const ap=!!pad.buttons?.[0]?.pressed,up=!!pad.buttons?.[1]?.pressed;if(ap&&!gamepadState.attackPrev)beginInputGesture('attack','gamepad');if(ap&&inputGesture?.source==='gamepad'&&inputGesture.kind==='attack'&&Math.hypot(gamepadState.aim.x,gamepadState.aim.y)>.2){inputGesture.dir=vecNorm(gamepadState.aim.x,gamepadState.aim.y);inputGesture.dragged=true;game.aimPreview={kind:'attack',dir:inputGesture.dir};game.player.facing=inputGesture.dir}if(!ap&&gamepadState.attackPrev&&inputGesture?.source==='gamepad'&&inputGesture.kind==='attack')finishInputGesture();if(up&&!gamepadState.ultPrev)beginInputGesture('ult','gamepad');if(up&&inputGesture?.source==='gamepad'&&inputGesture.kind==='ult'&&game.player.heroId==='ellie'&&inputGesture.elliePlace){
+ const ax=gamepadState.aim.x,ay=gamepadState.aim.y,mag=Math.hypot(ax,ay);
+ if(mag>.2){
+  const dir=vecNorm(ax,ay),distance=Math.min(ELLIE_ULT_RANGE,mag*ELLIE_ULT_RANGE);
+  const point={x:clamp(game.player.x+dir.x*distance,ARENA.min+8,ARENA.max-8),y:clamp(game.player.y+dir.y*distance,ARENA.min+8,ARENA.max-8)};
+  inputGesture.dir=dir;inputGesture.dragged=true;inputGesture.hasTarget=true;inputGesture.elliePoint=point;
+  game.ellieAimPoint=point;game.player.facing=dir;
+ }
+}else if(up&&inputGesture?.source==='gamepad'&&inputGesture.kind==='ult'&&Math.hypot(gamepadState.aim.x,gamepadState.aim.y)>.2){inputGesture.dir=vecNorm(gamepadState.aim.x,gamepadState.aim.y);inputGesture.dragged=true;game.aimPreview={kind:'ult',dir:inputGesture.dir};game.player.facing=inputGesture.dir}if(!up&&gamepadState.ultPrev&&inputGesture?.source==='gamepad'&&inputGesture.kind==='ult')finishInputGesture();gamepadState.attack=ap;gamepadState.attackPrev=ap;gamepadState.ultPrev=up}
 function loop(now){if(!game)return;raf=requestAnimationFrame(loop);let dt=Math.min(.033,Math.max(0,(now-lastFrame)/1000));lastFrame=now;if(!game.ended){pollGamepad();updateGame(dt);if(game?.mode==='user'&&game?.countdown<=0&&now-game.lastNetSend>55)sendOnlineState(now);drawGame(now/1000);updateHUD()}else{if(game.finishing){game.finishTimer-=dt;for(const fx of game.effects)fx.time-=dt;game.effects=game.effects.filter(fx=>fx.time>0);drawGame(now/1000);if(game.finishTimer<=0)endMatch(game.finishResult,game.finishReason,true)}else drawGame(now/1000)}}
 function sendOnlineState(now){if(!game||!window.wonjeokSocket?.connected)return;game.lastNetSend=now;const p=game.player;window.wonjeokSocket.emit('battle:state',{x:p.x,y:p.y,facing:p.facing,hp:p.hp,maxHp:p.maxHp,alive:p.alive,heroId:p.heroId,name:currentUser?.name||'플레이어',buffTime:p.buffTime,stunTime:p.stunTime,invulnTime:p.invulnTime,adamAwakenTime:p.adamAwakenTime||0,jokiDamageTime:p.jokiDamageTime||0,jokiHealTime:p.jokiHealTime||0,charmTime:p.charmTime||0,kuroStealthTime:p.kuroStealthTime||0,slowTime:p.slowTime||0,summons:game.summons.filter(s=>s.isPlayer&&!s.remote).map(s=>({id:s.id,x:s.x,y:s.y,hp:s.hp,alive:s.alive,facing:s.facing}))})}
 function resolveFighterOverlap(){if(!game)return;const a=game.player,b=game.enemy;if(!a?.alive||!b?.alive)return;const dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy)||.001,min=a.r+b.r+1;if(d>=min)return;const nx=dx/d,ny=dy/d,overlap=min-d;if(game.mode==='user'){/* The remote fighter is authoritative on its own client; only nudge the local fighter. */a.x=clamp(a.x-nx*(overlap+0.5),ARENA.min+a.r,ARENA.max-a.r);a.y=clamp(a.y-ny*(overlap+0.5),ARENA.min+a.r,ARENA.max-a.r);}else{a.x=clamp(a.x-nx*overlap*.5,ARENA.min+a.r,ARENA.max-a.r);a.y=clamp(a.y-ny*overlap*.5,ARENA.min+a.r,ARENA.max-a.r);b.x=clamp(b.x+nx*overlap*.5,ARENA.min+b.r,ARENA.max-b.r);b.y=clamp(b.y+ny*overlap*.5,ARENA.min+b.r,ARENA.max-b.r);}}
@@ -916,6 +1023,9 @@ setAuthMode('login');
 .yure-orb:before{content:"";position:absolute;left:8px;top:17px;width:69px;height:21px;border-radius:50% 50% 18% 18%;background:linear-gradient(#79441f,#3b2418 70%);transform:rotate(-5deg);box-shadow:0 3px 0 #dca34d}
 .yure-orb:after{content:"";position:absolute;left:19px;top:7px;width:47px;height:25px;border-radius:50% 50% 20% 20%;background:linear-gradient(145deg,#875027,#452819);border-bottom:4px solid #d39a3d}
 @media(max-width:600px){.event-period{font-size:11px;padding:11px}.halloween-no-event{font-size:18px;padding:36px 12px}.shop-art .kuro-orb,.fighter-art .kuro-orb{width:66px;height:66px}}
+/* Ellie touch-ult: visibly signal that the button is being held for drag placement. */
+.touch-btn.ult.aiming{background:linear-gradient(145deg,#e5faff,#65bce8)!important;color:#14334a!important;transform:scale(1.06);box-shadow:0 0 0 6px #bceeff66,0 0 26px #8fe8ff!important}
+@media (pointer:coarse){#touch-ult{touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}}
 </style>
 <div id="event-expired-toast" class="event-expired-toast" role="status">아직 이벤트 없습니다</div>
 <style id="glover-character-style">
