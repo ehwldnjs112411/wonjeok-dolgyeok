@@ -779,22 +779,24 @@ setAuthMode('login');
 @media (hover:none) and (orientation:landscape), (pointer:coarse) and (orientation:landscape) {
   #game-screen .game-layout{grid-template-columns:1fr!important;}
   #game-screen .side-panel{display:none!important;}
+  /* Landscape: movement joystick on the LEFT of the arena; attack/ultimate on the RIGHT. */
   #game-screen .arena-column{
     display:grid!important;
-    grid-template-columns:minmax(0,min(88vw,70vh)) 112px;
+    grid-template-columns:100px minmax(0,min(88vw,70vh)) 112px;
     grid-template-rows:auto auto;
     align-items:center;
     justify-content:center;
-    column-gap:12px;
+    column-gap:10px;
     row-gap:8px;
-    width:min(100%,calc(min(88vw,70vh) + 124px));
+    width:min(100%,calc(min(88vw,70vh) + 242px));
     margin:0 auto;
   }
-  #game-screen .fighter-huds{grid-column:1;grid-row:1;width:100%;max-width:none;margin:0;}
-  #game-screen .canvas-frame{grid-column:1;grid-row:2;width:100%;max-width:100%;max-height:none;justify-self:stretch;}
-  #game-screen .mobile-controls{display:block;position:relative;inset:auto;grid-column:2;grid-row:1 / 3;align-self:stretch;width:112px;height:100%;min-height:260px;margin:0;overflow:visible;pointer-events:none;z-index:5;}
-  #game-screen .mobile-controls .stick.move{position:absolute;left:50%;top:calc(50% - 56px);bottom:auto;width:88px;height:88px;transform:translate(-50%,-50%);}
-  #game-screen .mobile-controls .touch-actions{position:absolute;left:50%;right:auto;top:auto;bottom:calc(50% - 112px);display:flex;flex-direction:row;align-items:center;gap:7px;transform:translateX(-50%);}
+  #game-screen .fighter-huds{grid-column:2;grid-row:1;width:100%;max-width:none;margin:0;}
+  #game-screen .canvas-frame{grid-column:2;grid-row:2;width:100%;max-width:100%;max-height:none;justify-self:stretch;}
+  /* Let the joystick and action buttons occupy separate side columns around the arena. */
+  #game-screen .mobile-controls{display:contents;}
+  #game-screen .mobile-controls .stick.move{display:flex;position:relative;grid-column:1;grid-row:1 / 3;justify-self:center;align-self:center;left:auto;right:auto;top:auto;bottom:auto;width:88px;height:88px;transform:none;pointer-events:auto;}
+  #game-screen .mobile-controls .touch-actions{position:relative;grid-column:3;grid-row:1 / 3;justify-self:center;align-self:center;left:auto;right:auto;top:auto;bottom:auto;display:flex;flex-direction:column-reverse;align-items:center;gap:12px;transform:none;pointer-events:auto;}
   #game-screen .mobile-controls .touch-btn.attack{display:grid;width:56px;height:56px;font-size:11px;}
   #game-screen .mobile-controls .touch-btn.ult{width:49px;height:49px;font-size:9px;}
 }
