@@ -184,10 +184,9 @@ button,input{font:inherit}button{cursor:pointer;border:0;color:var(--text);font-
   <div class="game-top"><button class="game-back" id="leave-game-btn">← 메뉴</button><div style="text-align:center"><div class="brand"><span class="round">원</span>격돌격</div><div class="game-mode" id="game-mode-label">AI 매칭</div></div><div style="text-align:right"><div class="eyebrow">남은 시간</div><strong id="timer-label">02:30</strong></div></div>
   <div class="game-layout"><div class="arena-column"><div class="fighter-huds"><div class="fighter-hud"><div class="hud-title"><span id="player-hud-name">스피디</span><span id="player-hp-text">100 / 100</span></div><div class="hpbar"><div id="player-hp-bar" style="width:100%"></div></div><div class="player-resource-row"><div class="ammo-pips" id="player-ammo-pips" aria-label="플레이어 탄약"></div><div class="mobile-ult-meter"><span id="mobile-ult-text">궁 0/15</span><div class="mobile-ult-rail"><div id="mobile-ult-fill"></div></div></div></div></div><div class="fighter-hud enemy-hud"><div class="hud-title"><span id="enemy-hud-name">AI</span><span id="enemy-hp-text">100 / 100</span></div><div class="hpbar"><div id="enemy-hp-bar" style="width:100%"></div></div><div class="ammo-pips" id="enemy-ammo-pips" aria-label="상대 탄약"></div></div></div>
     <div class="canvas-frame" id="canvas-frame"><canvas id="arena" width="900" height="900" aria-label="원격돌격 전장"></canvas><div id="battle-countdown" class="battle-countdown hidden" aria-live="polite">3</div>
-      <div class="mobile-controls" id="mobile-controls"><div class="stick move" data-stick="move"><div class="stick-knob"></div></div><div class="touch-actions"><button class="touch-btn ult" id="touch-ult">궁극기</button><button class="touch-btn attack" id="touch-attack">공격</button></div></div>
       <div class="game-toast" id="game-toast"></div>
       <div class="result-overlay hidden" id="result-overlay"><div class="result-card"><div class="result-icon" id="result-icon">🏆</div><div class="eyebrow">BATTLE RESULT</div><h2 id="result-title">승리!</h2><p id="result-description">상대를 쓰러뜨렸어.</p><div class="trophy-change" id="trophy-change">+8 🏆</div><div class="result-actions"><button id="result-menu-btn">메뉴로</button><button class="primary-small" id="result-rematch-btn">다시 대전</button></div></div></div>
-    </div><div class="arena-caption"><span><b>WASD</b> 이동 · <b>마우스</b> 조준</span><span>탄약 3칸 · 탄약이 비면 자동 재장전.</span></div></div>
+    </div><div class="mobile-controls" id="mobile-controls"><div class="stick move" data-stick="move"><div class="stick-knob"></div></div><div class="touch-actions"><button class="touch-btn ult" id="touch-ult">궁극기</button><button class="touch-btn attack" id="touch-attack">공격</button></div></div><div class="arena-caption"><span><b>WASD</b> 이동 · <b>마우스</b> 조준</span><span>탄약 3칸 · 탄약이 비면 자동 재장전.</span></div></div>
     <aside class="side-panel"><h3>전투 정보</h3><div class="ability-card"><div class="ability-title"><span>기본 공격</span><span class="keycap">클릭</span></div><p id="basic-desc">거미줄 3개를 연사해.</p></div><div class="ability-card"><div class="ability-title"><span>궁극기 충전</span><span class="keycap" id="ult-key-label">E + 클릭</span></div><div class="charge-rail"><div id="ult-charge-fill"></div></div><div class="ability-title"><span id="ult-charge-text">0 / 15 명중</span><span id="ult-ready-label" class="muted">충전 중</span></div><p id="ult-desc">거미줄로 적을 끌어당기거나, 빗나가면 거미줄을 타고 그 지점으로 이동해.</p></div><div class="control-list"><h3>조작 방법</h3><div class="control-row"><span>이동</span><b>W A S D</b></div><div class="control-row"><span>조준 / 공격</span><b>마우스 / 클릭</b></div><div class="control-row"><span>궁극기 조준</span><b>E → 클릭</b></div><div class="control-row"><span>모바일 / 패드</span><b>조이스틱 지원</b></div><p id="game-tip">궁극기는 기본 공격을 적에게 맞춰 충전할 수 있어.</p></div></aside>
   </div>
 </section>
@@ -243,7 +242,7 @@ const HEROES={
  joki:{id:'joki',name:'조키',hp:95,speed:235,r:22,ultMax:10,ultMode:'hybrid',reloadInterval:1.7,short:'사탕 연속 투척',basic:'중거리 공격. 첫 공격은 피해 3인 사탕 1개, 다음은 2개, 3번째는 3개, 4번째는 4개를 던지고 다시 1개부터 반복해.',ult:'궁극기는 무작위야. 충전 중에는 종류가 공개되지 않고, 100% 충전되면 회복·강화·기절 중 선택된 궁극기를 확인할 수 있어.',desc:'사탕으로 서커스하는 소년. 사탕을 점점 많이 던지고 무작위 궁극기로 변수를 만들어.',unlock:'상점에서 원코인 1500개로 구매',unlockAt:-1,price:1500,currency:'coins',passive:'궁극기가 충전되기 전에는 종류를 알 수 없고, 사용 후 다음 궁극기가 다시 무작위로 정해져.'},
  gumi:{id:'gumi',name:'구미',hp:105,speed:235,r:22,ultMax:7,ultMode:'aim',reloadInterval:2.0,short:'하트 탄환',basic:'스피디의 사거리 절반 정도에서 피해 7의 하트 탄환을 발사해.',ult:'일반 공격 7회 적중으로 충전. 원거리 매혹탄을 맞은 적은 1초 동안 기절하며 구미를 향해 천천히 다가와. 적중하면 구미는 체력 9를 회복해.',desc:'아홉 갈래의 새하얀 꼬리와 얼음빛 눈을 지닌 신비로운 구미호.',unlock:'상점에서 원코인 1500개로 구매',unlockAt:-1,price:1500,currency:'coins'},
  kuro:{id:'kuro',name:'쿠로',hp:85,speed:265,r:22,ultMax:10,ultMode:'self',reloadInterval:1.5,short:'연속 표창 투척',basic:'중거리보다 길고 원거리보다 짧은 사거리에서 표창 2개를 차례로 던져. 표창 하나당 피해 4.',ult:'일반 공격 10회 적중으로 충전. 궁극기를 누르면 즉시 1초 동안 은신해 모든 적 공격과 상태이상을 무시해. 은신 후 첫 공격의 표창은 하나당 피해 8.',desc:'쿠로는 어릴때부터 닌자의 길을 걸었으며 지금도 어디선가 누구를 암살하고 있다.',unlock:'상점에서 원코인 1500개로 구매',unlockAt:-1,price:1500,currency:'coins'},
- glover:{id:'glover',name:'글러버',hp:110,speed:235,r:23,ultMax:100,ultMode:'aim',reloadInterval:1.2,short:'복싱 3연타',basic:'근거리에서 주먹을 3번 연속으로 날려. 주먹 한 번당 피해 3, 세 번 모두 맞히면 총 9 피해.',ult:'주먹 한 번 적중마다 20% 충전되고, 피해를 받을 때마다 궁극기가 5% 추가 충전돼. 궁극기를 쓰면 조준 방향으로 빠르게 돌진해. 적과 충돌하면 9 피해를 주고 강하게 밀쳐내.',desc:'유명한 격투가이고 매번 대회에서 모두 우승한다.',unlock:'상점에서 원코인 1500개로 구매',unlockAt:-1,price:1500,currency:'coins',passive:'적에게 피해를 받을 때마다 궁극기 5% 충전'},
+ glover:{id:'glover',name:'글러버',hp:125,speed:235,r:23,ultMax:100,ultMode:'aim',reloadInterval:1.2,short:'복싱 3연타',basic:'근거리에서 주먹을 3번 연속으로 날려. 주먹 한 번당 피해 3, 세 번 모두 맞히면 총 9 피해.',ult:'주먹 한 번 적중마다 20% 충전되고, 피해를 받을 때마다 궁극기가 5% 추가 충전돼. 궁극기를 쓰면 조준 방향으로 빠르게 돌진해. 적과 충돌하면 9 피해를 주고 강하게 밀쳐내.',desc:'유명한 격투가이고 매번 대회에서 모두 우승한다.',unlock:'상점에서 원코인 1500개로 구매',unlockAt:-1,price:1500,currency:'coins',passive:'적에게 피해를 받을 때마다 궁극기 5% 충전'},
  sniff:{id:'sniff',name:'킁킁',hp:95,speed:235,r:22,ultMax:5,ultMode:'self',reloadInterval:1.9,short:'대형 저속 호박포',basic:'크고 묵직한 호박탄을 발사해. 탄환 속도는 느리지만 명중 피해 6, 탄창 3발.',ult:'일반 공격 5회 적중으로 충전. 궁극기를 쓰면 호박 표창 4개가 서로 떨어진 위치에서 각각 날아가 적을 유도해. 표창 하나당 피해 4.',desc:'할로윈 밤에 사탕을 찾아 전장을 누비는 장난꾸러기. 느리지만 커다란 호박탄으로 압박하고, 궁극기에는 호박 표창 4개를 각각 적에게 유도해.',unlock:'할로윈 미션 사탕 20개 수집 후 잠금 해제 버튼 누르기',unlockAt:-2,eventOnly:true}
 };
 const RANGED_AI={id:'shooter',name:'원거리 AI',hp:100,speed:118,r:22,ultMax:0,short:'원거리 총격',basic:'멀리서 총알을 발사해. 총알 하나당 피해 6.',reloadInterval:1.25};
@@ -762,6 +761,49 @@ setAuthMode('login');
 .shop-art .glover-orb,.fighter-art .glover-orb{width:76px;height:76px}
 @media(max-width:600px){.shop-art .glover-orb,.fighter-art .glover-orb{width:66px;height:66px}}
 </style>
+
+<style id="touch-layout-overhaul">
+/* Touch devices: keep the playfield clear and put controls outside it. */
+@media (hover:none) and (orientation:portrait), (pointer:coarse) and (orientation:portrait) {
+  #game-screen .game-layout{grid-template-columns:1fr!important;}
+  #game-screen .arena-column{display:flex;flex-direction:column;align-items:center;width:100%;}
+  #game-screen .fighter-huds{width:100%;}
+  #game-screen .canvas-frame{width:100%;max-height:none;}
+  #game-screen .mobile-controls{display:block;position:relative;inset:auto;flex:0 0 124px;width:100%;max-width:100%;height:124px;margin:8px auto 0;overflow:visible;z-index:5;pointer-events:none;}
+  #game-screen .mobile-controls .stick.move{position:absolute;left:10px;top:10px;bottom:auto;width:100px;height:100px;transform:none;}
+  #game-screen .mobile-controls .touch-actions{position:absolute;left:auto;right:10px;top:auto;bottom:25px;display:flex;flex-direction:row-reverse;align-items:center;gap:10px;transform:none;}
+  #game-screen .mobile-controls .touch-btn.attack{display:grid;width:66px;height:66px;font-size:12px;}
+  #game-screen .mobile-controls .touch-btn.ult{width:58px;height:58px;font-size:10px;}
+  #game-screen .side-panel{display:none!important;}
+}
+@media (hover:none) and (orientation:landscape), (pointer:coarse) and (orientation:landscape) {
+  #game-screen .game-layout{grid-template-columns:1fr!important;}
+  #game-screen .side-panel{display:none!important;}
+  #game-screen .arena-column{
+    display:grid!important;
+    grid-template-columns:minmax(0,min(88vw,70vh)) 112px;
+    grid-template-rows:auto auto;
+    align-items:center;
+    justify-content:center;
+    column-gap:12px;
+    row-gap:8px;
+    width:min(100%,calc(min(88vw,70vh) + 124px));
+    margin:0 auto;
+  }
+  #game-screen .fighter-huds{grid-column:1;grid-row:1;width:100%;max-width:none;margin:0;}
+  #game-screen .canvas-frame{grid-column:1;grid-row:2;width:100%;max-width:100%;max-height:none;justify-self:stretch;}
+  #game-screen .mobile-controls{display:block;position:relative;inset:auto;grid-column:2;grid-row:1 / 3;align-self:stretch;width:112px;height:100%;min-height:260px;margin:0;overflow:visible;pointer-events:none;z-index:5;}
+  #game-screen .mobile-controls .stick.move{position:absolute;left:50%;top:calc(50% - 56px);bottom:auto;width:88px;height:88px;transform:translate(-50%,-50%);}
+  #game-screen .mobile-controls .touch-actions{position:absolute;left:50%;right:auto;top:auto;bottom:calc(50% - 112px);display:flex;flex-direction:row;align-items:center;gap:7px;transform:translateX(-50%);}
+  #game-screen .mobile-controls .touch-btn.attack{display:grid;width:56px;height:56px;font-size:11px;}
+  #game-screen .mobile-controls .touch-btn.ult{width:49px;height:49px;font-size:9px;}
+}
+/* The top HUD already contains the ultimate meter on touch devices. */
+@media (hover:none), (pointer:coarse) {
+  #game-screen .side-panel>.ability-card:has(#ult-charge-fill){display:none!important;}
+}
+</style>
+
 </body>
 </html>
 
