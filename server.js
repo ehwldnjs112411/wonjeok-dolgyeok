@@ -1,6 +1,7 @@
 const express = require("express");
 const http = require("http");
 const path = require("path");
+const fs = require("fs");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { Pool } = require("pg");
@@ -10,9 +11,27 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: true, credentials: false } });
 app.use(express.json({ limit: "32kb" }));
-app.use(express.static(path.join(__dirname, "public")));
-// Also support a single-file deployment where index.html sits beside server.js.
-app.get("/", (_req, res) => res.sendFile(path.join(__dirname, "index.html")));
+const publicDir = path.join(__dirname, "public");
+const rootIndexFile = path.join(__dirname, "index.html");
+const publicIndexFile = path.join(publicDir, "index.html");
+function findGameIndex() {
+  if (fs.existsSync(rootIndexFile)) return rootIndexFile;
+  if (fs.existsSync(publicIndexFile)) return publicIndexFile;
+  return null;
+}
+app.use(express.static(publicDir));
+// Serve index.html from the project root or public/ folder.
+function sendGameIndex(_req, res) {
+  const gameIndex = findGameIndex();
+  if (!gameIndex) {
+    console.error("[web] index.html missing. Checked:", rootIndexFile, publicIndexFile);
+    return res.status(404).type("text/plain; charset=utf-8").send(
+      "Game page not found. Put index.html beside server.js or inside public/. Check Render Root Directory."
+    );
+  }
+  return res.sendFile(gameIndex);
+}
+app.get("/", sendGameIndex);
 
 const PORT = process.env.PORT || 10000;
 const DATABASE_URL = process.env.DATABASE_URL;
@@ -83,7 +102,16 @@ app.get("/api/health", async (_req, res) => {
     try { await pool.query("SELECT 1"); database = "connected"; }
     catch (_) { database = "error"; }
   }
-  res.json({ ok: true, service: "wonjeok-dolgyuk", database });
+  const gameIndex = findGameIndex();
+  res.json({
+    ok: true,
+    service: "wonjeok-dolgyuk",
+    database,
+    webRoot: __dirname,
+    indexFound: Boolean(gameIndex),
+    indexLocation: gameIndex ? path.relative(__dirname, gameIndex) : null,
+    checked: ["index.html", "public/index.html"]
+  });
 });
 app.post("/api/auth/register", async (req, res) => {
   try {
@@ -300,7 +328,10 @@ setInterval(() => {
   }
 }, 15000).unref();
 
-app.get("*", (_req, res) => res.sendFile(path.join(__dirname, "index.html")));
+app.get("*", (req, res, next) => {
+  if (req.path.startsWith("/api/") || req.path.startsWith("/socket.io/")) return next();
+  return sendGameIndex(req, res);
+});
 initDb().then(() => {
   server.listen(PORT, "0.0.0.0", () => console.log(`원격돌격 서버가 ${PORT} 포트에서 실행 중입니다.`));
 }).catch(err => { console.error("Database initialization failed:", err); process.exit(1); });
