@@ -1,32 +1,44 @@
-# 원격돌격 — Render 404 복구용 배포 파일
+# 원격돌격 - 노바 및 태블릿 가로 조작 업데이트
 
-이 패키지는 최신 사용자 제공 게임 화면과 기존 Node/Socket.IO 서버를 함께 담았습니다.
+## 포함 파일
+- `index.html`: 신규 노바, 엘리·노바 범위 지정형 궁극기의 버튼 홀드/드래그 조작, 가로 화면 터치 조작 UI
+- `server.js`: 노바 캐릭터 및 온라인 궁극기·투사체 이벤트 동기화 허용
+- `package.json`: 기존 Node.js 서버 의존성 및 시작 명령
 
-## ZIP 안의 파일 위치 (중요)
-압축을 풀면 네 파일이 바로 보여야 합니다.
-- `index.html`
-- `server.js`
-- `package.json`
-- `README_배포안내.md`
+## 새 전사 노바
+- 체력 100, 기본 재장전 1.5초
+- 스피디 일반 공격 사거리의 약 절반인 별 투사체 사거리
+- 반짝이는 별 2발 연속 발사, 발당 피해 3, 적 관통
+- 궁극기: 별 7회 적중 시 충전, 엘리와 같은 지정 범위
+- 지정 위치로 0.28초 돌진(돌진 자체 피해 없음)
+- 도착 후 6초간 노바 크리스탈 변신
+- 변신 중 근거리 검 공격 피해 6, 적중당 체력 2 회복, 재장전 1.2초
+- 변신 중 궁극기 충전 및 재사용 불가
+- 상점 구매 가격 1,500 원코인
+- 설명: 노바는 별에서 온 신비한 흰 머리색깔 소녀이다.
 
-이 네 파일을 GitHub 저장소의 **최상위 폴더(root)** 에 업로드하세요. `index.html` 이름을 바꾸거나 한 단계 안쪽 폴더에 넣지 마세요.
+## 범위 지정형 궁극기 조작
+- 엘리·노바: 모바일/태블릿은 아래 궁극기 버튼을 누른 채 전장으로 드래그해 위치를 조준하고 손을 떼면 발동
+- 게임패드: 궁극기 버튼을 누르고 오른쪽 스틱으로 방향·거리를 지정한 뒤 버튼을 놓으면 발동
+- PC: 기존처럼 E를 누른 뒤 마우스로 전장 위치를 클릭
+- 전장 밖에서 놓거나 범위를 벗어난 위치를 지정하면 발동하지 않고 충전량은 보존
 
-## Render 서비스 설정
-기존 Render 서비스가 **Web Service (Node)** 인지 확인하세요. Static Site로 만들면 Socket.IO 서버를 실행하지 못합니다.
-- Root Directory: 비워 두기 (저장소 최상위 사용)
-- Build Command: `yarn install` (저장소에 yarn.lock이 있을 때) 또는 `npm install`
-- Start Command: `node server.js`
-- Environment: Node
+## 태블릿 가로 화면 조작
+- 이동 조이스틱을 화면 왼쪽 아래 가장자리로 고정
+- 공격/궁극기 버튼을 화면 오른쪽 아래 가장자리로 고정
+- 좌우 거리를 더 벌리고 버튼 및 조이스틱 크기를 확대
 
-기존 서비스의 Environment Variables 설정은 그대로 유지하세요. 계정 로그인에 필요한 `DATABASE_URL`, `JWT_SECRET`이 없다면 웹페이지는 열려도 로그인/회원가입은 정상 동작하지 않을 수 있습니다.
+## 배포
+1. 압축을 풀고 `index.html`, `server.js`, `package.json`을 GitHub 저장소 최상위에 업로드/교체합니다.
+2. Render는 기존 Node.js Web Service를 사용합니다. Root Directory는 저장소 최상위 기준으로 둡니다.
+3. Build Command는 기존 환경에 맞게 `npm install` 또는 기존 Yarn 명령을 사용합니다.
+4. Start Command는 `node server.js`를 사용합니다.
+5. 기존 Render 환경 변수(`DATABASE_URL`, `JWT_SECRET` 등)는 지우지 말고 그대로 유지합니다.
+6. GitHub에 커밋/푸시한 후 Render 배포 완료를 확인합니다.
 
-## 배포 확인 순서
-1. GitHub의 `main` 브랜치 최상위에 위 파일이 있는지 확인하고 커밋합니다.
-2. Render의 해당 **Web Service**에서 최신 커밋 배포가 성공했는지 Deploys / Events / Logs를 확인합니다.
-3. `https://wonjeok-dolgyeok-1.onrender.com/api/health` 를 엽니다.
-   - `ok: true`와 `indexFound: true`가 나오면 서버가 게임 파일을 찾은 것입니다.
-   - `indexFound: false`면 Render Root Directory 또는 GitHub 파일 위치가 잘못된 것입니다.
-   - `/api/health` 자체도 Not Found라면 이 server.js가 실행되는 Web Service가 아닌 다른 Render 서비스/도메인으로 접속 중일 가능성이 큽니다.
-4. 그다음 `https://wonjeok-dolgyeok-1.onrender.com/` 에서 게임을 확인합니다.
-
-이 파일은 Render에 직접 배포된 상태가 아닙니다. GitHub 커밋과 Render 배포는 사용자가 진행해야 합니다.
+## 검사 및 한계
+- HTML 인라인 JavaScript 문법 검사 통과
+- `server.js` Node.js 구문 검사 통과
+- Nova 상점 가격/공격/궁극기 설정 및 서버 이벤트 허용 목록 정적 검사 통과
+- ZIP 무결성 검사 통과
+- 이 실행 환경에는 프로젝트 Node.js 의존성이 설치되어 있지 않아 서버를 실제 기동하지 못했습니다. 태블릿 실기기 및 두 계정 온라인 대전 테스트도 별도로 확인해야 합니다.

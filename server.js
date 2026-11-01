@@ -210,7 +210,7 @@ io.on("connection", socket => {
       socketId: socket.id,
       since: Date.now(),
       name: String(payload?.name || "플레이어").slice(0, 24),
-      hero: ["spider", "hammer", "meto", "bujijik", "adam", "yure", "joki", "gumi", "sniff", "kuro", "glover", "ellie"].includes(payload?.hero) ? payload.hero : "spider"
+      hero: ["spider", "hammer", "meto", "bujijik", "adam", "yure", "joki", "gumi", "sniff", "kuro", "glover", "ellie", "nova"].includes(payload?.hero) ? payload.hero : "spider"
     };
     while (waiting.length) {
       const other = waiting.shift();
@@ -241,7 +241,7 @@ io.on("connection", socket => {
       facing: { x: Math.max(-1, Math.min(1, Number(data.facing?.x) || 0)), y: Math.max(-1, Math.min(1, Number(data.facing?.y) || 0)) },
       hp: Math.max(0, Math.min(200, Number(data.hp) || 0)),
       maxHp: Math.max(1, Math.min(200, Number(data.maxHp) || 100)),
-      alive: Boolean(data.alive), heroId: ["spider", "hammer", "meto", "bujijik", "adam", "yure", "joki", "gumi", "sniff", "kuro", "glover", "ellie"].includes(data.heroId) ? data.heroId : "spider",
+      alive: Boolean(data.alive), heroId: ["spider", "hammer", "meto", "bujijik", "adam", "yure", "joki", "gumi", "sniff", "kuro", "glover", "ellie", "nova"].includes(data.heroId) ? data.heroId : "spider",
       name: String(data.name || "플레이어").slice(0, 24),
       buffTime: Math.max(0, Math.min(10, Number(data.buffTime) || 0)),
       stunTime: Math.max(0, Math.min(5, Number(data.stunTime) || 0)),
@@ -251,6 +251,7 @@ io.on("connection", socket => {
       jokiHealTime: Math.max(0, Math.min(8, Number(data.jokiHealTime) || 0)),
       charmTime: Math.max(0, Math.min(2, Number(data.charmTime) || 0)),
       kuroStealthTime: Math.max(0, Math.min(1, Number(data.kuroStealthTime) || 0)),
+      novaCrystalTime: Math.max(0, Math.min(6, Number(data.novaCrystalTime) || 0)),
       slowTime: Math.max(0, Math.min(2, Number(data.slowTime) || 0)),
       summons: Array.isArray(data.summons) ? data.summons.slice(0, 8).map(s => ({ id: String(s?.id || "").slice(0, 80), x: Math.max(48, Math.min(852, Number(s?.x) || 450)), y: Math.max(48, Math.min(852, Number(s?.y) || 450)), hp: Math.max(0, Math.min(20, Number(s?.hp) || 0)), alive: Boolean(s?.alive), facing: { x: Math.max(-1, Math.min(1, Number(s?.facing?.x) || 0)), y: Math.max(-1, Math.min(1, Number(s?.facing?.y) || 0)) } })) : []
     };
@@ -259,16 +260,18 @@ io.on("connection", socket => {
   socket.on("battle:attack", data => {
     const match = socketUsers.get(socket.id);
     if (!match?.roomCode || !data || typeof data !== "object") return;
-    const allowed = new Set(["projectiles", "melee", "spider-ultimate", "ultimate-shield", "kuro-stealth-ultimate", "adam-ultimate", "joki-stun-ultimate", "joki-heal-ultimate", "joki-damage-ultimate", "summon", "summon-swing", "glover-punch", "glover-dash", "ellie-avalanche"]);
+    const allowed = new Set(["projectiles", "melee", "spider-ultimate", "ultimate-shield", "kuro-stealth-ultimate", "adam-ultimate", "joki-stun-ultimate", "joki-heal-ultimate", "joki-damage-ultimate", "summon", "summon-swing", "glover-punch", "glover-dash", "ellie-avalanche", "nova-crystal-ultimate", "nova-crystal-slash"]);
     if (!allowed.has(data.kind)) return;
     const safe = {
       kind: data.kind,
       hit: Boolean(data.hit),
       punchSide: Number(data.punchSide) === 1 ? 1 : 0,
-      heroId: ["spider", "hammer", "meto", "bujijik", "adam", "yure", "joki", "gumi", "sniff", "kuro", "glover", "ellie"].includes(data.heroId) ? data.heroId : "spider",
+      heroId: ["spider", "hammer", "meto", "bujijik", "adam", "yure", "joki", "gumi", "sniff", "kuro", "glover", "ellie", "nova"].includes(data.heroId) ? data.heroId : "spider",
       id: String(data.id || "").slice(0, 80),
       x: Math.max(48, Math.min(852, Number(data.x) || 450)),
       y: Math.max(48, Math.min(852, Number(data.y) || 450)),
+      targetX: Math.max(48, Math.min(852, Number(data.targetX) || 450)),
+      targetY: Math.max(48, Math.min(852, Number(data.targetY) || 450)),
       zoneX: Math.max(48, Math.min(852, Number(data.zoneX) || 450)),
       zoneY: Math.max(48, Math.min(852, Number(data.zoneY) || 450)),
       radius: Math.max(40, Math.min(150, Number(data.radius) || 96)),
@@ -279,7 +282,7 @@ io.on("connection", socket => {
         vx: Math.max(-800, Math.min(800, Number(b?.vx) || 0)), vy: Math.max(-800, Math.min(800, Number(b?.vy) || 0)),
         r: Math.max(2, Math.min(18, Number(b?.r) || 5)), life: Math.max(.1, Math.min(3, Number(b?.life) || 1)),
         color: /^#[0-9a-fA-F]{3,8}$/.test(String(b?.color || "")) ? String(b.color) : "#ffffff",
-        kind: String(b?.kind || "bullet").slice(0, 24), stun: Math.max(0, Math.min(2, Number(b?.stun) || 0)), charm: Math.max(0, Math.min(2, Number(b?.charm) || 0)), slow: Math.max(0, Math.min(2, Number(b?.slow) || 0))
+        kind: String(b?.kind || "bullet").slice(0, 24), stun: Math.max(0, Math.min(2, Number(b?.stun) || 0)), charm: Math.max(0, Math.min(2, Number(b?.charm) || 0)), slow: Math.max(0, Math.min(2, Number(b?.slow) || 0)), pierce: Boolean(b?.pierce)
       })) : []
     };
     socket.to(match.roomCode).emit("battle:attack", safe);
