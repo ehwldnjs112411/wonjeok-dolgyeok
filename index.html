@@ -204,6 +204,62 @@ button,input{font:inherit}button{cursor:pointer;border:0;color:var(--text);font-
 }
 </style>
 
+
+<style id="nova-limited-edition-portrait-v4">
+/* Nova's collision body remains the same 86px portrait circle (76/66px in cards).
+   Long hair is an absolutely positioned decoration and never participates in hitbox logic. */
+.nova-orb{
+ width:86px;height:86px;flex:0 0 86px;position:relative;isolation:isolate;overflow:visible;border-radius:50%;
+ border:3px solid #fff8ff;
+ background:
+  radial-gradient(circle at 36% 47%,#fff 0 1.2%,transparent 1.5%),
+  radial-gradient(ellipse 2.2px 3.6px at 39% 58%,#26204d 0 95%,transparent 100%),
+  radial-gradient(ellipse 2.2px 3.6px at 63% 58%,#26204d 0 95%,transparent 100%),
+  radial-gradient(ellipse 4.1px 6px at 39% 56%,#69d9f1 0 60%,#6576ce 83%,#3e397e 100%),
+  radial-gradient(ellipse 4.1px 6px at 63% 56%,#69d9f1 0 60%,#6576ce 83%,#3e397e 100%),
+  radial-gradient(ellipse 6px 2px at 39% 43%,#674e70 0 92%,transparent 100%),
+  radial-gradient(ellipse 6px 2px at 63% 43%,#674e70 0 92%,transparent 100%),
+  radial-gradient(ellipse 4px 2.7px at 24% 71%,#f39bbb 0 94%,transparent 100%),
+  radial-gradient(ellipse 4px 2.7px at 76% 71%,#f39bbb 0 94%,transparent 100%),
+  radial-gradient(circle at 50% 68%,#d99da9 0 1.3%,transparent 1.8%),
+  radial-gradient(ellipse at 50% 49%,#fff8f5 0 54%,#f2dfea 82%,#c3bfe7 100%);
+ box-shadow:0 0 0 7px #c8d5ff25,0 0 24px #cfbaff77,0 9px 20px #0006;
+}
+.nova-orb:before{
+ content:"";position:absolute;z-index:-1;pointer-events:none;
+ left:-25%;top:-13%;width:150%;height:178%;
+ background:
+  linear-gradient(100deg,transparent 0 22%,#fff9e8 24% 30%,#d9cff2 33% 36%,transparent 39% 61%,#fff7e7 64% 69%,#b9b1e1 72% 76%,transparent 79%),
+  radial-gradient(ellipse 20% 17% at 18% 16%,#fff 0 48%,#e9dcf7 80%,transparent 84%),
+  radial-gradient(ellipse 20% 17% at 82% 16%,#fff 0 48%,#e9dcf7 80%,transparent 84%),
+  linear-gradient(145deg,#fff 0%,#fff4e4 34%,#e4d8f7 67%,#9c9acb 100%);
+ clip-path:polygon(9% 0,30% 4%,43% 0,57% 3%,73% 1%,92% 0,89% 22%,100% 39%,88% 53%,95% 79%,78% 100%,67% 75%,56% 91%,47% 72%,35% 100%,21% 80%,15% 57%,0 42%,12% 24%);
+ filter:drop-shadow(0 4px 4px #5c568a66);
+}
+.nova-orb:after{
+ content:"✦";position:absolute;z-index:3;right:-10%;top:-20%;
+ color:#fff0a8;font-size:25px;line-height:1;
+ text-shadow:0 0 4px #fff,0 0 10px #ffe28a,0 0 18px #9edfff,0 0 24px #b79cff;
+ transform:rotate(13deg);
+}
+.fighter-art .nova-orb,.shop-art .nova-orb{width:76px;height:76px;flex-basis:76px}
+.featured-graphic .nova-orb{width:82px;height:82px;flex-basis:82px}
+@media(max-width:600px){.fighter-art .nova-orb,.shop-art .nova-orb{width:66px;height:66px;flex-basis:66px}}
+.nova-limited-card{border-color:#8677bd;background:radial-gradient(ellipse at 12% 0%,#a78bff2b,transparent 48%),linear-gradient(145deg,#221d42,#17192f 62%,#272043);box-shadow:inset 0 0 26px #a68aff20,0 0 0 1px #d4bfff18}
+.nova-limited-card.selected{border-color:#d8c6ff;box-shadow:inset 0 0 0 1px #d8c6ff55,0 0 24px #a98bff33}
+.nova-limited-art{position:relative;overflow:hidden;border:1px solid #8d7bc5;background:radial-gradient(circle at 50% 55%,#a8a0ff35,transparent 48%),radial-gradient(circle at 50% 100%,#7354ad55,transparent 68%),linear-gradient(145deg,#15172d,#29234b 62%,#171a31)}
+.nova-limited-art:before,.nova-limited-art:after{content:'✦';position:absolute;color:#fff0a8;text-shadow:0 0 9px #b9a5ff,0 0 15px #8deaff;animation:nova-sparkle 2.4s ease-in-out infinite;pointer-events:none}
+.nova-limited-art:before{left:13px;top:27px;font-size:19px}.nova-limited-art:after{right:15px;bottom:18px;font-size:15px;animation-delay:-1.1s}
+.nova-edition-tag{position:absolute;left:7px;top:7px;z-index:3;padding:5px 7px;border:1px solid #b4a0ed;border-radius:7px;background:linear-gradient(100deg,#332653,#6550a0);color:#fff0c4;font-size:8px;font-weight:1000;letter-spacing:.08em;box-shadow:0 3px 10px #0008}
+.nova-limited-card .fighter-meta h2{color:#e8dcff;text-shadow:0 0 14px #a78bff66}
+.nova-limited-card .fighter-meta p{color:#d2c9ed}
+.nova-details{margin-top:12px;padding:13px 14px;border:1px solid #8471bd;border-radius:13px;background:radial-gradient(circle at 100% 0%,#8f6fcf2b,transparent 43%),linear-gradient(135deg,#30264b,#191b32);color:#f1eaff;font-size:11px;line-height:1.9;box-shadow:inset 0 0 18px #a78bff13}
+.nova-details b{color:#ffe5a6}.nova-profile-title{margin-bottom:7px;color:#d8c5ff;font-size:10px;font-weight:1000;letter-spacing:.12em}
+.nova-flavor{display:inline-block;margin-top:7px;color:#bfeeff;font-size:10px;line-height:1.75}
+@keyframes nova-sparkle{0%,100%{opacity:.35;transform:scale(.82) rotate(0)}50%{opacity:1;transform:scale(1.2) rotate(32deg)}}
+@media(max-width:600px){.nova-limited-card{padding:13px}.nova-details{padding:11px;font-size:10px}}
+</style>
+
 </head>
 <body>
 <section id="auth-screen" class="screen active" data-screen>
@@ -358,7 +414,7 @@ const HEROES={
  glover:{id:'glover',name:'글러버',hp:125,speed:235,r:23,ultMax:100,ultMode:'aim',reloadInterval:1.2,short:'복싱 3연타',basic:'근거리에서 주먹을 3번 연속으로 날려. 주먹 한 번당 피해 3, 세 번 모두 맞히면 총 9 피해.',ult:'주먹 한 번 적중마다 20% 충전되고, 피해를 받을 때마다 궁극기가 5% 추가 충전돼. 궁극기를 쓰면 조준 방향으로 빠르게 돌진해. 적과 충돌하면 9 피해를 주고 강하게 밀쳐내.',desc:'유명한 격투가이고 매번 대회에서 모두 우승한다.',unlock:'상점에서 원코인 1500개로 구매',unlockAt:-1,price:1500,currency:'coins',passive:'적에게 피해를 받을 때마다 궁극기 5% 충전'},
  sniff:{id:'sniff',name:'킁킁',hp:95,speed:235,r:22,ultMax:5,ultMode:'self',reloadInterval:1.9,short:'대형 저속 호박포',basic:'크고 묵직한 호박탄을 발사해. 탄환 속도는 느리지만 명중 피해 6, 탄창 3발.',ult:'일반 공격 5회 적중으로 충전. 궁극기를 쓰면 호박 표창 4개가 서로 떨어진 위치에서 각각 날아가 적을 유도해. 표창 하나당 피해 4.',desc:'할로윈 밤에 사탕을 찾아 전장을 누비는 장난꾸러기. 느리지만 커다란 호박탄으로 압박하고, 궁극기에는 호박 표창 4개를 각각 적에게 유도해.',unlock:'할로윈 미션 사탕 20개 수집 후 잠금 해제 버튼 누르기',unlockAt:-2,eventOnly:true},
  ellie:{id:'ellie',name:'엘리',hp:100,speed:235,r:22,ultMax:10,ultMode:'place',reloadInterval:1.6,short:'눈꽃 3연사',basic:'원거리에서 눈 모양의 눈꽃을 3번 연속으로 던져. 눈꽃 하나당 피해 3이며, 적중하면 0.5초 동안 둔화돼.',ult:'일반 공격 눈꽃 10회 적중으로 충전. PC는 E로 조준한 뒤 마우스로 위치를 클릭해. 모바일·패드는 궁극기 버튼을 누른 채 전장으로 슬라이딩해 위치를 조절하고 손을 떼면 눈사태를 설치해. 반경이 큰 눈사태는 5초 동안 지속되며 범위 안의 적은 둔화되고 초당 1 피해를 받아. 사거리는 스피디 기본 공격의 절반이야.',desc:'엘리는 눈을 아주 좋아하는 소녀이다, 맨날 눈을 연구하며 살았다.',unlock:'상점에서 원코인 1500개로 구매',unlockAt:-1,price:1500,currency:'coins'},
- nova:{id:'nova',name:'노바',hp:100,speed:235,r:22,ultMax:7,ultMode:'place',reloadInterval:1.5,short:'반짝별 2연사',basic:'스피디 기본 공격 사거리의 절반 정도에서 피해 3인 반짝이는 별을 두 번 연속 발사해. 별은 적을 관통해.',ult:'별 7회 적중으로 충전. 모바일·패드는 아래 궁극기 버튼을 누른 채 드래그하고 손을 떼면 지정 위치로 돌진해. 돌진 피해는 없고, 도착하면 6초 동안 노바 크리스탈로 변신해. 변신 중에는 근거리 검 휘두르기로 피해 6을 주고 적중할 때마다 체력 2를 회복해. 변신 중 재장전 1.2초, 궁극기는 충전되지 않아. 지정 범위는 엘리와 같아.',desc:'노바는 별에서 온 신비한 흰 머리색깔 소녀이다.',unlock:'상점에서 원코인 1500개로 구매',unlockAt:-1,price:1500,currency:'coins'}
+ nova:{id:'nova',name:'노바',hp:100,speed:235,r:22,ultMax:7,ultMode:'place',reloadInterval:1.5,short:'반짝별 2연사',basic:'스피디 기본 공격 사거리의 절반 정도에서 피해 3인 반짝이는 별을 두 번 연속 발사해. 별은 적을 관통해.',ult:'별 7회 적중으로 충전. 모바일·패드는 아래 궁극기 버튼을 누른 채 드래그하고 손을 떼면 지정 위치로 돌진해. 돌진 피해는 없고, 도착하면 6초 동안 노바 크리스탈로 변신해. 변신 중에는 근거리 크리스탈 검 휘두르기로 피해 6을 주고 적중할 때마다 체력 4를 회복해. 변신 중 재장전 1.2초, 궁극기는 충전되지 않아. 지정 범위는 엘리와 같아.',desc:'노바는 별에서 온 신비로운 흰 머리 소녀이다. 별빛을 따라 지구에 찾아와 크리스탈 검으로 전장을 누빈다.',unlock:'한정판 · 추후 이벤트를 통해 획득',unlockAt:-3,limitedEdition:true,eventOnly:true,eventLabel:'추후 별빛 이벤트를 통해 획득 가능'}
 };
 const RANGED_AI={id:'shooter',name:'원거리 AI',hp:100,speed:118,r:22,ultMax:0,short:'원거리 총격',basic:'멀리서 총알을 발사해. 총알 하나당 피해 6.',reloadInterval:1.25};
 let sfxContext=null;
@@ -499,10 +555,49 @@ $('#halloween-btn').addEventListener('click',()=>{if(!isHalloweenEventActive()){
 $('#halloween-boss-start').addEventListener('click',()=>{if(!isHalloweenEventActive()){showEventUnavailable();return}startMatch('halloween')});
 $('#halloween-sniff-unlock').addEventListener('click',()=>{if(!isHalloweenEventActive()){showEventUnavailable();return}if(!currentUser)return;syncUnlocks();const ev=currentUser.halloweenEvent||{};if(currentUser.unlocked?.sniff){showToast('킁킁은 이미 해금했어!');renderHalloweenEvent();return}if((Number(ev.candy)||0)<20){showToast('사탕 20개를 먼저 모아야 해!');return}currentUser.unlocked=currentUser.unlocked||{};currentUser.unlocked.sniff=true;ev.sniffUnlocked=true;currentUser.halloweenEvent=ev;saveProfile();refreshMenu();renderHalloweenEvent();showToast('🎃 킁킁 해금 완료! 원 도감에서 선택할 수 있어.');});
 $$('[data-menu-back]').forEach(b=>b.addEventListener('click',()=>{refreshMenu();renderTowerMenu();showScreen('menu-screen')}));
-function renderCollection(){if(!currentUser)return;syncUnlocks();const grid=$('#collection-grid');grid.innerHTML='';for(const hero of Object.values(HEROES)){const unlocked=!!currentUser.unlocked?.[hero.id];const selected=currentUser.selectedHero===hero.id;const card=document.createElement('article');card.className='fighter-card'+(selected?' selected':'')+(!unlocked?' locked':'');const art=document.createElement('div');art.className='fighter-art';const orb=document.createElement('div');orb.className=heroOrbClass(hero.id);art.appendChild(orb);if(hero.id==='sniff'){card.classList.add('sniff-limited-card');art.classList.add('sniff-limited-art');const ribbon=document.createElement('div');ribbon.className='sniff-edition-tag';ribbon.textContent='🎃 HALLOWEEN LIMITED';art.appendChild(ribbon)}const meta=document.createElement('div');meta.className='fighter-meta';meta.innerHTML=`<h2>${hero.name}</h2><p>${hero.desc}</p><div class="stat-row"><span class="stat">체력 <b>${hero.hp}</b></span><span class="stat">이동 속도 <b>${hero.speed}${hero.id==='meto'?' (+100% 패시브)':hero.id==='adam'?' (기본 2 / 궁 중 4 회복)':hero.id==='joki'?' (랜덤 궁극기)':''}</b></span><span class="stat">궁극기 <b>${hero.id==='adam'?'초당 4% · 적중당 7%':hero.id==='joki'?'10회 적중 · 랜덤 공개':hero.id==='sniff'?'5회 적중 · 표창 4개(각 4 피해)':hero.id==='glover'?'주먹 적중당 20% · 피격당 5%':hero.ultMax+'회 적중'}</b></span><span class="stat">재장전 <b>${hero.reloadInterval.toFixed(1)}초</b></span></div>`;if(hero.id==='sniff'){const detail=document.createElement('div');detail.className='sniff-details';detail.innerHTML='<div class="sniff-profile-title">🦇 NIGHT OF PUMPKINS · 할로윈 한정판</div><b>🎃 호박총알</b> 피해 6 · 큰 크기 · 느린 탄속 · 탄창 3발<br><b>🍬 유령 표창</b> 표창 4개가 각자 흩어져 적을 추적 · 개당 피해 4<br><span class="sniff-flavor">달빛 아래 깨어난 호박 유령. 사탕 냄새를 따라 전장을 떠돌며 장난을 친다!</span>';meta.appendChild(detail)}if(hero.passive){const passive=document.createElement('div');passive.className='lock-line';passive.textContent='패시브: '+hero.passive;passive.style.color='#91edc1';meta.appendChild(passive)}if(!unlocked){const lock=document.createElement('div');lock.className='lock-line';lock.textContent=hero.eventOnly?'🔒 할로윈 미션 사탕 20개 필요':hero.currency==='coins'?`🔒 상점에서 원코인 ${hero.price}개로 구매`:`🔒 트로피 ${hero.unlockAt}개 달성 시 영구 잠금 해제`;meta.appendChild(lock)}const btn=document.createElement('button');btn.className='choose-btn'+(selected?' chosen':'');btn.textContent=!unlocked?'잠김':selected?'✓ 선택 중':'전사 선택';btn.disabled=!unlocked||selected;btn.addEventListener('click',()=>{currentUser.selectedHero=hero.id;saveProfile();refreshMenu();renderCollection()});meta.appendChild(btn);card.append(art,meta);grid.appendChild(card)}$('#selected-label').textContent='선택: '+(HEROES[currentUser.selectedHero]||HEROES.spider).name;saveProfile()}
+function renderCollection(){
+ if(!currentUser)return;
+ syncUnlocks();
+ const grid=$('#collection-grid');grid.innerHTML='';
+ for(const hero of Object.values(HEROES)){
+  const unlocked=!!currentUser.unlocked?.[hero.id],selected=currentUser.selectedHero===hero.id;
+  const card=document.createElement('article');
+  card.className='fighter-card'+(selected?' selected':'')+(!unlocked?' locked':'');
+  const art=document.createElement('div');art.className='fighter-art';
+  const orb=document.createElement('div');orb.className=heroOrbClass(hero.id);art.appendChild(orb);
+  if(hero.id==='sniff'){
+   card.classList.add('sniff-limited-card');art.classList.add('sniff-limited-art');
+   const ribbon=document.createElement('div');ribbon.className='sniff-edition-tag';ribbon.textContent='🎃 HALLOWEEN LIMITED';art.appendChild(ribbon);
+  }
+  if(hero.id==='nova'){
+   card.classList.add('nova-limited-card');art.classList.add('nova-limited-art');
+   const ribbon=document.createElement('div');ribbon.className='nova-edition-tag';ribbon.textContent='✦ CELESTIAL LIMITED';art.appendChild(ribbon);
+  }
+  const meta=document.createElement('div');meta.className='fighter-meta';
+  const speedNote=hero.id==='meto'?' (+100% 패시브)':hero.id==='adam'?' (기본 2 / 궁 중 4 회복)':hero.id==='joki'?' (랜덤 궁극기)':'';
+  const ultStat=hero.id==='adam'?'초당 4% · 적중당 7%':hero.id==='joki'?'10회 적중 · 랜덤 공개':hero.id==='sniff'?'5회 적중 · 표창 4개(각 4 피해)':hero.id==='glover'?'주먹 적중당 20% · 피격당 5%':hero.id==='nova'?'7회 적중 · 6초 크리스탈 변신':hero.ultMax+'회 적중';
+  meta.innerHTML=`<h2>${hero.name}</h2><p>${hero.desc}</p><div class="stat-row"><span class="stat">체력 <b>${hero.hp}</b></span><span class="stat">이동 속도 <b>${hero.speed}${speedNote}</b></span><span class="stat">궁극기 <b>${ultStat}</b></span><span class="stat">재장전 <b>${hero.reloadInterval.toFixed(1)}초</b></span></div>`;
+  if(hero.id==='sniff'){
+   const detail=document.createElement('div');detail.className='sniff-details';
+   detail.innerHTML='<div class="sniff-profile-title">🦇 NIGHT OF PUMPKINS · 할로윈 한정판</div><b>🎃 호박총알</b> 피해 6 · 큰 크기 · 느린 탄속 · 탄창 3발<br><b>🍬 유령 표창</b> 표창 4개가 각자 흩어져 적을 추적 · 개당 피해 4<br><span class="sniff-flavor">달빛 아래 깨어난 호박 유령. 사탕 냄새를 따라 전장을 떠돌며 장난을 친다!</span>';
+   meta.appendChild(detail);
+  }
+  if(hero.id==='nova'){
+   const detail=document.createElement('div');detail.className='nova-details';
+   detail.innerHTML='<div class="nova-profile-title">✦ CELESTIAL STARBORN · 별빛 한정판</div><b>🌟 별빛 2연사</b> 별 2개 연속 발사 · 개당 피해 3 · 적 관통 · 스피디 기본 공격 사거리의 절반<br><b>💎 크리스탈 변신</b> 7회 적중 충전 · 지정 위치로 무피해 돌진 · 6초 변신 · 크리스탈 검 피해 6 · 적중할 때마다 체력 4 회복 · 재장전 1.2초<br><span class="nova-flavor">먼 별에서 찾아온 신비로운 소녀. 길게 흘러내리는 은백색 머리카락과 별빛의 힘을 품은 크리스탈 검으로 전장을 수놓는다. 노바는 추후 이벤트에서 만날 수 있는 한정 전사다.</span>';
+   meta.appendChild(detail);
+  }
+  if(hero.passive){const passive=document.createElement('div');passive.className='lock-line';passive.textContent='패시브: '+hero.passive;passive.style.color='#91edc1';meta.appendChild(passive)}
+  if(!unlocked){const lock=document.createElement('div');lock.className='lock-line';lock.textContent=hero.limitedEdition?(hero.eventLabel||'🔒 한정판 · 추후 이벤트를 통해 획득 가능'):hero.eventOnly?'🔒 할로윈 미션 사탕 20개 필요':hero.currency==='coins'?`🔒 상점에서 원코인 ${hero.price}개로 구매`:`🔒 트로피 ${hero.unlockAt}개 달성 시 영구 잠금 해제`;meta.appendChild(lock)}
+  const btn=document.createElement('button');btn.className='choose-btn'+(selected?' chosen':'');btn.textContent=!unlocked?'잠김':selected?'✓ 선택 중':'전사 선택';btn.disabled=!unlocked||selected;
+  btn.addEventListener('click',()=>{currentUser.selectedHero=hero.id;saveProfile();refreshMenu();renderCollection()});
+  meta.appendChild(btn);card.append(art,meta);grid.appendChild(card);
+ }
+ $('#selected-label').textContent='선택: '+(HEROES[currentUser.selectedHero]||HEROES.spider).name;saveProfile();
+}
 function renderTrophy(){if(!currentUser)return;syncUnlocks();processTrophyCoinRewards();const t=currentUser.trophies||0;$('#trophy-total').innerHTML=`${t} <span>🏆</span>`;const target=t<50?50:t<100?100:t<150?150:t<200?200:t<250?250:t<300?300:t<400?400:t<500?500:500;$('#trophy-progress-fill').style.width=(t>=500?100:Math.min(100,t/target*100))+'%';$('#trophy-next-label').textContent=t<50?`망치보이 잠금 해제까지 ${50-t}개`:t<100?`메토 잠금 해제까지 ${100-t}개`:t<150?`뿌지직 잠금 해제까지 ${150-t}개`:t<200?`아담 잠금 해제까지 ${200-t}개`:t<250?`원코인 500개 보상까지 ${250-t}개`:t<300?`원코인 500개 보상까지 ${300-t}개`:t<400?`원코인 500개 보상까지 ${400-t}개`:t<500?`원코인 500개 보상까지 ${500-t}개`:'원 트로피 보상 모두 달성!';$('#wins-count').textContent=currentUser.wins||0;$('#losses-count').textContent=currentUser.losses||0;$('#hammer-reward-status').textContent=currentUser.unlocked.hammer?'✓ 영구 잠금 해제 · 트로피가 떨어져도 유지':`잠김 · 현재 ${t}/50 트로피`;$('#meto-reward-status').textContent=currentUser.unlocked.meto?'✓ 영구 잠금 해제 · 트로피가 떨어져도 유지':`잠김 · 현재 ${t}/100 트로피`;$('#bujijik-reward-status').textContent=currentUser.unlocked.bujijik?'✓ 영구 잠금 해제 · 트로피가 떨어져도 유지':`잠김 · 현재 ${t}/150 트로피`;$('#adam-reward-status').textContent=currentUser.unlocked.adam?'✓ 영구 잠금 해제 · 트로피가 떨어져도 유지':`잠김 · 현재 ${t}/200 트로피`;for(const threshold of [250,300,400,500]){const el=$('#coin-'+threshold+'-status');if(el){const claimed=(currentUser.trophyCoinRewardsClaimed||[]).includes(threshold);el.textContent=claimed?'✓ 지급 완료 · 원코인 +500':t>=threshold?'보상 받을 수 있음':`잠김 · 현재 ${t}/${threshold} 트로피`}}saveProfile()}
 
-function renderShop(){if(!currentUser)return;syncUnlocks();const grid=$('#shop-grid');grid.innerHTML='';$('#shop-coins').textContent=currentUser.coins;$('#shop-notice').textContent='';for(const id of ['yure','joki','gumi','kuro','glover','ellie','nova']){const h=HEROES[id],price=Number(h.price)||1500,owned=!!currentUser.unlocked?.[id];const card=document.createElement('article');card.className='shop-card'+(owned?' owned':'');const art=document.createElement('div');art.className='shop-art';const orb=document.createElement('div');orb.className=heroOrbClass(id);art.appendChild(orb);const info=document.createElement('div');const ability=id==='nova'?'기본 공격: 별 2연사 · 개당 피해 3 · 관통<br>궁극기: 지정 위치로 돌진 후 6초 크리스탈 변신 · 검 피해 6 · 적중당 2 회복':id==='ellie'?'기본 공격: 눈꽃 3연사 · 개당 피해 3 · 적중 시 0.5초 둔화<br>궁극기: 5초 눈사태 · 초당 1 피해 · 둔화':id==='yure'?'기본 공격: 피해 2 탄환 5연사<br>궁극기: 피해 3 탄환 10연사':id==='joki'?'기본 공격: 사탕 1~4개 연속 투척<br>궁극기: 무작위 효과':id==='gumi'?'기본 공격: 하트 탄환 피해 7<br>궁극기: 1초 매혹·기절':id==='glover'?'기본 공격: 주먹 3연타 · 한 번당 피해 3<br>궁극기: 조준 방향 돌진 · 충돌 피해 9 · 강한 밀치기':'기본 공격: 표창 2개 연속 투척 · 개당 피해 4<br>궁극기: 1초 은신 · 첫 공격 개당 피해 8';info.innerHTML=`<h2>${h.name}</h2><p>${h.desc}<br>${ability}</p><div class="shop-price">🪙 ${price} 원코인</div>`;const btn=document.createElement('button');btn.className='shop-buy';btn.textContent=owned?'✓ 구매 완료':`🪙 ${price}개로 구매`;btn.disabled=owned;btn.addEventListener('click',()=>{if(!currentUser)return;syncUnlocks();if(currentUser.unlocked?.[id]){$('#shop-notice').textContent=`${h.name}은(는) 이미 보유 중이야.`;return}if((Number(currentUser.coins)||0)<price){$('#shop-notice').textContent=`원코인이 부족해! ${h.name}은(는) ${price}개가 필요하고, 현재 ${currentUser.coins}개야.`;return}currentUser.coins-=price;currentUser.unlocked=currentUser.unlocked||{};currentUser.unlocked[id]=true;if(id==='joki')currentUser.jokiPurchased=true;saveProfile();refreshMenu();renderShop();$('#shop-notice').textContent=`${h.name} 구매 완료! 원코인 ${price}개가 차감됐어. 원 도감에서 선택할 수 있어.`});info.appendChild(btn);card.append(art,info);grid.appendChild(card)}}
+function renderShop(){if(!currentUser)return;syncUnlocks();const grid=$('#shop-grid');grid.innerHTML='';$('#shop-coins').textContent=currentUser.coins;$('#shop-notice').textContent='';for(const id of ['yure','joki','gumi','kuro','glover','ellie']){const h=HEROES[id],price=Number(h.price)||1500,owned=!!currentUser.unlocked?.[id];const card=document.createElement('article');card.className='shop-card'+(owned?' owned':'');const art=document.createElement('div');art.className='shop-art';const orb=document.createElement('div');orb.className=heroOrbClass(id);art.appendChild(orb);const info=document.createElement('div');const ability=id==='nova'?'기본 공격: 별 2연사 · 개당 피해 3 · 관통<br>궁극기: 지정 위치로 돌진 후 6초 크리스탈 변신 · 검 피해 6 · 적중당 2 회복':id==='ellie'?'기본 공격: 눈꽃 3연사 · 개당 피해 3 · 적중 시 0.5초 둔화<br>궁극기: 5초 눈사태 · 초당 1 피해 · 둔화':id==='yure'?'기본 공격: 피해 2 탄환 5연사<br>궁극기: 피해 3 탄환 10연사':id==='joki'?'기본 공격: 사탕 1~4개 연속 투척<br>궁극기: 무작위 효과':id==='gumi'?'기본 공격: 하트 탄환 피해 7<br>궁극기: 1초 매혹·기절':id==='glover'?'기본 공격: 주먹 3연타 · 한 번당 피해 3<br>궁극기: 조준 방향 돌진 · 충돌 피해 9 · 강한 밀치기':'기본 공격: 표창 2개 연속 투척 · 개당 피해 4<br>궁극기: 1초 은신 · 첫 공격 개당 피해 8';info.innerHTML=`<h2>${h.name}</h2><p>${h.desc}<br>${ability}</p><div class="shop-price">🪙 ${price} 원코인</div>`;const btn=document.createElement('button');btn.className='shop-buy';btn.textContent=owned?'✓ 구매 완료':`🪙 ${price}개로 구매`;btn.disabled=owned;btn.addEventListener('click',()=>{if(!currentUser)return;syncUnlocks();if(currentUser.unlocked?.[id]){$('#shop-notice').textContent=`${h.name}은(는) 이미 보유 중이야.`;return}if((Number(currentUser.coins)||0)<price){$('#shop-notice').textContent=`원코인이 부족해! ${h.name}은(는) ${price}개가 필요하고, 현재 ${currentUser.coins}개야.`;return}currentUser.coins-=price;currentUser.unlocked=currentUser.unlocked||{};currentUser.unlocked[id]=true;if(id==='joki')currentUser.jokiPurchased=true;saveProfile();refreshMenu();renderShop();$('#shop-notice').textContent=`${h.name} 구매 완료! 원코인 ${price}개가 차감됐어. 원 도감에서 선택할 수 있어.`});info.appendChild(btn);card.append(art,info);grid.appendChild(card)}}
 function renderMail(){if(!currentUser)return;const list=$('#mail-list');list.innerHTML='';$('#mail-trophies').textContent=currentUser.trophies;$('#mail-coins').textContent=currentUser.coins;const card=document.createElement('article');card.className='mail-card';const icon=document.createElement('div');icon.className='mail-icon';icon.textContent='✉️';const body=document.createElement('div');const claimed=!!currentUser.mailRewardClaimed;body.innerHTML=`<h2>원격돌격 운영팀의 환영 선물 ${claimed?'<span class="mail-read">수령 완료</span>':'<span class="new-badge">NEW</span>'}</h2><p>원격돌격에 와 줘서 고마워! 전장에서 도움이 되도록 환영 보상을 준비했어. 보상은 계정당 한 번만 받을 수 있어.</p><div class="mail-rewards"><span class="mail-reward">🏆 트로피 +50</span><span class="mail-reward">🪙 원코인 +1000</span></div>`;const btn=document.createElement('button');btn.className='mail-claim';btn.textContent=claimed?'이미 수령한 보상':'보상 받기';btn.disabled=claimed;btn.addEventListener('click',()=>{if(!currentUser||currentUser.mailRewardClaimed)return;currentUser.trophies=(Number(currentUser.trophies)||0)+50;currentUser.coins=(Number(currentUser.coins)||0)+1000;const mailTrophyMilestones=processTrophyCoinRewards();currentUser.mailRewardClaimed=true;currentUser.mailRewardRead=true;syncUnlocks();saveProfile();refreshMenu();renderMail();const notice=document.createElement('p');notice.textContent='보상을 받았어! 트로피 50개와 원코인 1000개가 지급됐어.'+(mailTrophyMilestones.length?` 트로피 보상 원코인 ${mailTrophyMilestones.length*500}개도 추가 지급됐어.`:'');notice.style.color='#7be0b7';notice.style.fontWeight='900';list.appendChild(notice);});body.appendChild(btn);card.append(icon,body);list.appendChild(card);const halloween=document.createElement('article');halloween.className='mail-card';const hIcon=document.createElement('div');hIcon.className='mail-icon';hIcon.textContent='🎃';const hBody=document.createElement('div');const hClaimed=!!currentUser.halloweenGiftClaimed;hBody.innerHTML=`<h2>할로윈 선물 ${hClaimed?'<span class="mail-read">수령 완료</span>':'<span class="new-badge">NEW</span>'}</h2><p>할로윈 기념 선물이 도착했어! 한 계정당 한 번만 받을 수 있어.</p><div class="mail-rewards"><span class="mail-reward">🏆 트로피 +100</span></div>`;const hBtn=document.createElement('button');hBtn.className='mail-claim';hBtn.textContent=hClaimed?'이미 수령한 보상':'할로윈 선물 받기';hBtn.disabled=hClaimed;hBtn.addEventListener('click',()=>{if(!currentUser||currentUser.halloweenGiftClaimed)return;currentUser.trophies=(Number(currentUser.trophies)||0)+100;currentUser.halloweenGiftClaimed=true;currentUser.unlocked=currentUser.unlocked||{};currentUser.unlocked.halloweenGiftClaimed=true;const milestone=processTrophyCoinRewards();syncUnlocks();saveProfile();refreshMenu();renderMail();const n=document.createElement('p');n.textContent='할로윈 선물! 트로피 100개를 받았어.'+(milestone.length?` 트로피 보상 원코인 ${milestone.length*500}개도 지급됐어.`:'');n.style.color='#7be0b7';n.style.fontWeight='900';list.appendChild(n)});hBody.appendChild(hBtn);halloween.append(hIcon,hBody);list.appendChild(halloween)}
 
 function awardHalloweenMission(key,candy){if(!currentUser||!isHalloweenEventActive())return false;const ev=currentUser.halloweenEvent||(currentUser.halloweenEvent={aiWins:0,candy:0,claimed:{boss:false,ai:false,tower:false},rewardVersion:2});ev.claimed=ev.claimed||{boss:false,ai:false,tower:false};if(ev.claimed[key])return false;ev.claimed[key]=true;ev.candy=Math.min(20,(Number(ev.candy)||0)+candy);saveProfile();refreshMenu();renderHalloweenEvent();if(ev.candy>=20)showToast('사탕 20개를 모았어! 아래 버튼을 눌러 킁킁을 해금해 줘.');else showToast(`할로윈 미션 완료! 사탕 ${candy}개 획득!`);return true}
@@ -605,7 +700,7 @@ function fireBasic(attacker,dir){if(!game||game.ended||!attacker.alive||attacker
  else{const target=opponentOf(attacker);if(!target)return;const dx=target.x-attacker.x,dy=target.y-attacker.y;const d=Math.hypot(dx,dy);const to=vecNorm(dx,dy);const summoned=game.summons.find(s=>s.alive&&s.isPlayer!==attacker.isPlayer&&Math.hypot(s.x-attacker.x,s.y-attacker.y)<attacker.r+s.r+58&&attacker.facing.x*vecNorm(s.x-attacker.x,s.y-attacker.y).x+attacker.facing.y*vecNorm(s.x-attacker.x,s.y-attacker.y).y>=0);if(summoned)damageSummon(summoned,8,attacker);else if(d<attacker.r+h.r+88&&attacker.facing.x*to.x+attacker.facing.y*to.y>=0){damage(target,8,attacker,true);attacker.attackHits.add(target)}game.effects.push({type:'slash',x:attacker.x,y:attacker.y,dir:{...attacker.facing},time:.28,max:.28,owner:attacker});}
  if(game.mode==='user'&&attacker.isPlayer&&window.wonjeokSocket?.connected&&attacker.heroId!=='bujijik'&&attacker.heroId!=='yure'&&attacker.heroId!=='adam'&&attacker.heroId!=='glover'&&attacker.heroId!=='joki'&&attacker.heroId!=='kuro'&&attacker.heroId!=='ellie'&&attacker.heroId!=='nova'){const bullets=game.projectiles.slice(projectileStart).map(projectilePayload);window.wonjeokSocket.emit('battle:attack',bullets.length?{kind:'projectiles',heroId:attacker.heroId,x:attacker.x,y:attacker.y,facing:attacker.facing,bullets}:{kind:'melee',heroId:attacker.heroId,x:attacker.x,y:attacker.y,facing:attacker.facing});}
 }
-function damage(target,amount,source,charge=true,stun=0,slow=0){if(!target||!target.alive||game.ended||(target.invulnTime||0)>0)return;const taken=Math.max(0,amount*(target.buffTime>0?.7:1));target.hp=Math.max(0,target.hp-taken);target.flash=.15;if(slow>0)target.slowTime=Math.max(target.slowTime||0,Math.min(2,slow));if(taken>0){playHitSound();const away=source?vecNorm(target.x-source.x,target.y-source.y):vecNorm(Math.random()-.5,Math.random()-.5);game.effects.push({type:'blood-splatter',x:target.x,y:target.y,dir:away,time:.48,max:.48,particles:Array.from({length:18},(_,i)=>({a:Math.atan2(away.y,away.x)+(i-8.5)*.19+(Math.random()-.5)*.42,s:48+Math.random()*118,r:2.2+Math.random()*3.6,tail:5+Math.random()*9,bright:i%4===0}))});}if(taken>0)game.effects.push({type:'damage',x:target.x,y:target.y-25,text:'-'+Math.round(taken),time:.7,max:.7,color:'#ff7a91'});if(target.heroId==='glover'&&taken>0)target.ultCharge=Math.min(target.ultMax,target.ultCharge+5);if(source&&source!==target&&charge&&!(source.heroId==='hammer'&&source.buffTime>0)&&!(source.heroId==='adam'&&source.adamAwakenTime>0)){const chargeGain=source.heroId==='adam'?7:source.heroId==='glover'?20:1;source.ultCharge=Math.min(source.ultMax,source.ultCharge+chargeGain);game.hitCount++;if(source.heroId==='adam')source.hp=Math.min(source.maxHp,source.hp+(source.adamAwakenTime>0?4:2))}else if(source?.heroId==='adam'&&source.adamAwakenTime>0&&taken>0){source.hp=Math.min(source.maxHp,source.hp+4)}if(source?.heroId==='nova'&&(source.novaCrystalTime||0)>0&&taken>0){source.hp=Math.min(source.maxHp,source.hp+2);game.effects.push({type:'damage',x:source.x,y:source.y-25,text:'+2',time:.65,max:.65,color:'#8fffe8'})}if(game.mode==='user'&&target===game.enemy&&window.wonjeokSocket?.connected)window.wonjeokSocket.emit('battle:damage',{amount:taken,stun:Math.max(0,Math.min(2,Number(stun)||0)),slow:Math.max(0,Math.min(2,Number(slow)||0))});if(target.hp<=0){target.alive=false;game.effects.push({type:'explosion',x:target.x,y:target.y,time:1.05,max:1.05,r:target.r,color:(game.enemies||[game.enemy]).includes(target)?'#ffbd69':'#69e8ff'});const isPlayer=target===game.player;const enemies=(game.enemies||[game.enemy]);const allEnemiesDown=enemies.every(enemy=>!enemy.alive);if(isPlayer||allEnemiesDown){game.ended=true;game.finishing=true;game.finishTimer=1.05;game.finishResult=isPlayer?'lose':'win';game.finishReason='ko';mouse.down=false;mobile.attackHeld=false;game.ultArmed=false}}}
+function damage(target,amount,source,charge=true,stun=0,slow=0){if(!target||!target.alive||game.ended||(target.invulnTime||0)>0)return;const taken=Math.max(0,amount*(target.buffTime>0?.7:1));target.hp=Math.max(0,target.hp-taken);target.flash=.15;if(slow>0)target.slowTime=Math.max(target.slowTime||0,Math.min(2,slow));if(taken>0){playHitSound();const away=source?vecNorm(target.x-source.x,target.y-source.y):vecNorm(Math.random()-.5,Math.random()-.5);game.effects.push({type:'blood-splatter',x:target.x,y:target.y,dir:away,time:.48,max:.48,particles:Array.from({length:18},(_,i)=>({a:Math.atan2(away.y,away.x)+(i-8.5)*.19+(Math.random()-.5)*.42,s:48+Math.random()*118,r:2.2+Math.random()*3.6,tail:5+Math.random()*9,bright:i%4===0}))});}if(taken>0)game.effects.push({type:'damage',x:target.x,y:target.y-25,text:'-'+Math.round(taken),time:.7,max:.7,color:'#ff7a91'});if(target.heroId==='glover'&&taken>0)target.ultCharge=Math.min(target.ultMax,target.ultCharge+5);if(source&&source!==target&&charge&&!(source.heroId==='hammer'&&source.buffTime>0)&&!(source.heroId==='adam'&&source.adamAwakenTime>0)){const chargeGain=source.heroId==='adam'?7:source.heroId==='glover'?20:1;source.ultCharge=Math.min(source.ultMax,source.ultCharge+chargeGain);game.hitCount++;if(source.heroId==='adam')source.hp=Math.min(source.maxHp,source.hp+(source.adamAwakenTime>0?4:2))}else if(source?.heroId==='adam'&&source.adamAwakenTime>0&&taken>0){source.hp=Math.min(source.maxHp,source.hp+4)}if(source?.heroId==='nova'&&(source.novaCrystalTime||0)>0&&taken>0){source.hp=Math.min(source.maxHp,source.hp+4);game.effects.push({type:'damage',x:source.x,y:source.y-25,text:'+4',time:.65,max:.65,color:'#8fffe8'})}if(game.mode==='user'&&target===game.enemy&&window.wonjeokSocket?.connected)window.wonjeokSocket.emit('battle:damage',{amount:taken,stun:Math.max(0,Math.min(2,Number(stun)||0)),slow:Math.max(0,Math.min(2,Number(slow)||0))});if(target.hp<=0){target.alive=false;game.effects.push({type:'explosion',x:target.x,y:target.y,time:1.05,max:1.05,r:target.r,color:(game.enemies||[game.enemy]).includes(target)?'#ffbd69':'#69e8ff'});const isPlayer=target===game.player;const enemies=(game.enemies||[game.enemy]);const allEnemiesDown=enemies.every(enemy=>!enemy.alive);if(isPlayer||allEnemiesDown){game.ended=true;game.finishing=true;game.finishTimer=1.05;game.finishResult=isPlayer?'lose':'win';game.finishReason='ko';mouse.down=false;mobile.attackHeld=false;game.ultArmed=false}}}
 function updateGloverDash(actor,dt){const dash=actor.gloverDash;if(!dash||!game)return;const step=Math.min(dash.speed*dt,dash.remaining),dir=dash.dir;const targets=actor.isPlayer?(game.enemies||[game.enemy]):[game.player];let collision=null,bestAlong=Infinity;for(const target of targets){if(!target?.alive||target.heroId==='kuro'&&(target.invulnTime||0)>0)continue;const dx=target.x-actor.x,dy=target.y-actor.y,along=dx*dir.x+dy*dir.y,lateral=Math.abs(dx*dir.y-dy*dir.x);if(along>=-actor.r*.25&&along<=step+actor.r+target.r&&lateral<target.r+actor.r*.58&&along<bestAlong){collision=target;bestAlong=along}}if(collision){const stop=Math.max(0,Math.min(step,bestAlong-(actor.r+collision.r)*.62));actor.x=clamp(actor.x+dir.x*stop,ARENA.min+actor.r,ARENA.max-actor.r);actor.y=clamp(actor.y+dir.y*stop,ARENA.min+actor.r,ARENA.max-actor.r);damage(collision,9,actor,false);collision.pull={source:{x:clamp(collision.x+dir.x*225,ARENA.min+collision.r,ARENA.max-collision.r),y:clamp(collision.y+dir.y*225,ARENA.min+collision.r,ARENA.max-collision.r)},time:.38,style:'glover-knock'};game.effects.push({type:'explosion',x:collision.x,y:collision.y,time:.46,max:.46,r:38,color:'#ff7543'});game.effects.push({type:'glover-dash',x:actor.x,y:actor.y,dir:{...dir},time:.2,max:.2});playGloverImpactSound();emitOnlineAttack(actor,{kind:'glover-dash',heroId:'glover',x:actor.x,y:actor.y,facing:dir,hit:true});actor.gloverDash=null;return}actor.x=clamp(actor.x+dir.x*step,ARENA.min+actor.r,ARENA.max-actor.r);actor.y=clamp(actor.y+dir.y*step,ARENA.min+actor.r,ARENA.max-actor.r);dash.remaining-=step;actor.gloverDashFxTimer-=dt;if(actor.gloverDashFxTimer<=0){game.effects.push({type:'glover-dash',x:actor.x,y:actor.y,dir:{...dir},time:.16,max:.16});actor.gloverDashFxTimer=.045}if(dash.remaining<=0||actor.x<=ARENA.min+actor.r+1||actor.x>=ARENA.max-actor.r-1||actor.y<=ARENA.min+actor.r+1||actor.y>=ARENA.max-actor.r-1)actor.gloverDash=null}
 
 function useUltimate(actor,dir){
@@ -978,76 +1073,80 @@ function drawBujijikFighter(f,t){
 
 function drawNovaFighter(f,t){
  const a=Math.atan2(f.facing.y,f.facing.x),crystal=(f.novaCrystalTime||0)>0;
- const eyeScale=crystal?1.22:1.08;
  const drawStar=(x,y,r,color,rotation=0)=>{
-  ctx.save();ctx.translate(x,y);ctx.rotate(rotation);ctx.fillStyle=color;ctx.beginPath();
-  for(let k=0;k<10;k++){const q=-Math.PI/2+k*Math.PI/5,rr=k%2?r*.43:r;if(k===0)ctx.moveTo(Math.cos(q)*rr,Math.sin(q)*rr);else ctx.lineTo(Math.cos(q)*rr,Math.sin(q)*rr)}
+  ctx.save();ctx.translate(x,y);ctx.rotate(rotation);ctx.fillStyle=color;
+  ctx.shadowColor=color;ctx.shadowBlur=7;ctx.beginPath();
+  for(let k=0;k<10;k++){const q=-Math.PI/2+k*Math.PI/5,rr=k%2?r*.42:r;if(k===0)ctx.moveTo(Math.cos(q)*rr,Math.sin(q)*rr);else ctx.lineTo(Math.cos(q)*rr,Math.sin(q)*rr)}
   ctx.closePath();ctx.fill();ctx.restore();
  };
- const hair=ctx.createLinearGradient(-25,-34,24,24);hair.addColorStop(0,'#fff');hair.addColorStop(.28,'#fff8e9');hair.addColorStop(.58,'#f0e6ff');hair.addColorStop(.82,'#c9c5ef');hair.addColorStop(1,'#9698cf');
- const hairLine='#aaa4d6';
+ const hair=ctx.createLinearGradient(-38,-36,35,76);
+ hair.addColorStop(0,'#fff');hair.addColorStop(.2,'#fff5df');hair.addColorStop(.44,'#f4e9ff');hair.addColorStop(.7,'#d4c6f2');hair.addColorStop(.9,'#a7a2d5');hair.addColorStop(1,'#777db7');
+ const hairShade='#918bbd';
  ctx.save();ctx.translate(f.x,f.y);ctx.rotate(a);
- // Soft star aura and long hair behind the face.
- ctx.save();ctx.globalAlpha=crystal?.86:.48;ctx.strokeStyle=crystal?'#c8b5ff':'#d9d9ff';ctx.lineWidth=2.2;ctx.shadowColor='#c4baff';ctx.shadowBlur=crystal?22:12;
- ctx.beginPath();ctx.ellipse(0,0,f.r+13,f.r+9,t*.16,0,Math.PI*2);ctx.stroke();ctx.restore();
- ctx.fillStyle=hair;ctx.strokeStyle=hairLine;ctx.lineWidth=1.5;
- // Side locks with curled tips, visible even at small battlefield scale.
- ctx.beginPath();ctx.moveTo(-15,-16);ctx.quadraticCurveTo(-34,-18,-31,5);ctx.quadraticCurveTo(-31,19,-22,24);ctx.quadraticCurveTo(-24,11,-14,7);ctx.closePath();ctx.fill();ctx.stroke();
- ctx.beginPath();ctx.moveTo(15,-16);ctx.quadraticCurveTo(34,-18,31,5);ctx.quadraticCurveTo(31,19,22,24);ctx.quadraticCurveTo(24,11,14,7);ctx.closePath();ctx.fill();ctx.stroke();
- // Crystal form has a little more flowing hair and a star-shaped back ribbon.
+ // Starlight aura: all decorative hair and dress shapes are visual only.
+ ctx.save();ctx.globalAlpha=crystal?.9:.42;ctx.strokeStyle=crystal?'#d7c5ff':'#dce8ff';ctx.lineWidth=2.2;ctx.shadowColor='#c4baff';ctx.shadowBlur=crystal?24:12;
+ ctx.beginPath();ctx.ellipse(0,0,f.r+13,f.r+10,t*.15,0,Math.PI*2);ctx.stroke();ctx.restore();
+ // Long, flowing hair behind Nova. It extends outside the circular body but never changes f.r.
+ ctx.fillStyle=hair;ctx.strokeStyle=hairShade;ctx.lineWidth=1.5;ctx.lineJoin='round';
+ ctx.beginPath();ctx.moveTo(-14,-15);ctx.bezierCurveTo(-38,-19,-39,5,-33,23);ctx.bezierCurveTo(-28,41,-43,55,-34,72);ctx.bezierCurveTo(-19,68,-16,51,-17,37);ctx.bezierCurveTo(-18,19,-8,5,-11,-8);ctx.closePath();ctx.fill();ctx.stroke();
+ ctx.beginPath();ctx.moveTo(14,-15);ctx.bezierCurveTo(38,-19,39,5,33,23);ctx.bezierCurveTo(28,41,43,55,34,72);ctx.bezierCurveTo(19,68,16,51,17,37);ctx.bezierCurveTo(18,19,8,5,11,-8);ctx.closePath();ctx.fill();ctx.stroke();
+ // Hair strand highlights make the long locks readable at battlefield scale.
+ ctx.strokeStyle='#fff';ctx.globalAlpha=.82;ctx.lineWidth=2.1;ctx.beginPath();ctx.moveTo(-27,-8);ctx.bezierCurveTo(-35,12,-24,34,-31,60);ctx.moveTo(27,-8);ctx.bezierCurveTo(35,12,24,34,31,60);ctx.stroke();ctx.globalAlpha=1;
+ ctx.strokeStyle='#b6a9dd';ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(-20,2);ctx.quadraticCurveTo(-23,26,-25,50);ctx.moveTo(20,2);ctx.quadraticCurveTo(23,26,25,50);ctx.stroke();
  if(crystal){
-  ctx.fillStyle='#d8d1ff';ctx.strokeStyle='#fff';ctx.lineWidth=1.4;
-  ctx.beginPath();ctx.moveTo(-13,9);ctx.quadraticCurveTo(-35,8,-39,24);ctx.quadraticCurveTo(-22,26,-9,17);ctx.closePath();ctx.fill();ctx.stroke();
-  ctx.beginPath();ctx.moveTo(13,9);ctx.quadraticCurveTo(35,8,39,24);ctx.quadraticCurveTo(22,26,9,17);ctx.closePath();ctx.fill();ctx.stroke();
-  // Layered starlight dress and collar.
-  const dress=ctx.createLinearGradient(0,10,0,37);dress.addColorStop(0,'#fff');dress.addColorStop(.35,'#f7eaff');dress.addColorStop(.7,'#c6b9ff');dress.addColorStop(1,'#8f91db');
-  ctx.fillStyle=dress;ctx.strokeStyle='#fff8ff';ctx.lineWidth=2;
-  ctx.beginPath();ctx.moveTo(-12,8);ctx.quadraticCurveTo(0,13,12,8);ctx.lineTo(25,29);ctx.quadraticCurveTo(15,35,0,31);ctx.quadraticCurveTo(-15,35,-25,29);ctx.closePath();ctx.fill();ctx.stroke();
-  ctx.strokeStyle='#fff';ctx.lineWidth=1.8;ctx.beginPath();ctx.moveTo(-20,24);ctx.quadraticCurveTo(-8,29,0,25);ctx.quadraticCurveTo(9,29,20,24);ctx.stroke();
-  ctx.fillStyle='#f2d5ff';ctx.strokeStyle='#fff';ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(-4,12);ctx.lineTo(-16,7);ctx.lineTo(-13,18);ctx.closePath();ctx.fill();ctx.stroke();ctx.beginPath();ctx.moveTo(4,12);ctx.lineTo(16,7);ctx.lineTo(13,18);ctx.closePath();ctx.fill();ctx.stroke();
+  // Floating back ribbons and crystal tassels during transformation.
+  ctx.fillStyle='#f2dfff';ctx.strokeStyle='#fff';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(-22,9);ctx.quadraticCurveTo(-43,12,-48,31);ctx.quadraticCurveTo(-28,31,-15,18);ctx.closePath();ctx.fill();ctx.stroke();
+  ctx.beginPath();ctx.moveTo(22,9);ctx.quadraticCurveTo(43,12,48,31);ctx.quadraticCurveTo(28,31,15,18);ctx.closePath();ctx.fill();ctx.stroke();
+  drawStar(-43,32,4,'#ffeaa3',t);drawStar(43,32,4,'#ffeaa3',-t);
  }
- // Face: soft warm porcelain rather than a blank orb.
- const face=ctx.createRadialGradient(-7,-11,2,0,-1,f.r*1.35);face.addColorStop(0,'#fffdfb');face.addColorStop(.66,'#ffeef0');face.addColorStop(1,'#e1d9f4');
- ctx.fillStyle=face;ctx.strokeStyle='#fff';ctx.lineWidth=2.4;ctx.shadowColor=crystal?'#d9c7ff':'#c9d7ff';ctx.shadowBlur=crystal?20:12;ctx.beginPath();ctx.ellipse(0,0,f.r*.84,f.r*.91,0,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.shadowBlur=0;
- // Tiny ears and little pearl earrings.
- ctx.fillStyle='#f6d9dd';ctx.beginPath();ctx.ellipse(-17,-1,4,6,-.25,0,Math.PI*2);ctx.ellipse(17,-1,4,6,.25,0,Math.PI*2);ctx.fill();
- if(crystal){ctx.fillStyle='#fff0a8';ctx.beginPath();ctx.arc(-18,5,2,0,Math.PI*2);ctx.arc(18,5,2,0,Math.PI*2);ctx.fill();}
- // Big expressive eyes with dark upper lashes and clearly visible eyebrows.
- const eyeY=1.5, eyeW=crystal?6.8:6.1, eyeH=crystal?8.3:7.4;
- ctx.strokeStyle='#705c79';ctx.lineWidth=2.25;ctx.lineCap='round';
- ctx.beginPath();ctx.moveTo(-13,-8);ctx.quadraticCurveTo(-8,-12,-3,-8);ctx.moveTo(3,-8);ctx.quadraticCurveTo(8,-12,13,-8);ctx.stroke();
- ctx.fillStyle='#fff';ctx.beginPath();ctx.ellipse(-8,eyeY,eyeW,eyeH,.04,0,Math.PI*2);ctx.ellipse(8,eyeY,eyeW,eyeH,-.04,0,Math.PI*2);ctx.fill();
- const iris=ctx.createRadialGradient(-8,eyeY-1,1,-8,eyeY,eyeH);iris.addColorStop(0,'#b7f5ff');iris.addColorStop(.34,'#68b5e7');iris.addColorStop(.72,'#5966b8');iris.addColorStop(1,'#30366f');
- ctx.fillStyle=iris;ctx.beginPath();ctx.ellipse(-8+f.facing.x*1.35,eyeY+f.facing.y*1.35,3.9,5.6,0,0,Math.PI*2);ctx.ellipse(8+f.facing.x*1.35,eyeY+f.facing.y*1.35,3.9,5.6,0,0,Math.PI*2);ctx.fill();
- ctx.fillStyle='#20234d';ctx.beginPath();ctx.ellipse(-8+f.facing.x*1.5,eyeY+f.facing.y*1.5,2,3.5,0,0,Math.PI*2);ctx.ellipse(8+f.facing.x*1.5,eyeY+f.facing.y*1.5,2,3.5,0,0,Math.PI*2);ctx.fill();
- ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(-9.4+f.facing.x,eyeY-3,2.1,0,Math.PI*2);ctx.arc(6.6+f.facing.x,eyeY-3,2.1,0,Math.PI*2);ctx.fill();
- ctx.strokeStyle='#5f4e70';ctx.lineWidth=1.7;ctx.beginPath();ctx.moveTo(-13,-9);ctx.lineTo(-10,-7);ctx.moveTo(13,-9);ctx.lineTo(10,-7);ctx.stroke();
- // Nose, smile and rosy cheeks.
- ctx.fillStyle='#e6a4ad';ctx.globalAlpha=.7;ctx.beginPath();ctx.arc(0,7,1.45,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
- ctx.fillStyle='#f3a6c5';ctx.globalAlpha=.78;ctx.beginPath();ctx.ellipse(-14,8,4,2.5,-.15,0,Math.PI*2);ctx.ellipse(14,8,4,2.5,.15,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
- ctx.strokeStyle='#a85f83';ctx.lineWidth=1.7;ctx.beginPath();ctx.moveTo(-4,11);ctx.quadraticCurveTo(0,15,4,11);ctx.stroke();
- // Voluminous top hair: rounded crown, layered fringe and two curled side locks.
- ctx.fillStyle=hair;ctx.strokeStyle=hairLine;ctx.lineWidth=1.8;
- ctx.beginPath();ctx.moveTo(-19,-3);ctx.quadraticCurveTo(-29,-28,-10,-33);ctx.quadraticCurveTo(5,-41,20,-27);ctx.quadraticCurveTo(29,-17,19,-3);ctx.quadraticCurveTo(12,-12,7,-15);ctx.quadraticCurveTo(1,-6,-5,-11);ctx.quadraticCurveTo(-12,-4,-19,-3);ctx.closePath();ctx.fill();ctx.stroke();
- // Side-swept fringe, a separate bright lock to give her a styled hairstyle.
- const fringe=ctx.createLinearGradient(-13,-28,11,-8);fringe.addColorStop(0,'#fff');fringe.addColorStop(.55,'#fff4df');fringe.addColorStop(1,'#d9c7ed');ctx.fillStyle=fringe;
- ctx.beginPath();ctx.moveTo(-12,-27);ctx.quadraticCurveTo(2,-33,13,-23);ctx.quadraticCurveTo(9,-11,-2,-7);ctx.quadraticCurveTo(0,-16,-12,-17);ctx.closePath();ctx.fill();ctx.stroke();
- ctx.fillStyle='#fff';ctx.globalAlpha=.85;ctx.beginPath();ctx.moveTo(-18,-17);ctx.quadraticCurveTo(-23,-5,-17,3);ctx.quadraticCurveTo(-12,-3,-12,-14);ctx.closePath();ctx.fill();ctx.globalAlpha=1;
- // Small star clips and a crown only in the transformed form.
- drawStar(17,-19,5,crystal?'#ffe58b':'#9cecff',t*.7);
+ // The actual circular fighter body remains exactly f.r (22px for Nova).
+ const face=ctx.createRadialGradient(-8,-11,2,0,-1,f.r*1.25);
+ face.addColorStop(0,'#fffefd');face.addColorStop(.58,'#fff0f1');face.addColorStop(.86,'#f2dfe9');face.addColorStop(1,'#c8c4e7');
+ ctx.fillStyle=face;ctx.strokeStyle=crystal?'#fff7ff':'#fff';ctx.lineWidth=2.5;ctx.shadowColor=crystal?'#d9c7ff':'#c9d7ff';ctx.shadowBlur=crystal?20:11;
+ ctx.beginPath();ctx.arc(0,0,f.r,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.shadowBlur=0;
+ // Side fringe and a softly layered hair cap; drawn before the brows and eyes.
+ ctx.fillStyle=hair;ctx.strokeStyle=hairShade;ctx.lineWidth=1.5;
+ ctx.beginPath();ctx.moveTo(-20,-5);ctx.bezierCurveTo(-26,-25,-17,-34,-2,-34);ctx.bezierCurveTo(16,-37,26,-22,19,-5);ctx.quadraticCurveTo(12,-12,7,-16);ctx.quadraticCurveTo(2,-7,-4,-11);ctx.quadraticCurveTo(-11,-3,-20,-5);ctx.closePath();ctx.fill();ctx.stroke();
+ // Side-swept bang, leaving the eyebrow line visible below it.
+ const bang=ctx.createLinearGradient(-12,-30,15,-7);bang.addColorStop(0,'#fff');bang.addColorStop(.6,'#fff4df');bang.addColorStop(1,'#d9c8ee');ctx.fillStyle=bang;
+ ctx.beginPath();ctx.moveTo(-13,-27);ctx.quadraticCurveTo(1,-36,15,-24);ctx.quadraticCurveTo(11,-15,2,-10);ctx.quadraticCurveTo(-1,-17,-13,-17);ctx.closePath();ctx.fill();ctx.stroke();
+ // Visible, shaped eyebrows above the eyes (deliberately darkened for contrast).
+ ctx.strokeStyle='#69506e';ctx.lineWidth=2.8;ctx.lineCap='round';ctx.beginPath();
+ ctx.moveTo(-15,-10);ctx.quadraticCurveTo(-9,-14,-3,-10);ctx.moveTo(3,-10);ctx.quadraticCurveTo(9,-14,15,-10);ctx.stroke();
+ ctx.strokeStyle='#f4d7d8';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(-13,-11);ctx.quadraticCurveTo(-9,-13,-5,-11);ctx.moveTo(5,-11);ctx.quadraticCurveTo(9,-13,13,-11);ctx.stroke();
+ // Big expressive anime eyes with blue-violet irises and two catchlights.
+ const eyeY=2.1;
+ ctx.fillStyle='#fff';ctx.beginPath();ctx.ellipse(-8,eyeY,6.7,8.6,-.04,0,Math.PI*2);ctx.ellipse(8,eyeY,6.7,8.6,.04,0,Math.PI*2);ctx.fill();
+ const iris=ctx.createRadialGradient(-8,eyeY-2,1,-8,eyeY,7);iris.addColorStop(0,'#e4fbff');iris.addColorStop(.22,'#7de1f4');iris.addColorStop(.58,'#6588df');iris.addColorStop(.84,'#6253ad');iris.addColorStop(1,'#302b67');
+ ctx.fillStyle=iris;ctx.beginPath();ctx.ellipse(-8+f.facing.x*1.2,eyeY+f.facing.y*1.1,4.4,6.5,0,0,Math.PI*2);ctx.ellipse(8+f.facing.x*1.2,eyeY+f.facing.y*1.1,4.4,6.5,0,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='#1f2352';ctx.beginPath();ctx.ellipse(-8+f.facing.x*1.3,eyeY+f.facing.y*1.2,2.4,4.1,0,0,Math.PI*2);ctx.ellipse(8+f.facing.x*1.3,eyeY+f.facing.y*1.2,2.4,4.1,0,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(-10,eyeY-3.4,2.5,0,Math.PI*2);ctx.arc(6,eyeY-3.4,2.5,0,Math.PI*2);ctx.arc(-5,eyeY+2,1.1,0,Math.PI*2);ctx.arc(11,eyeY+2,1.1,0,Math.PI*2);ctx.fill();
+ ctx.strokeStyle='#51405e';ctx.lineWidth=1.8;ctx.beginPath();ctx.moveTo(-14,eyeY-5);ctx.quadraticCurveTo(-8,eyeY-10,-2,eyeY-5);ctx.moveTo(2,eyeY-5);ctx.quadraticCurveTo(8,eyeY-10,14,eyeY-5);ctx.stroke();
+ // Tiny nose, smile and rosy cheeks.
+ ctx.fillStyle='#df9ba9';ctx.globalAlpha=.8;ctx.beginPath();ctx.arc(0,8.6,1.5,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
+ ctx.fillStyle='#f49cbd';ctx.globalAlpha=.8;ctx.beginPath();ctx.ellipse(-14,8,4.3,2.7,-.18,0,Math.PI*2);ctx.ellipse(14,8,4.3,2.7,.18,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
+ ctx.strokeStyle='#a65b83';ctx.lineWidth=1.8;ctx.beginPath();ctx.moveTo(-4,12);ctx.quadraticCurveTo(0,16,4,12);ctx.stroke();
+ // Small pearl earrings and a star clip in both forms.
+ ctx.fillStyle='#fff0b1';ctx.beginPath();ctx.arc(-19,7,2.2,0,Math.PI*2);ctx.arc(19,7,2.2,0,Math.PI*2);ctx.fill();
+ drawStar(17,-20,5.2,crystal?'#ffe58b':'#9cecff',t*.7);
  if(crystal){
-  ctx.strokeStyle='#ffe7a8';ctx.lineWidth=2.3;ctx.shadowColor='#fff0a4';ctx.shadowBlur=13;ctx.beginPath();ctx.moveTo(-12,-25);ctx.lineTo(-7,-32);ctx.lineTo(0,-26);ctx.lineTo(7,-33);ctx.lineTo(13,-24);ctx.stroke();ctx.shadowBlur=0;drawStar(0,-29,4.5,'#fff2a8');
-  drawStar(0,17,5.5,'#fff0a4',t*.3);
-  // Large sparkling crystal sword and a broad but still melee-range slash trail.
-  const blade=ctx.createLinearGradient(14,-8,51,4);blade.addColorStop(0,'#fff');blade.addColorStop(.35,'#dffaff');blade.addColorStop(.72,'#a9baff');blade.addColorStop(1,'#fff');
-  ctx.save();ctx.rotate(-.06+Math.sin(t*8)*.02);ctx.fillStyle=blade;ctx.strokeStyle='#fff';ctx.lineWidth=1.6;ctx.shadowColor='#a9efff';ctx.shadowBlur=16;ctx.beginPath();ctx.moveTo(15,-7);ctx.lineTo(51,-1);ctx.lineTo(18,4);ctx.closePath();ctx.fill();ctx.stroke();ctx.strokeStyle='#ffe9a8';ctx.lineWidth=3.3;ctx.beginPath();ctx.moveTo(14,-10);ctx.lineTo(11,7);ctx.stroke();ctx.strokeStyle='#a88be8';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(11,-2);ctx.lineTo(4,2);ctx.stroke();ctx.shadowBlur=0;ctx.restore();
-  for(let i=0;i<7;i++){const q=t*1.5+i*Math.PI*2/7,rr=f.r+16+(i%2)*6;ctx.save();ctx.translate(Math.cos(q)*rr,Math.sin(q)*rr);drawStar(0,0,4,i%2?'#fff0ad':'#c7f6ff',q+t);ctx.restore();}
+  // Magical-girl crown, ribbon bow, chest gem and a layered white/lilac dress.
+  ctx.strokeStyle='#ffe8a8';ctx.lineWidth=2.8;ctx.shadowColor='#fff0a4';ctx.shadowBlur=14;ctx.beginPath();ctx.moveTo(-15,-25);ctx.lineTo(-10,-34);ctx.lineTo(-3,-27);ctx.lineTo(0,-39);ctx.lineTo(5,-27);ctx.lineTo(12,-34);ctx.lineTo(16,-24);ctx.stroke();ctx.shadowBlur=0;drawStar(0,-36,5.5,'#fff2a8');
+  ctx.fillStyle='#f4dfff';ctx.strokeStyle='#fff';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(-7,15);ctx.quadraticCurveTo(-20,17,-23,35);ctx.quadraticCurveTo(-10,38,0,31);ctx.quadraticCurveTo(10,38,23,35);ctx.quadraticCurveTo(20,17,7,15);ctx.closePath();ctx.fill();ctx.stroke();
+  ctx.fillStyle='#fff';ctx.beginPath();ctx.moveTo(-16,22);ctx.lineTo(-26,36);ctx.quadraticCurveTo(-10,40,0,32);ctx.quadraticCurveTo(10,40,26,36);ctx.lineTo(16,22);ctx.closePath();ctx.fill();ctx.stroke();
+  ctx.fillStyle='#b9a6ef';ctx.beginPath();ctx.moveTo(-6,16);ctx.lineTo(-15,12);ctx.lineTo(-12,24);ctx.closePath();ctx.fill();ctx.beginPath();ctx.moveTo(6,16);ctx.lineTo(15,12);ctx.lineTo(12,24);ctx.closePath();ctx.fill();
+  ctx.fillStyle='#fff4bb';ctx.strokeStyle='#fff';ctx.lineWidth=1.1;ctx.beginPath();ctx.moveTo(0,18);ctx.lineTo(5,24);ctx.lineTo(0,30);ctx.lineTo(-5,24);ctx.closePath();ctx.fill();ctx.stroke();
+  // Crystal sword, glowing but visually separate from the collision circle.
+  const blade=ctx.createLinearGradient(15,-8,53,4);blade.addColorStop(0,'#fff');blade.addColorStop(.35,'#e2fcff');blade.addColorStop(.72,'#a8c4ff');blade.addColorStop(1,'#fff');
+  ctx.save();ctx.rotate(-.08+Math.sin(t*8)*.025);ctx.fillStyle=blade;ctx.strokeStyle='#fff';ctx.lineWidth=1.8;ctx.shadowColor='#a9efff';ctx.shadowBlur=18;ctx.beginPath();ctx.moveTo(15,-8);ctx.lineTo(54,-1);ctx.lineTo(18,5);ctx.closePath();ctx.fill();ctx.stroke();ctx.strokeStyle='#ffe9a8';ctx.lineWidth=3.8;ctx.beginPath();ctx.moveTo(14,-11);ctx.lineTo(10,8);ctx.stroke();ctx.strokeStyle='#a88be8';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(12,-2);ctx.lineTo(4,3);ctx.stroke();ctx.shadowBlur=0;ctx.restore();
+  for(let i=0;i<9;i++){const q=t*1.35+i*Math.PI*2/9,rr=f.r+19+(i%2)*7;drawStar(Math.cos(q)*rr,Math.sin(q)*rr,3.4,i%2?'#fff0ad':'#c7f6ff',q+t);}
  }else{
-  // A small lavender collar and star brooch in Nova's everyday look.
-  ctx.fillStyle='#d8d2ff';ctx.strokeStyle='#fff';ctx.lineWidth=1.3;ctx.beginPath();ctx.ellipse(0,18,13,5,0,0,Math.PI*2);ctx.fill();ctx.stroke();drawStar(0,18,4,'#fff0a8');
+  // Everyday Nova wears a star brooch and a little lavender collar.
+  ctx.fillStyle='#dcd4ff';ctx.strokeStyle='#fff';ctx.lineWidth=1.4;ctx.beginPath();ctx.ellipse(0,19,13,5,0,0,Math.PI*2);ctx.fill();ctx.stroke();drawStar(0,18,4.2,'#fff0a8');
  }
  if(crystal&&f.attackAnim>0){const progress=1-f.attackAnim/.25;ctx.globalAlpha=.95;ctx.strokeStyle='#f5fbff';ctx.lineWidth=9;ctx.shadowColor='#a8eaff';ctx.shadowBlur=25;ctx.beginPath();ctx.arc(0,0,f.r+35,-1.15+progress*.38,1.15+progress*.38);ctx.stroke();ctx.globalAlpha=1;ctx.shadowBlur=0;}
- if(crystal){ctx.rotate(-a);ctx.fillStyle='#fff2ad';ctx.font='900 12px system-ui';ctx.textAlign='center';ctx.fillText(Math.ceil(f.novaCrystalTime)+'s',0,-f.r-34);}
+ if(crystal){ctx.fillStyle='#fff2ad';ctx.font='900 12px system-ui';ctx.textAlign='center';ctx.fillText(Math.ceil(f.novaCrystalTime)+'s',0,-f.r-34);}
  ctx.restore();
 }
 function drawFighter(f,t){if(!f.alive)return;ctx.save();if(f.heroId==='kuro'&&f.kuroStealthTime>0)ctx.globalAlpha=f.isPlayer?0.24:0.08;if(f.flash>0){ctx.globalAlpha=Math.min(ctx.globalAlpha,.5+.5*Math.sin(t*55))}if(f.buffTime>0){ctx.save();ctx.strokeStyle='#a98cff';ctx.lineWidth=4;ctx.shadowColor='#a98cff';ctx.shadowBlur=18;ctx.beginPath();ctx.arc(f.x,f.y,f.r+9+Math.sin(t*9)*2,0,Math.PI*2);ctx.stroke();ctx.restore()}if(f.sniffUltTime>0){ctx.save();for(let i=0;i<4;i++){const a=t*5+i*Math.PI/2;ctx.font='22px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.shadowColor='#ff8c2a';ctx.shadowBlur=14;ctx.fillText('🎃',f.x+Math.cos(a)*(f.r+19),f.y+Math.sin(a)*(f.r+19))}ctx.restore()}
