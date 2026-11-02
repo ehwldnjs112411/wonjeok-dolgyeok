@@ -978,67 +978,76 @@ function drawBujijikFighter(f,t){
 
 function drawNovaFighter(f,t){
  const a=Math.atan2(f.facing.y,f.facing.x),crystal=(f.novaCrystalTime||0)>0;
+ const eyeScale=crystal?1.22:1.08;
+ const drawStar=(x,y,r,color,rotation=0)=>{
+  ctx.save();ctx.translate(x,y);ctx.rotate(rotation);ctx.fillStyle=color;ctx.beginPath();
+  for(let k=0;k<10;k++){const q=-Math.PI/2+k*Math.PI/5,rr=k%2?r*.43:r;if(k===0)ctx.moveTo(Math.cos(q)*rr,Math.sin(q)*rr);else ctx.lineTo(Math.cos(q)*rr,Math.sin(q)*rr)}
+  ctx.closePath();ctx.fill();ctx.restore();
+ };
+ const hair=ctx.createLinearGradient(-25,-34,24,24);hair.addColorStop(0,'#fff');hair.addColorStop(.28,'#fff8e9');hair.addColorStop(.58,'#f0e6ff');hair.addColorStop(.82,'#c9c5ef');hair.addColorStop(1,'#9698cf');
+ const hairLine='#aaa4d6';
  ctx.save();ctx.translate(f.x,f.y);ctx.rotate(a);
+ // Soft star aura and long hair behind the face.
+ ctx.save();ctx.globalAlpha=crystal?.86:.48;ctx.strokeStyle=crystal?'#c8b5ff':'#d9d9ff';ctx.lineWidth=2.2;ctx.shadowColor='#c4baff';ctx.shadowBlur=crystal?22:12;
+ ctx.beginPath();ctx.ellipse(0,0,f.r+13,f.r+9,t*.16,0,Math.PI*2);ctx.stroke();ctx.restore();
+ ctx.fillStyle=hair;ctx.strokeStyle=hairLine;ctx.lineWidth=1.5;
+ // Side locks with curled tips, visible even at small battlefield scale.
+ ctx.beginPath();ctx.moveTo(-15,-16);ctx.quadraticCurveTo(-34,-18,-31,5);ctx.quadraticCurveTo(-31,19,-22,24);ctx.quadraticCurveTo(-24,11,-14,7);ctx.closePath();ctx.fill();ctx.stroke();
+ ctx.beginPath();ctx.moveTo(15,-16);ctx.quadraticCurveTo(34,-18,31,5);ctx.quadraticCurveTo(31,19,22,24);ctx.quadraticCurveTo(24,11,14,7);ctx.closePath();ctx.fill();ctx.stroke();
+ // Crystal form has a little more flowing hair and a star-shaped back ribbon.
  if(crystal){
-  // Magical-girl crystal form: radiant halo, long silver hair, tiara,
-  // layered star dress, ribbons and a shining crystal sword.
-  const pulse=1+Math.sin(t*10)*.035;
-  ctx.save();ctx.scale(pulse,pulse);
-  // Orbiting star halo behind Nova.
-  ctx.globalAlpha=.72;ctx.strokeStyle='#b8b8ff';ctx.lineWidth=2.2;ctx.shadowColor='#a9a7ff';ctx.shadowBlur=17;
-  ctx.beginPath();ctx.ellipse(0,0,f.r+13,f.r+8,t*.18,0,Math.PI*2);ctx.stroke();
-  ctx.strokeStyle='#fff1bd';ctx.lineWidth=1.5;ctx.beginPath();ctx.ellipse(0,0,f.r+18,f.r+5,-t*.22,0,Math.PI*2);ctx.stroke();ctx.shadowBlur=0;ctx.globalAlpha=1;
-  // Flowing twin ribbons / hair tails.
-  const ribbon=ctx.createLinearGradient(-30,-20,-4,27);ribbon.addColorStop(0,'#fff');ribbon.addColorStop(.55,'#d9ddff');ribbon.addColorStop(1,'#9b9be8');
-  ctx.fillStyle=ribbon;ctx.strokeStyle='#f7f4ff';ctx.lineWidth=1.5;
-  ctx.beginPath();ctx.moveTo(-12,-10);ctx.quadraticCurveTo(-34,-25,-35,-5);ctx.quadraticCurveTo(-30,5,-38,18);ctx.quadraticCurveTo(-16,15,-12,3);ctx.closePath();ctx.fill();ctx.stroke();
-  ctx.beginPath();ctx.moveTo(-13,7);ctx.quadraticCurveTo(-34,14,-29,30);ctx.quadraticCurveTo(-12,22,-5,13);ctx.closePath();ctx.fill();ctx.stroke();
-  // Crystal dress silhouette and layered frills beneath the face.
-  const dress=ctx.createLinearGradient(-4,7,5,31);dress.addColorStop(0,'#fff');dress.addColorStop(.42,'#e7e5ff');dress.addColorStop(.75,'#b7b8f5');dress.addColorStop(1,'#8588d5');
-  ctx.fillStyle=dress;ctx.strokeStyle='#fff5ff';ctx.lineWidth=2.1;
-  ctx.beginPath();ctx.moveTo(-12,7);ctx.quadraticCurveTo(0,12,12,7);ctx.lineTo(22,26);ctx.quadraticCurveTo(0,34,-22,26);ctx.closePath();ctx.fill();ctx.stroke();
-  ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-17,21);ctx.quadraticCurveTo(-5,25,0,22);ctx.quadraticCurveTo(9,26,17,21);ctx.stroke();
-  // Main face with a soft pearl glow.
-  const face=ctx.createRadialGradient(-8,-11,2,0,-1,f.r*1.35);face.addColorStop(0,'#fff');face.addColorStop(.58,'#fffaff');face.addColorStop(1,'#cfd5ff');
-  ctx.fillStyle=face;ctx.strokeStyle='#fff';ctx.lineWidth=2.7;ctx.shadowColor='#c3c5ff';ctx.shadowBlur=24;ctx.beginPath();ctx.arc(0,-1,f.r*.83,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.shadowBlur=0;
-  // Big flowing silver-white hair and side locks.
-  const hair=ctx.createLinearGradient(-23,-30,18,5);hair.addColorStop(0,'#fff');hair.addColorStop(.42,'#edf0ff');hair.addColorStop(.8,'#c7c9ef');hair.addColorStop(1,'#8c91cf');
-  ctx.fillStyle=hair;ctx.strokeStyle='#fff';ctx.lineWidth=1.7;
-  ctx.beginPath();ctx.moveTo(-20,-7);ctx.quadraticCurveTo(-31,-31,-8,-34);ctx.quadraticCurveTo(12,-39,22,-18);ctx.quadraticCurveTo(28,-7,17,5);ctx.quadraticCurveTo(12,-10,6,-13);ctx.quadraticCurveTo(-3,-3,-9,-11);ctx.quadraticCurveTo(-15,-4,-20,-7);ctx.closePath();ctx.fill();ctx.stroke();
-  ctx.beginPath();ctx.moveTo(-17,-5);ctx.quadraticCurveTo(-27,4,-22,17);ctx.quadraticCurveTo(-11,12,-10,1);ctx.closePath();ctx.fill();ctx.stroke();
-  ctx.beginPath();ctx.moveTo(15,-9);ctx.quadraticCurveTo(29,0,22,15);ctx.quadraticCurveTo(11,9,12,-1);ctx.closePath();ctx.fill();ctx.stroke();
-  // Fringe, eyes and rosy cheeks.
-  ctx.fillStyle='#fff';ctx.beginPath();ctx.moveTo(-13,-25);ctx.quadraticCurveTo(-3,-29,7,-22);ctx.lineTo(2,-8);ctx.quadraticCurveTo(-5,-15,-10,-12);ctx.closePath();ctx.fill();
-  ctx.fillStyle='#fff';ctx.beginPath();ctx.ellipse(-7,-2,4.8,5.4,0,0,Math.PI*2);ctx.ellipse(8,-2,4.8,5.4,0,0,Math.PI*2);ctx.fill();
-  ctx.fillStyle='#7775dc';ctx.beginPath();ctx.arc(-7+f.facing.x*1.6,-2+f.facing.y*1.6,2.5,0,Math.PI*2);ctx.arc(8+f.facing.x*1.6,-2+f.facing.y*1.6,2.5,0,Math.PI*2);ctx.fill();
-  ctx.fillStyle='#ffb8d5';ctx.globalAlpha=.72;ctx.beginPath();ctx.arc(-14,6,2.8,0,Math.PI*2);ctx.arc(14,6,2.8,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
-  ctx.strokeStyle='#9a80bd';ctx.lineWidth=1.6;ctx.beginPath();ctx.arc(0,8,4.5,.18,Math.PI-.18);ctx.stroke();
-  // Tiara and central star gem.
-  ctx.strokeStyle='#ffe6a4';ctx.lineWidth=2.4;ctx.shadowColor='#fff0a4';ctx.shadowBlur=13;ctx.beginPath();ctx.moveTo(-12,-22);ctx.lineTo(-6,-29);ctx.lineTo(0,-23);ctx.lineTo(7,-30);ctx.lineTo(13,-21);ctx.stroke();
-  ctx.fillStyle='#fff2a9';ctx.beginPath();ctx.arc(0,-25,4,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(-1,-26,1.4,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
-  // Chest bow and star brooch.
-  ctx.fillStyle='#b7a8f4';ctx.strokeStyle='#fff';ctx.lineWidth=1.3;ctx.beginPath();ctx.moveTo(-3,12);ctx.lineTo(-14,7);ctx.lineTo(-12,18);ctx.closePath();ctx.fill();ctx.stroke();ctx.beginPath();ctx.moveTo(3,12);ctx.lineTo(14,7);ctx.lineTo(12,18);ctx.closePath();ctx.fill();ctx.stroke();
-  ctx.fillStyle='#fff0a7';ctx.shadowColor='#ffeaa0';ctx.shadowBlur=9;ctx.beginPath();for(let k=0;k<10;k++){const q=-Math.PI/2+k*Math.PI/5,rr=k%2?2.2:5;if(!k)ctx.moveTo(Math.cos(q)*rr,Math.sin(q)*rr+13);else ctx.lineTo(Math.cos(q)*rr,Math.sin(q)*rr+13)}ctx.closePath();ctx.fill();ctx.shadowBlur=0;
-  // Crystal sword held toward the facing direction.
-  const blade=ctx.createLinearGradient(14,-7,49,3);blade.addColorStop(0,'#fff');blade.addColorStop(.45,'#dffbff');blade.addColorStop(.78,'#a9baff');blade.addColorStop(1,'#fff');
-  ctx.save();ctx.rotate(-.08+Math.sin(t*8)*.025);ctx.fillStyle=blade;ctx.strokeStyle='#fff';ctx.lineWidth=1.5;ctx.shadowColor='#a9efff';ctx.shadowBlur=15;
-  ctx.beginPath();ctx.moveTo(15,-7);ctx.lineTo(49,-1);ctx.lineTo(17,3);ctx.closePath();ctx.fill();ctx.stroke();
-  ctx.strokeStyle='#ffe9a8';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(14,-9);ctx.lineTo(12,5);ctx.stroke();
-  ctx.strokeStyle='#a88be8';ctx.lineWidth=3.5;ctx.beginPath();ctx.moveTo(10,-2);ctx.lineTo(4,1);ctx.stroke();ctx.shadowBlur=0;ctx.restore();
-  // Orbiting sparkles around the transformed form.
-  for(let i=0;i<6;i++){const q=t*1.7+i*Math.PI/3,rr=f.r+15+(i%2)*5;ctx.save();ctx.translate(Math.cos(q)*rr,Math.sin(q)*rr);ctx.rotate(q+t);ctx.fillStyle=i%2?'#fff2b0':'#c9f7ff';ctx.shadowColor='#c8e9ff';ctx.shadowBlur=12;ctx.beginPath();ctx.moveTo(0,-4);ctx.lineTo(1.5,-1.5);ctx.lineTo(4,0);ctx.lineTo(1.5,1.5);ctx.lineTo(0,4);ctx.lineTo(-1.5,1.5);ctx.lineTo(-4,0);ctx.lineTo(-1.5,-1.5);ctx.closePath();ctx.fill();ctx.restore();}
-  ctx.restore();
-  if(f.attackAnim>0){const progress=1-f.attackAnim/.25;ctx.globalAlpha=.95;ctx.strokeStyle='#f4fbff';ctx.lineWidth=8;ctx.shadowColor='#a8eaff';ctx.shadowBlur=24;ctx.beginPath();ctx.arc(0,0,f.r+34,-1.05+progress*.28,1.05+progress*.28);ctx.stroke();ctx.globalAlpha=1;ctx.shadowBlur=0;ctx.fillStyle='#fff';ctx.fillRect(13,-4,43,7);ctx.fillStyle='#b6c5ff';ctx.fillRect(48,-6,10,11);}
- }else{
-  const face=ctx.createRadialGradient(-7,-10,2,0,0,f.r*1.4);face.addColorStop(0,'#ffffff');face.addColorStop(.68,'#f2f2ff');face.addColorStop(1,'#c8cfe8');ctx.fillStyle=face;ctx.strokeStyle='#e8edff';ctx.lineWidth=3;ctx.shadowColor='#d6d5ff';ctx.shadowBlur=13;ctx.beginPath();ctx.arc(0,0,f.r,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.shadowBlur=0;
-  // Long white-silver hair and a soft fringe.
-  ctx.fillStyle='#f8fbff';ctx.strokeStyle='#aeb9d7';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-20,-5);ctx.quadraticCurveTo(-30,-27,-8,-30);ctx.quadraticCurveTo(12,-37,22,-17);ctx.lineTo(18,-4);ctx.quadraticCurveTo(10,-15,0,-11);ctx.quadraticCurveTo(-10,-19,-20,-5);ctx.closePath();ctx.fill();ctx.stroke();
-  ctx.fillStyle='#e4eaff';ctx.beginPath();ctx.moveTo(-8,-23);ctx.quadraticCurveTo(4,-24,12,-14);ctx.lineTo(4,-4);ctx.quadraticCurveTo(-2,-12,-9,-12);ctx.closePath();ctx.fill();
-  ctx.fillStyle='#fff';ctx.beginPath();ctx.ellipse(-8,-1,5.7,5,0,0,Math.PI*2);ctx.ellipse(8,-1,5.7,5,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#7b79d9';ctx.beginPath();ctx.arc(-8+f.facing.x*1.6,-1+f.facing.y*1.6,2.6,0,Math.PI*2);ctx.arc(8+f.facing.x*1.6,-1+f.facing.y*1.6,2.6,0,Math.PI*2);ctx.fill();
-  ctx.fillStyle='#f4a9ca';ctx.globalAlpha=.72;ctx.beginPath();ctx.arc(-15,7,3,0,Math.PI*2);ctx.arc(15,7,3,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;ctx.strokeStyle='#8b79bd';ctx.lineWidth=1.8;ctx.beginPath();ctx.arc(0,8,5,.12,Math.PI-.12);ctx.stroke();
-  ctx.save();ctx.translate(15,-21);ctx.rotate(t*-.75);ctx.fillStyle='#fff1a4';ctx.strokeStyle='#ffffff';ctx.lineWidth=1.6;ctx.shadowColor='#fff0a0';ctx.shadowBlur=12;ctx.beginPath();for(let k=0;k<10;k++){const q=-Math.PI/2+k*Math.PI/5,rr=k%2?3:7;if(k===0)ctx.moveTo(Math.cos(q)*rr,Math.sin(q)*rr);else ctx.lineTo(Math.cos(q)*rr,Math.sin(q)*rr)}ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();
+  ctx.fillStyle='#d8d1ff';ctx.strokeStyle='#fff';ctx.lineWidth=1.4;
+  ctx.beginPath();ctx.moveTo(-13,9);ctx.quadraticCurveTo(-35,8,-39,24);ctx.quadraticCurveTo(-22,26,-9,17);ctx.closePath();ctx.fill();ctx.stroke();
+  ctx.beginPath();ctx.moveTo(13,9);ctx.quadraticCurveTo(35,8,39,24);ctx.quadraticCurveTo(22,26,9,17);ctx.closePath();ctx.fill();ctx.stroke();
+  // Layered starlight dress and collar.
+  const dress=ctx.createLinearGradient(0,10,0,37);dress.addColorStop(0,'#fff');dress.addColorStop(.35,'#f7eaff');dress.addColorStop(.7,'#c6b9ff');dress.addColorStop(1,'#8f91db');
+  ctx.fillStyle=dress;ctx.strokeStyle='#fff8ff';ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(-12,8);ctx.quadraticCurveTo(0,13,12,8);ctx.lineTo(25,29);ctx.quadraticCurveTo(15,35,0,31);ctx.quadraticCurveTo(-15,35,-25,29);ctx.closePath();ctx.fill();ctx.stroke();
+  ctx.strokeStyle='#fff';ctx.lineWidth=1.8;ctx.beginPath();ctx.moveTo(-20,24);ctx.quadraticCurveTo(-8,29,0,25);ctx.quadraticCurveTo(9,29,20,24);ctx.stroke();
+  ctx.fillStyle='#f2d5ff';ctx.strokeStyle='#fff';ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(-4,12);ctx.lineTo(-16,7);ctx.lineTo(-13,18);ctx.closePath();ctx.fill();ctx.stroke();ctx.beginPath();ctx.moveTo(4,12);ctx.lineTo(16,7);ctx.lineTo(13,18);ctx.closePath();ctx.fill();ctx.stroke();
  }
- if(crystal){ctx.rotate(-a);ctx.fillStyle='#fff2ad';ctx.font='900 12px system-ui';ctx.textAlign='center';ctx.fillText(Math.ceil(f.novaCrystalTime)+'s',0,-f.r-30);}
+ // Face: soft warm porcelain rather than a blank orb.
+ const face=ctx.createRadialGradient(-7,-11,2,0,-1,f.r*1.35);face.addColorStop(0,'#fffdfb');face.addColorStop(.66,'#ffeef0');face.addColorStop(1,'#e1d9f4');
+ ctx.fillStyle=face;ctx.strokeStyle='#fff';ctx.lineWidth=2.4;ctx.shadowColor=crystal?'#d9c7ff':'#c9d7ff';ctx.shadowBlur=crystal?20:12;ctx.beginPath();ctx.ellipse(0,0,f.r*.84,f.r*.91,0,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.shadowBlur=0;
+ // Tiny ears and little pearl earrings.
+ ctx.fillStyle='#f6d9dd';ctx.beginPath();ctx.ellipse(-17,-1,4,6,-.25,0,Math.PI*2);ctx.ellipse(17,-1,4,6,.25,0,Math.PI*2);ctx.fill();
+ if(crystal){ctx.fillStyle='#fff0a8';ctx.beginPath();ctx.arc(-18,5,2,0,Math.PI*2);ctx.arc(18,5,2,0,Math.PI*2);ctx.fill();}
+ // Big expressive eyes with dark upper lashes and clearly visible eyebrows.
+ const eyeY=1.5, eyeW=crystal?6.8:6.1, eyeH=crystal?8.3:7.4;
+ ctx.strokeStyle='#705c79';ctx.lineWidth=2.25;ctx.lineCap='round';
+ ctx.beginPath();ctx.moveTo(-13,-8);ctx.quadraticCurveTo(-8,-12,-3,-8);ctx.moveTo(3,-8);ctx.quadraticCurveTo(8,-12,13,-8);ctx.stroke();
+ ctx.fillStyle='#fff';ctx.beginPath();ctx.ellipse(-8,eyeY,eyeW,eyeH,.04,0,Math.PI*2);ctx.ellipse(8,eyeY,eyeW,eyeH,-.04,0,Math.PI*2);ctx.fill();
+ const iris=ctx.createRadialGradient(-8,eyeY-1,1,-8,eyeY,eyeH);iris.addColorStop(0,'#b7f5ff');iris.addColorStop(.34,'#68b5e7');iris.addColorStop(.72,'#5966b8');iris.addColorStop(1,'#30366f');
+ ctx.fillStyle=iris;ctx.beginPath();ctx.ellipse(-8+f.facing.x*1.35,eyeY+f.facing.y*1.35,3.9,5.6,0,0,Math.PI*2);ctx.ellipse(8+f.facing.x*1.35,eyeY+f.facing.y*1.35,3.9,5.6,0,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='#20234d';ctx.beginPath();ctx.ellipse(-8+f.facing.x*1.5,eyeY+f.facing.y*1.5,2,3.5,0,0,Math.PI*2);ctx.ellipse(8+f.facing.x*1.5,eyeY+f.facing.y*1.5,2,3.5,0,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(-9.4+f.facing.x,eyeY-3,2.1,0,Math.PI*2);ctx.arc(6.6+f.facing.x,eyeY-3,2.1,0,Math.PI*2);ctx.fill();
+ ctx.strokeStyle='#5f4e70';ctx.lineWidth=1.7;ctx.beginPath();ctx.moveTo(-13,-9);ctx.lineTo(-10,-7);ctx.moveTo(13,-9);ctx.lineTo(10,-7);ctx.stroke();
+ // Nose, smile and rosy cheeks.
+ ctx.fillStyle='#e6a4ad';ctx.globalAlpha=.7;ctx.beginPath();ctx.arc(0,7,1.45,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
+ ctx.fillStyle='#f3a6c5';ctx.globalAlpha=.78;ctx.beginPath();ctx.ellipse(-14,8,4,2.5,-.15,0,Math.PI*2);ctx.ellipse(14,8,4,2.5,.15,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
+ ctx.strokeStyle='#a85f83';ctx.lineWidth=1.7;ctx.beginPath();ctx.moveTo(-4,11);ctx.quadraticCurveTo(0,15,4,11);ctx.stroke();
+ // Voluminous top hair: rounded crown, layered fringe and two curled side locks.
+ ctx.fillStyle=hair;ctx.strokeStyle=hairLine;ctx.lineWidth=1.8;
+ ctx.beginPath();ctx.moveTo(-19,-3);ctx.quadraticCurveTo(-29,-28,-10,-33);ctx.quadraticCurveTo(5,-41,20,-27);ctx.quadraticCurveTo(29,-17,19,-3);ctx.quadraticCurveTo(12,-12,7,-15);ctx.quadraticCurveTo(1,-6,-5,-11);ctx.quadraticCurveTo(-12,-4,-19,-3);ctx.closePath();ctx.fill();ctx.stroke();
+ // Side-swept fringe, a separate bright lock to give her a styled hairstyle.
+ const fringe=ctx.createLinearGradient(-13,-28,11,-8);fringe.addColorStop(0,'#fff');fringe.addColorStop(.55,'#fff4df');fringe.addColorStop(1,'#d9c7ed');ctx.fillStyle=fringe;
+ ctx.beginPath();ctx.moveTo(-12,-27);ctx.quadraticCurveTo(2,-33,13,-23);ctx.quadraticCurveTo(9,-11,-2,-7);ctx.quadraticCurveTo(0,-16,-12,-17);ctx.closePath();ctx.fill();ctx.stroke();
+ ctx.fillStyle='#fff';ctx.globalAlpha=.85;ctx.beginPath();ctx.moveTo(-18,-17);ctx.quadraticCurveTo(-23,-5,-17,3);ctx.quadraticCurveTo(-12,-3,-12,-14);ctx.closePath();ctx.fill();ctx.globalAlpha=1;
+ // Small star clips and a crown only in the transformed form.
+ drawStar(17,-19,5,crystal?'#ffe58b':'#9cecff',t*.7);
+ if(crystal){
+  ctx.strokeStyle='#ffe7a8';ctx.lineWidth=2.3;ctx.shadowColor='#fff0a4';ctx.shadowBlur=13;ctx.beginPath();ctx.moveTo(-12,-25);ctx.lineTo(-7,-32);ctx.lineTo(0,-26);ctx.lineTo(7,-33);ctx.lineTo(13,-24);ctx.stroke();ctx.shadowBlur=0;drawStar(0,-29,4.5,'#fff2a8');
+  drawStar(0,17,5.5,'#fff0a4',t*.3);
+  // Large sparkling crystal sword and a broad but still melee-range slash trail.
+  const blade=ctx.createLinearGradient(14,-8,51,4);blade.addColorStop(0,'#fff');blade.addColorStop(.35,'#dffaff');blade.addColorStop(.72,'#a9baff');blade.addColorStop(1,'#fff');
+  ctx.save();ctx.rotate(-.06+Math.sin(t*8)*.02);ctx.fillStyle=blade;ctx.strokeStyle='#fff';ctx.lineWidth=1.6;ctx.shadowColor='#a9efff';ctx.shadowBlur=16;ctx.beginPath();ctx.moveTo(15,-7);ctx.lineTo(51,-1);ctx.lineTo(18,4);ctx.closePath();ctx.fill();ctx.stroke();ctx.strokeStyle='#ffe9a8';ctx.lineWidth=3.3;ctx.beginPath();ctx.moveTo(14,-10);ctx.lineTo(11,7);ctx.stroke();ctx.strokeStyle='#a88be8';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(11,-2);ctx.lineTo(4,2);ctx.stroke();ctx.shadowBlur=0;ctx.restore();
+  for(let i=0;i<7;i++){const q=t*1.5+i*Math.PI*2/7,rr=f.r+16+(i%2)*6;ctx.save();ctx.translate(Math.cos(q)*rr,Math.sin(q)*rr);drawStar(0,0,4,i%2?'#fff0ad':'#c7f6ff',q+t);ctx.restore();}
+ }else{
+  // A small lavender collar and star brooch in Nova's everyday look.
+  ctx.fillStyle='#d8d2ff';ctx.strokeStyle='#fff';ctx.lineWidth=1.3;ctx.beginPath();ctx.ellipse(0,18,13,5,0,0,Math.PI*2);ctx.fill();ctx.stroke();drawStar(0,18,4,'#fff0a8');
+ }
+ if(crystal&&f.attackAnim>0){const progress=1-f.attackAnim/.25;ctx.globalAlpha=.95;ctx.strokeStyle='#f5fbff';ctx.lineWidth=9;ctx.shadowColor='#a8eaff';ctx.shadowBlur=25;ctx.beginPath();ctx.arc(0,0,f.r+35,-1.15+progress*.38,1.15+progress*.38);ctx.stroke();ctx.globalAlpha=1;ctx.shadowBlur=0;}
+ if(crystal){ctx.rotate(-a);ctx.fillStyle='#fff2ad';ctx.font='900 12px system-ui';ctx.textAlign='center';ctx.fillText(Math.ceil(f.novaCrystalTime)+'s',0,-f.r-34);}
  ctx.restore();
 }
 function drawFighter(f,t){if(!f.alive)return;ctx.save();if(f.heroId==='kuro'&&f.kuroStealthTime>0)ctx.globalAlpha=f.isPlayer?0.24:0.08;if(f.flash>0){ctx.globalAlpha=Math.min(ctx.globalAlpha,.5+.5*Math.sin(t*55))}if(f.buffTime>0){ctx.save();ctx.strokeStyle='#a98cff';ctx.lineWidth=4;ctx.shadowColor='#a98cff';ctx.shadowBlur=18;ctx.beginPath();ctx.arc(f.x,f.y,f.r+9+Math.sin(t*9)*2,0,Math.PI*2);ctx.stroke();ctx.restore()}if(f.sniffUltTime>0){ctx.save();for(let i=0;i<4;i++){const a=t*5+i*Math.PI/2;ctx.font='22px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.shadowColor='#ff8c2a';ctx.shadowBlur=14;ctx.fillText('🎃',f.x+Math.cos(a)*(f.r+19),f.y+Math.sin(a)*(f.r+19))}ctx.restore()}
@@ -1266,9 +1275,36 @@ setAuthMode('login');
 
 
 <style id="nova-orb-portrait">
-.nova-orb{width:86px;height:86px;border-radius:50%;position:relative;overflow:visible;background:radial-gradient(ellipse 5px 6px at 38% 48%,#fff 0 95%,transparent 100%),radial-gradient(ellipse 5px 6px at 64% 48%,#fff 0 95%,transparent 100%),radial-gradient(circle 2.5px at 40% 49%,#7776bf 0 98%,transparent 100%),radial-gradient(circle 2.5px at 66% 49%,#7776bf 0 98%,transparent 100%),radial-gradient(ellipse at 50% 29%,#fff 0 12%,transparent 38%),linear-gradient(145deg,#ffffff 0%,#e7edff 58%,#aebbe0 100%);border:4px solid #f7fbff;box-shadow:0 0 0 9px #c8d5ff22,0 10px 24px #0006}
-.nova-orb:before{content:"";position:absolute;z-index:2;left:4px;top:-13px;width:72px;height:42px;background:linear-gradient(145deg,#fff 0%,#f1f5ff 55%,#bac8e9 100%);clip-path:polygon(0 70%,13% 7%,37% 47%,51% 0,67% 51%,89% 8%,100% 76%,80% 100%,51% 72%,22% 100%);filter:drop-shadow(0 2px 2px #7283ae)}
-.nova-orb:after{content:"✦";position:absolute;z-index:3;right:-8px;top:-13px;color:#fff0a2;font-size:25px;text-shadow:0 0 9px #ffe48b,0 0 18px #a9dfff}
+.nova-orb{
+ width:86px;height:86px;border-radius:48% 48% 46% 46%;position:relative;overflow:visible;
+ background:
+  radial-gradient(ellipse 1.5px 2px at 38.5% 57%,#fff 0 95%,transparent 100%),
+  radial-gradient(ellipse 1.7px 2px at 61.5% 57%,#fff 0 95%,transparent 100%),
+  radial-gradient(ellipse 2.3px 4.8px at 39% 59%,#26295b 0 94%,transparent 100%),
+  radial-gradient(ellipse 2.3px 4.8px at 62% 59%,#26295b 0 94%,transparent 100%),
+  radial-gradient(ellipse 4.2px 7px at 39% 58%,#fff 0 96%,transparent 100%),
+  radial-gradient(ellipse 4.2px 7px at 62% 58%,#fff 0 96%,transparent 100%),
+  radial-gradient(ellipse 5px 1.5px at 39% 44%,#78617e 0 96%,transparent 100%),
+  radial-gradient(ellipse 5px 1.5px at 62% 44%,#78617e 0 96%,transparent 100%),
+  radial-gradient(ellipse 4px 2px at 25% 69%,#f2a6c4a8 0 96%,transparent 100%),
+  radial-gradient(ellipse 4px 2px at 75% 69%,#f2a6c4a8 0 96%,transparent 100%),
+  radial-gradient(circle at 50% 31%,#fff 0 8%,transparent 34%),
+  radial-gradient(ellipse at 50% 48%,#fff5f1 0 52%,#f2dce7 83%,#c8c5e8 100%);
+ border:3px solid #fff;box-shadow:0 0 0 8px #c8d5ff2b,0 0 20px #c9bdff66,0 10px 24px #0006;
+}
+.nova-orb:before{
+ content:"";position:absolute;z-index:2;left:-8%;top:-19%;width:116%;height:66%;
+ background:
+  radial-gradient(ellipse 18px 15px at 8% 70%,#fff 0 57%,#d9d4f1 78%,transparent 82%),
+  radial-gradient(ellipse 18px 15px at 92% 70%,#fff 0 57%,#d9d4f1 78%,transparent 82%),
+  linear-gradient(145deg,#fff 0%,#fff7e8 42%,#e5dcfa 76%,#a9a5d8 100%);
+ clip-path:polygon(0 78%,5% 34%,17% 13%,31% 18%,43% 4%,54% 14%,69% 8%,86% 20%,98% 48%,100% 83%,86% 68%,77% 91%,67% 67%,55% 82%,46% 67%,34% 88%,23% 66%,12% 91%);
+ filter:drop-shadow(0 2px 2px #7773a0);
+}
+.nova-orb:after{
+ content:"✦";position:absolute;z-index:3;right:-9px;top:-13px;color:#fff0a2;font-size:24px;
+ text-shadow:0 0 8px #ffe48b,0 0 16px #a9dfff;transform:rotate(12deg);
+}
 .fighter-art .nova-orb,.shop-art .nova-orb{width:76px;height:76px}
 .featured-graphic .nova-orb{width:82px;height:82px}
 @media(max-width:600px){.fighter-art .nova-orb,.shop-art .nova-orb{width:66px;height:66px}}
