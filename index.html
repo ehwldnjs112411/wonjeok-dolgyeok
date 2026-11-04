@@ -261,16 +261,39 @@ button,input{font:inherit}button{cursor:pointer;border:0;color:var(--text);font-
 </style>
 
 
-<style id="bit-special-forces-style">
-.bit-orb{width:86px;height:86px;border-radius:50%;position:relative;overflow:visible;border:5px solid #bacb91;background:radial-gradient(ellipse 5px 5px at 38% 51%,#fff 0 95%,transparent 100%),radial-gradient(ellipse 5px 5px at 63% 51%,#fff 0 95%,transparent 100%),radial-gradient(circle 2px at 40% 52%,#273522 0 100%,transparent 100%),radial-gradient(circle 2px at 65% 52%,#273522 0 100%,transparent 100%),linear-gradient(145deg,#92a56b,#59734e 55%,#304537);box-shadow:0 0 0 8px #a5c17c18,0 9px 20px #0007}
-.bit-orb:before{content:"";position:absolute;z-index:2;left:8%;top:-17%;width:84%;height:43%;border-radius:58% 58% 18% 18%;background:linear-gradient(180deg,#9ca86c,#6b7e4c 68%,#394d34);border:3px solid #d6e0a9;box-shadow:0 7px 0 -3px #354b35}
-.bit-orb:after{content:"";position:absolute;z-index:3;right:-29%;top:53%;width:43%;height:10%;border-radius:3px;background:linear-gradient(180deg,#455b4a,#1b2c25);border:1px solid #d1d8b0;box-shadow:-8px 7px 0 -2px #536344;transform:rotate(-8deg)}
-.fighter-art .bit-orb,.shop-art .bit-orb{width:76px;height:76px}.featured-graphic .bit-orb{width:82px;height:82px}
-.bit-special-card{border-color:#6d8051;background:radial-gradient(ellipse at 12% 0%,#a7c36b22,transparent 48%),linear-gradient(145deg,#202d29,#151e2b 65%,#202a2b);box-shadow:inset 0 0 22px #9dbd5520}
-.bit-special-art{position:relative;border:1px solid #6c7f53;background:radial-gradient(circle at 50% 55%,#a1c76830,transparent 52%),linear-gradient(145deg,#172329,#26372b)}
-.bit-edition-tag{position:absolute;left:7px;top:7px;z-index:3;padding:5px 7px;border:1px solid #9cab68;border-radius:7px;background:linear-gradient(100deg,#263a2d,#596b3a);color:#ecf2b8;font-size:8px;font-weight:1000;letter-spacing:.06em}
-.bit-special-card .fighter-meta h2{color:#dce9a6}.bit-details{margin-top:12px;padding:13px;border:1px solid #72834e;border-radius:12px;background:radial-gradient(circle at 100% 0%,#91b94a22,transparent 46%),linear-gradient(135deg,#26342d,#18242a);color:#e8efcc;box-shadow:inset 0 0 17px #9bbf4813;font-size:11px;line-height:1.8}.bit-profile-title{margin-bottom:7px;color:#d6e99a;font-size:10px;font-weight:1000;letter-spacing:.1em}.bit-details b{color:#f0e6a1}.bit-flavor{display:inline-block;margin-top:7px;color:#c0cfaa;font-size:10px;line-height:1.7}
-@media(max-width:600px){.fighter-art .bit-orb,.shop-art .bit-orb{width:66px;height:66px}.bit-special-card{padding:13px}}
+<style id="bit-standard-profile-style">
+/* Bit: midnight-blue lone sniper; regular fighter profile, not a limited edition. */
+.bit-orb{
+  width:86px;height:86px;flex:0 0 86px;position:relative;overflow:visible;border-radius:50%;
+  border:4px solid #9db8d4;
+  background:
+    radial-gradient(ellipse 5px 7px at 38% 49%,#fbffff 0 96%,transparent 100%),
+    radial-gradient(ellipse 5px 7px at 64% 49%,#fbffff 0 96%,transparent 100%),
+    radial-gradient(circle 2px at 40% 51%,#244b68 0 98%,transparent 100%),
+    radial-gradient(circle 2px at 66% 51%,#244b68 0 98%,transparent 100%),
+    radial-gradient(ellipse 7px 2px at 38% 38%,#27374c 0 98%,transparent 100%),
+    radial-gradient(ellipse 7px 2px at 64% 38%,#27374c 0 98%,transparent 100%),
+    radial-gradient(ellipse 10px 4px at 51% 70%,#52677b 0 60%,transparent 65%),
+    radial-gradient(circle at 35% 25%,#f4e2d2 0 7%,transparent 8%),
+    linear-gradient(145deg,#d7e1e9 0%,#aabccc 58%,#718ba2 100%);
+  box-shadow:0 0 0 8px #78a9d51a,0 9px 20px #0007;
+}
+.bit-orb:before{
+  content:"";position:absolute;z-index:2;left:-5%;top:-17%;width:110%;height:49%;
+  border-radius:58% 58% 38% 38%;
+  background:linear-gradient(160deg,transparent 0 54%,#263d58 55% 63%,transparent 64%),
+    linear-gradient(145deg,#354e6c 0%,#1c2d46 70%,#111d31 100%);
+  border:3px solid #728eae;box-shadow:0 7px 0 -3px #182a41,0 2px 9px #07111e99;
+}
+.bit-orb:after{
+  content:"";position:absolute;z-index:3;right:-34%;top:56%;width:47%;height:9%;
+  border-radius:4px;background:linear-gradient(180deg,#9cacc0,#34485f 48%,#18283b);
+  border:1px solid #c2d4e6;transform:rotate(-7deg);
+  box-shadow:-8px 6px 0 -2px #526a83,4px -5px 0 -3px #a9c8e4;
+}
+.fighter-art .bit-orb,.shop-art .bit-orb{width:76px;height:76px;flex-basis:76px}
+.featured-graphic .bit-orb{width:82px;height:82px;flex-basis:82px}
+@media(max-width:600px){.fighter-art .bit-orb,.shop-art .bit-orb{width:66px;height:66px;flex-basis:66px}}
 </style>
 
 <style id="menu-grid-three-layout">.menu-grid{grid-template-columns:repeat(3,minmax(0,1fr))}@media(max-width:900px){.menu-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}</style>
@@ -601,13 +624,6 @@ function renderCollection(){
   if(hero.id==='nova'){
    const detail=document.createElement('div');detail.className='nova-details';
    detail.innerHTML='<div class="nova-profile-title">✦ CELESTIAL STARBORN · 별빛 한정판</div><b>🌟 별빛 2연사</b> 별 2개 연속 발사 · 개당 피해 3 · 적 관통 · 스피디 기본 공격 사거리의 절반<br><b>💎 크리스탈 변신</b> 7회 적중 충전 · 지정 위치로 무피해 돌진 · 6초 변신 · 크리스탈 검 피해 6 · 적중할 때마다 체력 4 회복 · 재장전 1.2초<br><span class="nova-flavor">먼 별에서 찾아온 신비로운 소녀. 길게 흘러내리는 은백색 머리카락과 별빛의 힘을 품은 크리스탈 검으로 전장을 수놓는다. 노바는 추후 이벤트에서 만날 수 있는 한정 전사다.</span>';
-   meta.appendChild(detail);
-  }
-  if(hero.id==='bit'){
-   card.classList.add('bit-special-card');art.classList.add('bit-special-art');
-   const ribbon=document.createElement('div');ribbon.className='bit-edition-tag';ribbon.textContent='🎯 SPECIAL FORCES · SNIPER';art.appendChild(ribbon);
-   const detail=document.createElement('div');detail.className='bit-details';
-   detail.innerHTML='<div class="bit-profile-title">🎯 LONE WOLF UNIT · 특수부대 저격수</div><b>🔭 거리 비례 저격탄</b> 재장전 1.7초 · 근거리 피해 2부터 시작 · 멀리 날아갈수록 강해져 최대 16 피해<br><b>💣 360° 충격 폭탄</b> 100% 충전 · 비트 주변 반경 230 · 설치 1초 후 폭발 · 피해 9 · 적 넉백<br><span class="bit-flavor">특수부대 저격수 비트. 다른 사람들과 어울리는 것보다 혼자만의 시간을 보내는 걸 좋아한다. 조용한 곳에서 표적을 관찰하고 단 한 발로 전장을 바꾼다.</span>';
    meta.appendChild(detail);
   }
   if(hero.passive){const passive=document.createElement('div');passive.className='lock-line';passive.textContent='패시브: '+hero.passive;passive.style.color='#91edc1';meta.appendChild(passive)}
@@ -1180,7 +1196,70 @@ function drawBujijikFighter(f,t){
  ctx.restore();
 }
 
-function drawBitFighter(f,t){const a=Math.atan2(f.facing.y,f.facing.x),look=vecNorm(f.facing.x||1,f.facing.y||0);ctx.save();ctx.translate(f.x,f.y);ctx.rotate(a);ctx.fillStyle='#5d7652';ctx.strokeStyle='#d0dfa1';ctx.lineWidth=3;ctx.beginPath();ctx.arc(0,0,f.r,0,Math.PI*2);ctx.fill();ctx.stroke();/* compact field helmet */ctx.fillStyle='#536842';ctx.strokeStyle='#c8d79a';ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(-20,-5);ctx.quadraticCurveTo(-24,-27,-6,-31);ctx.quadraticCurveTo(14,-34,22,-12);ctx.lineTo(17,-6);ctx.quadraticCurveTo(0,-15,-20,-5);ctx.closePath();ctx.fill();ctx.stroke();ctx.fillStyle='#a8bb77';ctx.fillRect(-14,-13,28,4);ctx.fillStyle='#f6ffe9';ctx.beginPath();ctx.ellipse(-8,-1,5.8,5.4,0,0,Math.PI*2);ctx.ellipse(8,-1,5.8,5.4,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#243322';ctx.beginPath();ctx.arc(-8+look.x*2.4,-1+look.y*2.4,2.5,0,Math.PI*2);ctx.arc(8+look.x*2.4,-1+look.y*2.4,2.5,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#34442d';ctx.lineWidth=2.3;ctx.beginPath();ctx.moveTo(-13,-9);ctx.lineTo(-4,-11);ctx.moveTo(4,-11);ctx.lineTo(13,-9);ctx.stroke();/* tactical vest */ctx.fillStyle='#344b39';ctx.strokeStyle='#a9bd7a';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(-10,10);ctx.lineTo(10,10);ctx.lineTo(8,21);ctx.lineTo(-8,21);ctx.closePath();ctx.fill();ctx.stroke();ctx.fillStyle='#c5d38d';ctx.fillRect(-4,12,8,3);/* sniper rifle */ctx.fillStyle='#1e2c26';ctx.fillRect(10,-5,29,8);ctx.fillStyle='#82946b';ctx.fillRect(32,-3,11,4);ctx.fillStyle='#b7c68c';ctx.fillRect(17,-8,13,3);if(f.attackAnim>0){ctx.globalAlpha=Math.min(1,f.attackAnim/.16);ctx.fillStyle='#eaffb4';ctx.shadowColor='#d9ff8f';ctx.shadowBlur=16;ctx.beginPath();ctx.arc(45,-1,5,0,Math.PI*2);ctx.fill()}ctx.restore();}
+function drawBitFighter(f,t){
+ const a=Math.atan2(f.facing.y,f.facing.x);
+ const look=vecNorm(f.facing.x||1,f.facing.y||0);
+ ctx.save();ctx.translate(f.x,f.y);ctx.rotate(a);
+
+ // Decorative hood tails are drawn outside the body, but never affect f.r.
+ ctx.fillStyle='#172941';ctx.strokeStyle='#607f9e';ctx.lineWidth=2;
+ ctx.beginPath();ctx.moveTo(-11,8);ctx.quadraticCurveTo(-26,17,-23,29);
+ ctx.quadraticCurveTo(-9,25,-3,16);ctx.closePath();ctx.fill();ctx.stroke();
+ ctx.beginPath();ctx.moveTo(7,10);ctx.quadraticCurveTo(23,19,21,29);
+ ctx.quadraticCurveTo(9,25,2,16);ctx.closePath();ctx.fill();ctx.stroke();
+
+ // Face remains inside the ordinary circular collision radius.
+ const face=ctx.createRadialGradient(-7,-10,2,0,0,f.r*1.25);
+ face.addColorStop(0,'#f4e9df');face.addColorStop(.65,'#c5d2dc');face.addColorStop(1,'#7892aa');
+ ctx.fillStyle=face;ctx.beginPath();ctx.arc(0,0,f.r,0,Math.PI*2);ctx.fill();
+ ctx.strokeStyle='#c9dbea';ctx.lineWidth=2.7;ctx.stroke();
+
+ // Midnight hood and swept fringe distinguish Bit from Meto's olive helmet.
+ ctx.fillStyle='#243b59';ctx.strokeStyle='#718eae';ctx.lineWidth=2.4;
+ ctx.beginPath();ctx.moveTo(-20,-5);ctx.quadraticCurveTo(-25,-25,-8,-30);
+ ctx.quadraticCurveTo(10,-37,22,-18);ctx.lineTo(18,-7);
+ ctx.quadraticCurveTo(8,-17,1,-14);ctx.quadraticCurveTo(-8,-22,-20,-5);
+ ctx.closePath();ctx.fill();ctx.stroke();
+ ctx.fillStyle='#405c7c';ctx.beginPath();ctx.moveTo(-5,-27);
+ ctx.quadraticCurveTo(7,-31,17,-18);ctx.lineTo(6,-13);
+ ctx.quadraticCurveTo(0,-18,-5,-27);ctx.closePath();ctx.fill();
+
+ // Clear brows, bright eyes and pupils that track the aim direction.
+ ctx.strokeStyle='#344d68';ctx.lineWidth=2.4;ctx.lineCap='round';
+ ctx.beginPath();ctx.moveTo(-14,-8);ctx.lineTo(-5,-10);
+ ctx.moveTo(5,-10);ctx.lineTo(14,-8);ctx.stroke();
+ ctx.fillStyle='#fff';ctx.beginPath();ctx.ellipse(-8,-1,5.8,6,0,0,Math.PI*2);
+ ctx.ellipse(8,-1,5.8,6,0,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='#2b7199';ctx.beginPath();
+ ctx.arc(-8+look.x*2.5,-1+look.y*2.5,2.7,0,Math.PI*2);
+ ctx.arc(8+look.x*2.5,-1+look.y*2.5,2.7,0,Math.PI*2);ctx.fill();
+ ctx.fillStyle='#fff';ctx.beginPath();
+ ctx.arc(-9+look.x*2.5,-2+look.y*2.5,1,0,Math.PI*2);
+ ctx.arc(7+look.x*2.5,-2+look.y*2.5,1,0,Math.PI*2);ctx.fill();
+
+ // Neck gaiter and compact blue-gray tactical vest.
+ ctx.fillStyle='#263d55';ctx.strokeStyle='#839bb4';ctx.lineWidth=1.6;
+ ctx.beginPath();ctx.moveTo(-12,10);ctx.quadraticCurveTo(0,15,12,10);
+ ctx.lineTo(10,20);ctx.quadraticCurveTo(0,24,-10,20);ctx.closePath();ctx.fill();ctx.stroke();
+ ctx.fillStyle='#9ec7df';ctx.fillRect(-4,15,8,2.5);
+
+ // Long precision rifle with a visible scope.
+ ctx.fillStyle='#172638';ctx.strokeStyle='#91a9c0';ctx.lineWidth=1.2;
+ ctx.beginPath();ctx.moveTo(8,-5);ctx.lineTo(42,-5);ctx.lineTo(47,-3);
+ ctx.lineTo(47,1);ctx.lineTo(11,2);ctx.closePath();ctx.fill();ctx.stroke();
+ ctx.fillStyle='#58758f';ctx.fillRect(18,-10,11,5);
+ ctx.strokeStyle='#bdd5e9';ctx.lineWidth=1.5;ctx.strokeRect(20,-9,7,3);
+ ctx.fillStyle='#b2d9ee';ctx.fillRect(43,-4,8,2);
+
+ if(f.attackAnim>0){
+  ctx.globalAlpha=Math.min(1,f.attackAnim/.18);
+  ctx.fillStyle='#d8f5ff';ctx.shadowColor='#8bdcff';ctx.shadowBlur=19;
+  ctx.beginPath();ctx.arc(51,-1,5.5,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle='#b9eaff';ctx.lineWidth=2;ctx.beginPath();
+  ctx.moveTo(49,-7);ctx.lineTo(58,-12);ctx.moveTo(50,5);ctx.lineTo(59,9);ctx.stroke();
+ }
+ ctx.restore();
+}
 function drawNovaFighter(f,t){
  const a=Math.atan2(f.facing.y,f.facing.x),crystal=(f.novaCrystalTime||0)>0;
  const drawStar=(x,y,r,color,rotation=0)=>{
