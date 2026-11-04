@@ -620,7 +620,7 @@ function renderCollection(){
  for(const hero of Object.values(HEROES)){
   const unlocked=!!currentUser.unlocked?.[hero.id],selected=currentUser.selectedHero===hero.id;
   const card=document.createElement('article');card.className='fighter-card'+(selected?' selected':'')+(!unlocked?' locked':'');
-  const art=document.createElement('div');art.className='fighter-art';const orb=document.createElement('div');orb.className=heroOrbClass(hero.id);if(hero.id==='bujijik'&&currentUser.equippedSkins?.bujijik==='rainbow-bujijik')orb.classList.add('rainbow-equipped');if(hero.id==='meto'&&currentUser.equippedSkins?.meto==='mentos-meto')orb.classList.add('mentos-equipped');art.appendChild(orb);
+  const art=document.createElement('div');art.className='fighter-art';const orb=document.createElement('div');orb.className=heroOrbClass(hero.id);if(hero.id==='spider'&&currentUser.equippedSkins?.spider==='venom-spider')orb.classList.add('venom-equipped');if(hero.id==='bujijik'&&currentUser.equippedSkins?.bujijik==='rainbow-bujijik')orb.classList.add('rainbow-equipped');if(hero.id==='meto'&&currentUser.equippedSkins?.meto==='mentos-meto')orb.classList.add('mentos-equipped');art.appendChild(orb);
   if(hero.id==='sniff'){card.classList.add('sniff-limited-card');art.classList.add('sniff-limited-art');const ribbon=document.createElement('div');ribbon.className='sniff-edition-tag';ribbon.textContent='🎃 HALLOWEEN LIMITED';art.appendChild(ribbon)}
   if(hero.id==='nova'){card.classList.add('nova-limited-card');art.classList.add('nova-limited-art');const ribbon=document.createElement('div');ribbon.className='nova-edition-tag';ribbon.textContent='✦ CELESTIAL LIMITED';art.appendChild(ribbon)}
   const meta=document.createElement('div');meta.className='fighter-meta';
