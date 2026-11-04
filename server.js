@@ -242,6 +242,7 @@ io.on("connection", socket => {
       hp: Math.max(0, Math.min(200, Number(data.hp) || 0)),
       maxHp: Math.max(1, Math.min(200, Number(data.maxHp) || 100)),
       alive: Boolean(data.alive), ultCharge: Math.max(0, Math.min(100, Number(data.ultCharge) || 0)), heroId: ["spider", "hammer", "meto", "bujijik", "adam", "yure", "joki", "gumi", "sniff", "kuro", "glover", "ellie", "nova", "bit", "prma", "teemo"].includes(data.heroId) ? data.heroId : "spider",
+      skinId: data.heroId === "spider" && data.skinId === "venom-spider" ? "venom-spider" : null,
       name: String(data.name || "플레이어").slice(0, 24),
       buffTime: Math.max(0, Math.min(10, Number(data.buffTime) || 0)),
       stunTime: Math.max(0, Math.min(5, Number(data.stunTime) || 0)),
