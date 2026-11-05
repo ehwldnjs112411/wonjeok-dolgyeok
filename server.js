@@ -160,7 +160,7 @@ app.get("/api/profile", authRequired, async (req, res) => {
 app.put("/api/profile", authRequired, async (req, res) => {
   try {
     await dbReady();
-    const allowedHeroes = new Set(["spider", "hammer", "meto", "bujijik", "adam", "yure", "joki", "gumi", "sniff", "kuro", "glover", "ellie"]);
+    const allowedHeroes = new Set(["spider", "hammer", "meto", "bujijik", "adam", "yure", "joki", "gumi", "sniff", "kuro", "glover", "ellie", "nova", "bit", "prma", "teemo"]);
     const selected = allowedHeroes.has(req.body.selectedHero) ? req.body.selectedHero : "spider";
     const result = await pool.query("SELECT trophies, unlocked FROM players WHERE id=$1", [req.user.id]);
     if (!result.rows[0]) return res.status(404).json({ error: "계정을 찾을 수 없습니다." });
@@ -177,7 +177,12 @@ app.put("/api/profile", authRequired, async (req, res) => {
       gumi: Boolean(old.gumi),
       sniff: Boolean(old.sniff),
       kuro: Boolean(old.kuro),
-      glover: Boolean(old.glover)
+      glover: Boolean(old.glover),
+      ellie: Boolean(old.ellie),
+      nova: Boolean(old.nova),
+      bit: Boolean(old.bit),
+      prma: Boolean(old.prma),
+      teemo: Boolean(old.teemo)
     };
     const safeSelected = unlocked[selected] ? selected : "spider";
     const saved = await pool.query(
@@ -199,18 +204,40 @@ app.post("/api/match/result", authRequired, async (req, res) => {
 const waiting = [];
 const socketUsers = new Map();
 function removeFromQueue(socketId) {
-  const i = waiting.findIndex(x => x.socketId === socketId);
-  if (i >= 0) waiting.splice(i, 1);
+  for (let i = waiting.length - 1; i >= 0; i--) {
+    if (waiting[i].socketId === socketId) waiting.splice(i, 1);
+  }
+}
+function releaseMatch(socket, notifyOpponent = true) {
+  const match = socketUsers.get(socket.id);
+  if (!match?.roomCode) {
+    socketUsers.delete(socket.id);
+    return;
+  }
+  const roomCode = match.roomCode;
+  if (notifyOpponent) socket.to(roomCode).emit("battle:opponent-left");
+  for (const [peerId, peerMatch] of socketUsers) {
+    if (peerId === socket.id || peerMatch.roomCode !== roomCode) continue;
+    socketUsers.delete(peerId);
+    const peer = io.sockets.sockets.get(peerId);
+    if (peer) peer.leave(roomCode);
+  }
+  socket.leave(roomCode);
+  socketUsers.delete(socket.id);
 }
 io.on("connection", socket => {
   socket.emit("queue:status", { message: "온라인 서버에 연결됨" });
   socket.on("queue:join", payload => {
+    if (socketUsers.has(socket.id)) {
+      socket.emit("queue:status", { message: "이미 대전 중이야. 먼저 현재 대전을 종료해 줘." });
+      return;
+    }
     removeFromQueue(socket.id);
     const user = {
       socketId: socket.id,
       since: Date.now(),
       name: String(payload?.name || "플레이어").slice(0, 24),
-      hero: ["spider", "hammer", "meto", "bujijik", "adam", "yure", "joki", "gumi", "sniff", "kuro", "glover", "ellie", "nova", "bit"].includes(payload?.hero) ? payload.hero : "spider"
+      hero: ["spider", "hammer", "meto", "bujijik", "adam", "yure", "joki", "gumi", "sniff", "kuro", "glover", "ellie", "nova", "bit", "prma", "teemo"].includes(payload?.hero) ? payload.hero : "spider"
     };
     while (waiting.length) {
       const other = waiting.shift();
@@ -254,6 +281,7 @@ io.on("connection", socket => {
       kuroStealthTime: Math.max(0, Math.min(1, Number(data.kuroStealthTime) || 0)),
       novaCrystalTime: Math.max(0, Math.min(6, Number(data.novaCrystalTime) || 0)),
       slowTime: Math.max(0, Math.min(2, Number(data.slowTime) || 0)),
+      poisonTime: Math.max(0, Math.min(10, Number(data.poisonTime) || 0)),
       summons: Array.isArray(data.summons) ? data.summons.slice(0, 8).map(s => ({ id: String(s?.id || "").slice(0, 80), x: Math.max(48, Math.min(852, Number(s?.x) || 450)), y: Math.max(48, Math.min(852, Number(s?.y) || 450)), hp: Math.max(0, Math.min(20, Number(s?.hp) || 0)), alive: Boolean(s?.alive), facing: { x: Math.max(-1, Math.min(1, Number(s?.facing?.x) || 0)), y: Math.max(-1, Math.min(1, Number(s?.facing?.y) || 0)) }, skinId: data.heroId === "bujijik" && s?.skinId === "rainbow-bujijik" ? "rainbow-bujijik" : null })) : []
     };
     socket.to(match.roomCode).emit("battle:state", safe);
@@ -261,11 +289,11 @@ io.on("connection", socket => {
   socket.on("battle:attack", data => {
     const match = socketUsers.get(socket.id);
     if (!match?.roomCode || !data || typeof data !== "object") return;
-    const allowed = new Set(["projectiles", "melee", "spider-ultimate", "ultimate-shield", "kuro-stealth-ultimate", "adam-ultimate", "joki-stun-ultimate", "joki-heal-ultimate", "joki-damage-ultimate", "summon", "summon-swing", "glover-punch", "glover-dash", "ellie-avalanche", "nova-crystal-ultimate", "nova-crystal-slash", "bit-bomb", "prma-blackhole", "teemo-mushroom"]);
+    const allowed = new Set(["projectiles", "melee", "spider-ultimate", "ultimate-shield", "kuro-stealth-ultimate", "adam-ultimate", "joki-stun-ultimate", "joki-heal-ultimate", "joki-damage-ultimate", "summon", "summon-swing", "glover-punch", "glover-dash", "ellie-avalanche", "nova-crystal-ultimate", "nova-crystal-slash", "sniff-ultimate", "bit-bomb", "prma-blackhole", "teemo-mushroom"]);
     if (!allowed.has(data.kind)) return;
     const safe = {
       kind: data.kind,
-      skinId: (data.heroId === "bujijik" && data.skinId === "rainbow-bujijik") || (data.heroId === "meto" && data.skinId === "mentos-meto") ? data.skinId : null,
+      skinId: (data.heroId === "spider" && data.skinId === "venom-spider") || (data.heroId === "bujijik" && data.skinId === "rainbow-bujijik") || (data.heroId === "meto" && data.skinId === "mentos-meto") ? data.skinId : null,
       hit: Boolean(data.hit),
       punchSide: Number(data.punchSide) === 1 ? 1 : 0,
       heroId: ["spider", "hammer", "meto", "bujijik", "adam", "yure", "joki", "gumi", "sniff", "kuro", "glover", "ellie", "nova", "bit", "prma", "teemo"].includes(data.heroId) ? data.heroId : "spider",
@@ -282,12 +310,13 @@ io.on("connection", socket => {
       facing: { x: Math.max(-1, Math.min(1, Number(data.facing?.x) || 0)), y: Math.max(-1, Math.min(1, Number(data.facing?.y) || 0)) },
       positions: Array.isArray(data.positions) ? data.positions.slice(0, 3).map(pos => ({ x: Math.max(48, Math.min(852, Number(pos?.x) || 450)), y: Math.max(48, Math.min(852, Number(pos?.y) || 450)) })) : [],
       bullets: Array.isArray(data.bullets) ? data.bullets.slice(0, 20).map(b => ({
+        id: String(b?.id || "").slice(0, 80),
         x: Math.max(0, Math.min(900, Number(b?.x) || 0)), y: Math.max(0, Math.min(900, Number(b?.y) || 0)),
         vx: Math.max(-800, Math.min(800, Number(b?.vx) || 0)), vy: Math.max(-800, Math.min(800, Number(b?.vy) || 0)),
         r: Math.max(2, Math.min(18, Number(b?.r) || 5)), life: Math.max(.1, Math.min(3, Number(b?.life) || 1)),
         damage: Math.max(0, Math.min(100, Number.isFinite(Number(b?.damage)) ? Number(b.damage) : 0)),
         color: /^#[0-9a-fA-F]{3,8}$/.test(String(b?.color || "")) ? String(b.color) : "#ffffff",
-        kind: String(b?.kind || "bullet").slice(0, 24), skinId: (data.heroId === "bujijik" && b?.skinId === "rainbow-bujijik") || (data.heroId === "meto" && b?.skinId === "mentos-meto") ? b.skinId : null, stun: Math.max(0, Math.min(2, Number(b?.stun) || 0)), charm: Math.max(0, Math.min(2, Number(b?.charm) || 0)), slow: Math.max(0, Math.min(2, Number(b?.slow) || 0)), pierce: Boolean(b?.pierce), charge: b?.charge !== false, damageByRange: Boolean(b?.damageByRange), originX: Math.max(0, Math.min(900, Number(b?.originX) || 0)), originY: Math.max(0, Math.min(900, Number(b?.originY) || 0)), rangeCap: Math.max(200, Math.min(1200, Number(b?.rangeCap) || 804)), chargeGroup: b?.chargeGroup == null ? null : String(b.chargeGroup).slice(0, 80), critChance: Math.max(0, Math.min(0.8, Number(b?.critChance) || 0)), critBonus: Math.max(0, Math.min(10, Number(b?.critBonus) || 0)), poison: Math.max(0, Math.min(10, Number(b?.poison) || 0))
+        kind: String(b?.kind || "bullet").slice(0, 24), skinId: (data.heroId === "spider" && b?.skinId === "venom-spider") || (data.heroId === "bujijik" && b?.skinId === "rainbow-bujijik") || (data.heroId === "meto" && b?.skinId === "mentos-meto") ? b.skinId : null, stun: Math.max(0, Math.min(2, Number(b?.stun) || 0)), charm: Math.max(0, Math.min(2, Number(b?.charm) || 0)), slow: Math.max(0, Math.min(2, Number(b?.slow) || 0)), pierce: Boolean(b?.pierce), charge: b?.charge !== false, damageByRange: Boolean(b?.damageByRange), originX: Math.max(0, Math.min(900, Number(b?.originX) || 0)), originY: Math.max(0, Math.min(900, Number(b?.originY) || 0)), rangeCap: Math.max(200, Math.min(1200, Number(b?.rangeCap) || 804)), chargeGroup: b?.chargeGroup == null ? null : String(b.chargeGroup).slice(0, 80), critChance: Math.max(0, Math.min(0.8, Number(b?.critChance) || 0)), critBonus: Math.max(0, Math.min(10, Number(b?.critBonus) || 0)), poison: Math.max(0, Math.min(10, Number(b?.poison) || 0))
       })) : []
     };
     socket.to(match.roomCode).emit("battle:attack", safe);
@@ -300,6 +329,32 @@ io.on("connection", socket => {
     if (match?.roomCode && heroIds.has(heroId) && charge > 0) {
       socket.to(match.roomCode).emit('battle:hit-confirm', { heroId, charge });
     }
+  });
+  socket.on("battle:impact", data => {
+    const match = socketUsers.get(socket.id);
+    if (!match?.roomCode || !data || typeof data !== "object") return;
+    const validHeroes = new Set(["spider", "hammer", "meto", "bujijik", "adam", "yure", "joki", "gumi", "sniff", "kuro", "glover", "ellie", "nova", "bit", "prma", "teemo"]);
+    const safe = {
+      id: String(data.id || "").slice(0, 80),
+      roomCode: match.roomCode,
+      x: Math.max(0, Math.min(900, Number.isFinite(Number(data.x)) ? Number(data.x) : 450)),
+      y: Math.max(0, Math.min(900, Number.isFinite(Number(data.y)) ? Number(data.y) : 450)),
+      kind: String(data.kind || "hit").slice(0, 32),
+      amount: Math.max(0, Math.min(100, Number(data.amount) || 0)),
+      hp: Math.max(0, Math.min(200, Number.isFinite(Number(data.hp)) ? Number(data.hp) : 0)),
+      maxHp: Math.max(1, Math.min(200, Number(data.maxHp) || 100)),
+      alive: Boolean(data.alive),
+      stun: Math.max(0, Math.min(2, Number(data.stun) || 0)),
+      charm: Math.max(0, Math.min(2, Number(data.charm) || 0)),
+      slow: Math.max(0, Math.min(2, Number(data.slow) || 0)),
+      poison: Math.max(0, Math.min(10, Number(data.poison) || 0)),
+      heroId: validHeroes.has(data.heroId) ? data.heroId : "spider",
+      skinId: ["venom-spider", "rainbow-bujijik", "mentos-meto"].includes(data.skinId) ? data.skinId : null,
+      targetType: data.targetType === "summon" ? "summon" : "fighter",
+      targetId: String(data.targetId || "").slice(0, 80),
+      pierce: Boolean(data.pierce)
+    };
+    socket.to(match.roomCode).emit("battle:impact", safe);
   });
   socket.on("battle:summon-damage", data => {
     const match = socketUsers.get(socket.id);
@@ -314,29 +369,26 @@ io.on("connection", socket => {
     const charm = Math.max(0, Math.min(2, Number(data?.charm) || 0));
     const slow = Math.max(0, Math.min(2, Number(data?.slow) || 0));
     const poison = Math.max(0, Math.min(10, Number(data?.poison) || 0));
-    if (match?.roomCode && (amount > 0 || stun > 0 || charm > 0 || slow > 0 || poison > 0)) socket.to(match.roomCode).emit("battle:damage", { amount, stun, charm, slow, poison, skinId: data?.skinId === "mentos-meto" ? "mentos-meto" : null });
+    const heroIds = new Set(["spider", "hammer", "meto", "bujijik", "adam", "yure", "joki", "gumi", "sniff", "kuro", "glover", "ellie", "nova", "bit", "prma", "teemo"]);
+    const skinId = ["venom-spider", "rainbow-bujijik", "mentos-meto"].includes(data?.skinId) ? data.skinId : null;
+    const safe = {
+      amount, stun, charm, slow, poison,
+      kind: String(data?.kind || "hit").slice(0, 32),
+      heroId: heroIds.has(data?.heroId) ? data.heroId : "spider",
+      skinId,
+      x: Math.max(0, Math.min(900, Number.isFinite(Number(data?.x)) ? Number(data.x) : 450)),
+      y: Math.max(0, Math.min(900, Number.isFinite(Number(data?.y)) ? Number(data.y) : 450)),
+      facing: { x: Math.max(-1, Math.min(1, Number(data?.facing?.x) || 0)), y: Math.max(-1, Math.min(1, Number(data?.facing?.y) || 0)) }
+    };
+    if (match?.roomCode && (amount > 0 || stun > 0 || charm > 0 || slow > 0 || poison > 0)) socket.to(match.roomCode).emit("battle:damage", safe);
   });
   socket.on("battle:leave", () => {
-    const match = socketUsers.get(socket.id);
-    if (match?.roomCode) {
-      const roomCode = match.roomCode;
-      socket.to(roomCode).emit("battle:opponent-left");
-      for (const [peerId, peerMatch] of socketUsers) {
-        if (peerId !== socket.id && peerMatch.roomCode === roomCode) {
-          socketUsers.delete(peerId);
-          const peer = io.sockets.sockets.get(peerId);
-          if (peer) peer.leave(roomCode);
-        }
-      }
-      socket.leave(roomCode);
-      socketUsers.delete(socket.id);
-    }
+    removeFromQueue(socket.id);
+    releaseMatch(socket, true);
   });
   socket.on("disconnect", () => {
     removeFromQueue(socket.id);
-    const match = socketUsers.get(socket.id);
-    if (match?.roomCode) socket.to(match.roomCode).emit("battle:opponent-left");
-    socketUsers.delete(socket.id);
+    releaseMatch(socket, true);
   });
 });
 setInterval(() => {
