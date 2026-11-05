@@ -285,6 +285,7 @@ io.on("connection", socket => {
         x: Math.max(0, Math.min(900, Number(b?.x) || 0)), y: Math.max(0, Math.min(900, Number(b?.y) || 0)),
         vx: Math.max(-800, Math.min(800, Number(b?.vx) || 0)), vy: Math.max(-800, Math.min(800, Number(b?.vy) || 0)),
         r: Math.max(2, Math.min(18, Number(b?.r) || 5)), life: Math.max(.1, Math.min(3, Number(b?.life) || 1)),
+        damage: Math.max(0, Math.min(100, Number.isFinite(Number(b?.damage)) ? Number(b.damage) : 0)),
         color: /^#[0-9a-fA-F]{3,8}$/.test(String(b?.color || "")) ? String(b.color) : "#ffffff",
         kind: String(b?.kind || "bullet").slice(0, 24), skinId: (data.heroId === "bujijik" && b?.skinId === "rainbow-bujijik") || (data.heroId === "meto" && b?.skinId === "mentos-meto") ? b.skinId : null, stun: Math.max(0, Math.min(2, Number(b?.stun) || 0)), charm: Math.max(0, Math.min(2, Number(b?.charm) || 0)), slow: Math.max(0, Math.min(2, Number(b?.slow) || 0)), pierce: Boolean(b?.pierce), charge: b?.charge !== false, damageByRange: Boolean(b?.damageByRange), originX: Math.max(0, Math.min(900, Number(b?.originX) || 0)), originY: Math.max(0, Math.min(900, Number(b?.originY) || 0)), rangeCap: Math.max(200, Math.min(1200, Number(b?.rangeCap) || 804)), chargeGroup: b?.chargeGroup == null ? null : String(b.chargeGroup).slice(0, 80), critChance: Math.max(0, Math.min(0.8, Number(b?.critChance) || 0)), critBonus: Math.max(0, Math.min(10, Number(b?.critBonus) || 0)), poison: Math.max(0, Math.min(10, Number(b?.poison) || 0))
       })) : []
