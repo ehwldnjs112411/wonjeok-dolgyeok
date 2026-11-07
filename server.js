@@ -257,6 +257,7 @@ io.on("connection", socket => {
   });
   socket.on("queue:leave", () => {
     removeFromQueue(socket.id);
+    releaseMatch(socket, true);
     socket.emit("queue:status", { message: "매칭 대기 취소" });
   });
   socket.on("battle:state", data => {
