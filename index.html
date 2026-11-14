@@ -570,7 +570,7 @@ function playBackgroundMusic(videoId,title,options={}){const safeId=String(video
 }
 function toggleBackgroundMusic(){musicEnabled=!musicEnabled;if(musicEnabled){playBackgroundMusic(currentTrackId,currentMusicContext==='menu'?'대기 음악':'전투 배경 음악',currentMusicContext==='menu'&&menuMusicStarted?{resumeAt:menuMusicTime}:{})}else{musicPlaying=false;try{if(ytReady&&ytPlayer)ytPlayer.pauseVideo();else $('#music-frame')?.contentWindow?.postMessage(JSON.stringify({event:'command',func:'pauseVideo',args:[]}), '*')}catch(_){}updateMusicControls('배경 음악')}}
 $('#music-toggle-btn').addEventListener('click',toggleBackgroundMusic);
-function startRandomGameTrack(mode='ai',floor=null){if(currentMusicContext==='menu'&&ytReady&&ytPlayer){try{menuMusicTime=ytPlayer.getCurrentTime()||menuMusicTime;menuMusicStarted=true;ytPlayer.pauseVideo()}catch(_){}}let choices=GAME_TRACKS;let boss=mode==='tower'&&floor%10===0;if(mode==='halloween'){choices=[HALLOWEEN_BOSS_TRACK]}else if(mode==='tower'){ if(floor===100)choices=[FINAL_BOSS_TRACK];else if([10,20,30,40,50,60,70,80,90].includes(floor))choices=[BOSS_TRACK];else if(floor>=91)choices=TOWER_91_TRACKS;else if(floor>=51)choices=TOWER_51_TRACKS;else choices=TOWER_TRACKS;}const id=choices[Math.floor(Math.random()*choices.length)]||GAME_TRACKS[0];currentMusicContext='combat';currentCombatTrack=id;playBackgroundMusic(id,mode==='halloween'?'할로윈 보스전 음악':boss?`${floor}층 보스전 음악`:'전투 배경 음악');}
+function startRandomGameTrack(mode='ai',floor=null){if(currentMusicContext==='menu'&&ytReady&&ytPlayer){try{menuMusicTime=ytPlayer.getCurrentTime()||menuMusicTime;menuMusicStarted=true;ytPlayer.pauseVideo()}catch(_){}}let choices=GAME_TRACKS;let boss=mode==='tower'&&floor%10===0;if(mode==='zombie'){choices=['uA6mBZRrMjA']}else if(mode==='halloween'){choices=[HALLOWEEN_BOSS_TRACK]}else if(mode==='tower'){ if(floor===100)choices=[FINAL_BOSS_TRACK];else if([10,20,30,40,50,60,70,80,90].includes(floor))choices=[BOSS_TRACK];else if(floor>=91)choices=TOWER_91_TRACKS;else if(floor>=51)choices=TOWER_51_TRACKS;else choices=TOWER_TRACKS;}const id=choices[Math.floor(Math.random()*choices.length)]||GAME_TRACKS[0];currentMusicContext='combat';currentCombatTrack=id;playBackgroundMusic(id,mode==='zombie'?'좀비모드 배경 음악':mode==='halloween'?'할로윈 보스전 음악':boss?`${floor}층 보스전 음악`:'전투 배경 음악');}
 function returnToMenuMusic(){if(game?.mode==='user'&&window.wonjeokSocket?.connected)try{window.wonjeokSocket.emit('battle:leave')}catch(_){}currentMusicContext='menu';currentCombatTrack='';if(musicEnabled){playBackgroundMusic(PRE_GAME_TRACK,'대기 음악',{resumeAt:menuMusicStarted?menuMusicTime:0})}else{musicPlaying=false;updateMusicControls('배경 음악')}}
 function renderTowerMenu(){if(!currentUser)return;$('#ai-mode-coins').textContent=currentUser.coins||0;const completed=Math.max(0,Number(currentUser.towerCompleted)||0);const floor=Math.max(1,Math.min(100,Number(currentUser.towerFloor)||1));$('#tower-progress-text').textContent=`최고 기록 ${completed} / 100층 · 다음 도전 ${floor}층`;$('#tower-button-label').textContent=completed>=100?'100층 다시 도전 ↗':`${floor}층 도전 ↗`;}
 function towerEnemySpecs(floor){
@@ -756,7 +756,7 @@ function renderTrophy(){
  saveProfile();
 }
 
-function renderShop(tab='fighters'){if(!currentUser)return;syncUnlocks();const grid=$('#shop-grid');grid.innerHTML='';$('#shop-coins').textContent=currentUser.coins;$('#shop-notice').textContent='';document.querySelectorAll('[data-shop-tab]').forEach(b=>b.classList.toggle('active',b.dataset.shopTab===tab));$('#shop-footnote').textContent=tab==='skins'?'스킨은 전사의 외형과 공격 효과를 바꿔. 구매한 스킨은 원 도감의 스킨 메뉴에서 장착할 수 있어.':'구매한 전사는 계정에 영구 지급돼. 트로피를 잃어도 유지돼.';if(tab==='skins'){const addSkinCard=(key,name,desc,price,artClass,ownedKey,heroId,skinId)=>{const owned=!!currentUser.ownedSkins?.[ownedKey],equipped=currentUser.equippedSkins?.[heroId]===skinId;const card=document.createElement('article');card.className='shop-card'+(owned?' owned':'');const art=document.createElement('div');art.className='shop-art';const preview=document.createElement('div');preview.className=artClass;art.appendChild(preview);const info=document.createElement('div');info.innerHTML=`<h2>${name}</h2><p>${desc}</p><div class="shop-price">🪙 ${price.toLocaleString('ko-KR')} 원코인</div>`;const btn=document.createElement('button');btn.className='shop-buy';btn.textContent=owned?(equipped?'✓ 장착 중':'✓ 구매 완료'):`🪙 ${price.toLocaleString('ko-KR')}개로 구매`;btn.disabled=owned;btn.addEventListener('click',()=>{if(!currentUser)return;if(currentUser.ownedSkins?.[ownedKey])return;if((Number(currentUser.coins)||0)<price){$('#shop-notice').textContent=`원코인이 부족해! ${name}은(는) ${price.toLocaleString('ko-KR')}개가 필요해.`;return}currentUser.coins-=price;currentUser.ownedSkins=currentUser.ownedSkins||{};currentUser.ownedSkins[ownedKey]=true;saveProfile();refreshMenu();renderShop('skins');$('#shop-notice').textContent=`${name} 구매 완료! 원 도감에서 장착해 줘.`});info.appendChild(btn);card.append(art,info);grid.appendChild(card)};const owned=!!currentUser.ownedSkins?.venomSpider;const equipped=currentUser.equippedSkins?.spider==='venom-spider';const card=document.createElement('article');card.className='shop-card'+(owned?' owned':'');const art=document.createElement('div');art.className='shop-art';const venom=document.createElement('div');venom.className='skin-preview-venom';venom.innerHTML='<span></span><i></i>';art.appendChild(venom);const info=document.createElement('div');info.innerHTML='<h2>베놈 스피디</h2><p>스피디 전용 스킨. 몸체가 검은색으로 바뀌고 흰색 줄무늬는 유지돼. 기본 공격은 흰색, 궁극기 거미줄은 검은색이 돼.</p><div class="shop-price">🪙 3,000 원코인</div>';const btn=document.createElement('button');btn.className='shop-buy';btn.textContent=owned?'✓ 구매 완료': '🪙 3,000개로 구매';btn.disabled=owned;btn.addEventListener('click',()=>{if(!currentUser)return;if(currentUser.ownedSkins?.venomSpider){$('#shop-notice').textContent='베놈 스피디는 이미 보유 중이야.';return}if((Number(currentUser.coins)||0)<3000){$('#shop-notice').textContent='원코인이 부족해! 베놈 스피디는 3,000개가 필요해.';return}currentUser.coins-=3000;currentUser.ownedSkins=currentUser.ownedSkins||{};currentUser.ownedSkins.venomSpider=true;saveProfile();refreshMenu();renderShop('skins');$('#shop-notice').textContent='베놈 스피디 구매 완료! 원 도감에서 스킨을 장착해 줘.'});info.appendChild(btn);card.append(art,info);grid.appendChild(card);addSkinCard('rainbow-bujijik','무지직','뿌지직 전용 무지개 스킨. 기본 공격은 탄환마다 무작위 무지개색, 궁극기 소환물도 무지개색으로 변해.',3000,'skin-preview-rainbow','rainbowBujijik','bujijik','rainbow-bujijik');addSkinCard('mentos-meto','멘토스','메토 전용 스킨. 몸체와 군모는 부드러운 무지개 그라데이션으로 천천히 변하고, 공격은 빨강·주황·노랑·초록 순서로 발사돼. 궁극기 적중 시 무지개 기절 임팩트가 나타나.',3000,'skin-preview-mentos','mentosMeto','meto','mentos-meto');addSkinCard('thunder-adam','천둥 아담','신화 속 번개 전사 테마. 일반 공격은 번개 두 번으로 바뀌고 궁극기 오라는 노란색이 돼.',3000,'skin-preview-thunder','thunderAdam','adam','thunder-adam');addSkinCard('thorboy-hammer','토르보이','신화 속 천둥 전사 테마. 금빛 망치 휘두르기와 궁극기 강화 별빛 효과가 적용돼.',3000,'skin-preview-thor','thorboyHammer','hammer','thorboy-hammer');return;}for(const id of ['yure','joki','gumi','kuro','glover','ellie','bit','prma','teemo','sera','root','magnet','bolt']){const h=HEROES[id],price=Number(h.price)||1500,owned=!!currentUser.unlocked?.[id];const card=document.createElement('article');card.className='shop-card'+(owned?' owned':'');const art=document.createElement('div');art.className='shop-art';const orb=document.createElement('div');orb.className=heroOrbClass(id);art.appendChild(orb);const info=document.createElement('div');const ability=id==='bolt'?'기본 공격: 엘리 궁극기 사거리의 2배까지 조준해 0.5초 뒤 번개 낙하 · 피해 6 · 명중할 때마다 궁극기 충전<br>궁극기: 5회 명중 충전 · 360° 전기파 · 피해 4~10 · 0.5초 기절':id==='root'?'기본 공격: 선인장 3 피해 · 명중/최대 사거리에서 6방향 가시 폭발<br>궁극기: 지정 위치 1초 경고 후 피해 9 · 4초 둔화':id==='magnet'?'기본 공격: 근거리 360° 전기파 · 피해 7 · 둔화 · 적중당 충전 30%<br>궁극기: 중거리 자기장 · 피해 5 · 적을 끌어당김 · 피격 시 충전 5%':id==='teemo'?'기본 공격: 독가시 2발 · 명중마다 독 중첩 · 재장전 2.1초<br>궁극기: 주변 360° 버섯 지뢰 · 밟으면 독 중첩':id==='sera'?'기본 공격: 관통 어둠 파동 · 피해 7 · 재장전 1.8초<br>궁극기: 360° 파동 · 피해 7 · 0.5초 기절':id==='bit'?'기본 공격: 원거리 저격탄 · 거리 비례 피해 2~16 · 재장전 1.7초<br>궁극기: 360° 폭탄 · 1초 후 폭발 · 피해 9 · 넉백':id==='nova'?'기본 공격: 별 2연사 · 개당 피해 3 · 관통<br>궁극기: 지정 위치로 돌진 후 6초 크리스탈 변신 · 검 피해 6 · 적중당 2 회복':id==='ellie'?'기본 공격: 눈꽃 3연사 · 개당 피해 3 · 적중 시 0.5초 둔화<br>궁극기: 5초 눈사태 · 초당 1 피해 · 둔화':id==='yure'?'기본 공격: 피해 2 탄환 5연사<br>궁극기: 피해 3 탄환 10연사':id==='joki'?'기본 공격: 사탕 1~4개 연속 투척<br>궁극기: 무작위 효과':id==='gumi'?'기본 공격: 하트 탄환 피해 7<br>궁극기: 1초 매혹·기절':id==='glover'?'기본 공격: 주먹 3연타 · 한 번당 피해 3<br>궁극기: 조준 방향 돌진 · 충돌 피해 9 · 강한 밀치기':id==='prma'?'기본 공격: 흰색·보라색 성광 폭격 · 피해 8<br>궁극기: 6초 블랙홀 · 끌어당김 · 초당 1 피해':'기본 공격: 표창 2개 연속 투척 · 개당 피해 4<br>궁극기: 1초 은신 · 첫 공격 개당 피해 8';info.innerHTML=`<h2>${h.name}</h2><p>${h.desc}<br>${ability}</p><div class="shop-price">🪙 ${price} 원코인</div>`;const btn=document.createElement('button');btn.className='shop-buy';btn.textContent=owned?'✓ 구매 완료':`🪙 ${price}개로 구매`;btn.disabled=owned;btn.addEventListener('click',()=>{if(!currentUser)return;syncUnlocks();if(currentUser.unlocked?.[id]){$('#shop-notice').textContent=`${h.name}은(는) 이미 보유 중이야.`;return}if((Number(currentUser.coins)||0)<price){$('#shop-notice').textContent=`원코인이 부족해! ${h.name}은(는) ${price}개가 필요하고, 현재 ${currentUser.coins}개야.`;return}currentUser.coins-=price;currentUser.unlocked=currentUser.unlocked||{};currentUser.unlocked[id]=true;if(id==='joki')currentUser.jokiPurchased=true;saveProfile();refreshMenu();renderShop();$('#shop-notice').textContent=`${h.name} 구매 완료! 원코인 ${price}개가 차감됐어. 원 도감에서 선택할 수 있어.`});info.appendChild(btn);card.append(art,info);grid.appendChild(card)}}
+function renderShop(tab='fighters'){if(!currentUser)return;syncUnlocks();const grid=$('#shop-grid');grid.innerHTML='';$('#shop-coins').textContent=currentUser.coins;$('#shop-notice').textContent='';document.querySelectorAll('[data-shop-tab]').forEach(b=>b.classList.toggle('active',b.dataset.shopTab===tab));$('#shop-footnote').textContent=tab==='skins'?'스킨은 전사의 외형과 공격 효과를 바꿔. 구매한 스킨은 원 도감의 스킨 메뉴에서 장착할 수 있어.':'구매한 전사는 계정에 영구 지급돼. 트로피를 잃어도 유지돼.';if(tab==='skins'){const addSkinCard=(key,name,desc,price,artClass,ownedKey,heroId,skinId)=>{const owned=!!currentUser.ownedSkins?.[ownedKey],equipped=currentUser.equippedSkins?.[heroId]===skinId;const card=document.createElement('article');card.className='shop-card'+(owned?' owned':'');const art=document.createElement('div');art.className='shop-art';const preview=document.createElement('div');preview.className=artClass;art.appendChild(preview);const info=document.createElement('div');info.innerHTML=`<h2>${name}</h2><p>${desc}</p><div class="shop-price">🪙 ${price.toLocaleString('ko-KR')} 원코인</div>`;const btn=document.createElement('button');btn.className='shop-buy';btn.textContent=owned?(equipped?'✓ 장착 중':'✓ 구매 완료'):`🪙 ${price.toLocaleString('ko-KR')}개로 구매`;btn.disabled=owned;btn.addEventListener('click',()=>{if(!currentUser)return;if(currentUser.ownedSkins?.[ownedKey])return;if((Number(currentUser.coins)||0)<price){$('#shop-notice').textContent=`원코인이 부족해! ${name}은(는) ${price.toLocaleString('ko-KR')}개가 필요해.`;return}currentUser.coins-=price;currentUser.ownedSkins=currentUser.ownedSkins||{};currentUser.ownedSkins[ownedKey]=true;saveProfile();refreshMenu();renderShop('skins');$('#shop-notice').textContent=`${name} 구매 완료! 원 도감에서 장착해 줘.`});info.appendChild(btn);card.append(art,info);grid.appendChild(card)};const owned=!!currentUser.ownedSkins?.venomSpider;const equipped=currentUser.equippedSkins?.spider==='venom-spider';const card=document.createElement('article');card.className='shop-card'+(owned?' owned':'');const art=document.createElement('div');art.className='shop-art';const venom=document.createElement('div');venom.className='skin-preview-venom';venom.innerHTML='<span></span><i></i>';art.appendChild(venom);const info=document.createElement('div');info.innerHTML='<h2>베놈 스피디</h2><p>스피디 전용 스킨. 몸체가 검은색으로 바뀌고 흰색 줄무늬는 유지돼. 기본 공격은 흰색, 궁극기 거미줄은 검은색이 돼.</p><div class="shop-price">🪙 3,000 원코인</div>';const btn=document.createElement('button');btn.className='shop-buy';btn.textContent=owned?'✓ 구매 완료': '🪙 3,000개로 구매';btn.disabled=owned;btn.addEventListener('click',()=>{if(!currentUser)return;if(currentUser.ownedSkins?.venomSpider){$('#shop-notice').textContent='베놈 스피디는 이미 보유 중이야.';return}if((Number(currentUser.coins)||0)<3000){$('#shop-notice').textContent='원코인이 부족해! 베놈 스피디는 3,000개가 필요해.';return}currentUser.coins-=3000;currentUser.ownedSkins=currentUser.ownedSkins||{};currentUser.ownedSkins.venomSpider=true;saveProfile();refreshMenu();renderShop('skins');$('#shop-notice').textContent='베놈 스피디 구매 완료! 원 도감에서 스킨을 장착해 줘.'});info.appendChild(btn);card.append(art,info);grid.appendChild(card);addSkinCard('rainbow-bujijik','무지직','뿌지직 전용 무지개 스킨. 기본 공격은 탄환마다 무작위 무지개색, 궁극기 소환물도 무지개색으로 변해.',3000,'skin-preview-rainbow','rainbowBujijik','bujijik','rainbow-bujijik');addSkinCard('mentos-meto','멘토스','메토 전용 스킨. 몸체와 군모는 부드러운 무지개 그라데이션으로 천천히 변하고, 공격은 빨강·주황·노랑·초록 순서로 발사돼. 궁극기 적중 시 무지개 기절 임팩트가 나타나.',3000,'skin-preview-mentos','mentosMeto','meto','mentos-meto');addSkinCard('thunder-adam','천둥 아담','신화 속 번개 전사 테마. 일반 공격은 번개 두 번으로 바뀌고 궁극기 오라는 노란색이 돼.',3000,'skin-preview-thunder','thunderAdam','adam','thunder-adam');addSkinCard('thorboy-hammer','토르보이','신화 속 천둥 전사 테마. 금빛 망치 휘두르기와 궁극기 강화 별빛 효과가 적용돼.',3000,'skin-preview-thor','thorboyHammer','hammer','thorboy-hammer');return;}for(const id of ['yure','joki','gumi','kuro','glover','ellie','bit','prma','teemo','sera','root','magnet','bolt']){const h=HEROES[id],price=Number(h.price)||1500,owned=!!currentUser.unlocked?.[id];const card=document.createElement('article');card.className='shop-card'+(owned?' owned':'');const art=document.createElement('div');art.className='shop-art';const orb=document.createElement('div');orb.className=heroOrbClass(id);art.appendChild(orb);const info=document.createElement('div');const ability=id==='bolt'?'기본 공격: 엘리 궁극기 사거리의 1.4배까지 자동 조준해 0.5초 뒤 번개 낙하 · 피해 6 · 명중할 때마다 궁극기 충전<br>궁극기: 5회 명중 충전 · 360° 전기파 · 피해 4~10 · 0.5초 기절':id==='root'?'기본 공격: 선인장 3 피해 · 명중/최대 사거리에서 6방향 가시 폭발<br>궁극기: 지정 위치 1초 경고 후 피해 9 · 4초 둔화':id==='magnet'?'기본 공격: 근거리 360° 전기파 · 피해 7 · 둔화 · 적중당 충전 30%<br>궁극기: 중거리 자기장 · 피해 5 · 적을 끌어당김 · 피격 시 충전 5%':id==='teemo'?'기본 공격: 독가시 2발 · 명중마다 독 중첩 · 재장전 2.1초<br>궁극기: 주변 360° 버섯 지뢰 · 밟으면 독 중첩':id==='sera'?'기본 공격: 관통 어둠 파동 · 피해 7 · 재장전 1.8초<br>궁극기: 360° 파동 · 피해 7 · 0.5초 기절':id==='bit'?'기본 공격: 원거리 저격탄 · 거리 비례 피해 2~16 · 재장전 1.7초<br>궁극기: 360° 폭탄 · 1초 후 폭발 · 피해 9 · 넉백':id==='nova'?'기본 공격: 별 2연사 · 개당 피해 3 · 관통<br>궁극기: 지정 위치로 돌진 후 6초 크리스탈 변신 · 검 피해 6 · 적중당 2 회복':id==='ellie'?'기본 공격: 눈꽃 3연사 · 개당 피해 3 · 적중 시 0.5초 둔화<br>궁극기: 5초 눈사태 · 초당 1 피해 · 둔화':id==='yure'?'기본 공격: 피해 2 탄환 5연사<br>궁극기: 피해 3 탄환 10연사':id==='joki'?'기본 공격: 사탕 1~4개 연속 투척<br>궁극기: 무작위 효과':id==='gumi'?'기본 공격: 하트 탄환 피해 7<br>궁극기: 1초 매혹·기절':id==='glover'?'기본 공격: 주먹 3연타 · 한 번당 피해 3<br>궁극기: 조준 방향 돌진 · 충돌 피해 9 · 강한 밀치기':id==='prma'?'기본 공격: 흰색·보라색 성광 폭격 · 피해 8<br>궁극기: 6초 블랙홀 · 끌어당김 · 초당 1 피해':'기본 공격: 표창 2개 연속 투척 · 개당 피해 4<br>궁극기: 1초 은신 · 첫 공격 개당 피해 8';info.innerHTML=`<h2>${h.name}</h2><p>${h.desc}<br>${ability}</p><div class="shop-price">🪙 ${price} 원코인</div>`;const btn=document.createElement('button');btn.className='shop-buy';btn.textContent=owned?'✓ 구매 완료':`🪙 ${price}개로 구매`;btn.disabled=owned;btn.addEventListener('click',()=>{if(!currentUser)return;syncUnlocks();if(currentUser.unlocked?.[id]){$('#shop-notice').textContent=`${h.name}은(는) 이미 보유 중이야.`;return}if((Number(currentUser.coins)||0)<price){$('#shop-notice').textContent=`원코인이 부족해! ${h.name}은(는) ${price}개가 필요하고, 현재 ${currentUser.coins}개야.`;return}currentUser.coins-=price;currentUser.unlocked=currentUser.unlocked||{};currentUser.unlocked[id]=true;if(id==='joki')currentUser.jokiPurchased=true;saveProfile();refreshMenu();renderShop();$('#shop-notice').textContent=`${h.name} 구매 완료! 원코인 ${price}개가 차감됐어. 원 도감에서 선택할 수 있어.`});info.appendChild(btn);card.append(art,info);grid.appendChild(card)}}
 function renderMail(){if(!currentUser)return;const list=$('#mail-list');list.innerHTML='';$('#mail-trophies').textContent=currentUser.trophies;$('#mail-coins').textContent=currentUser.coins;const card=document.createElement('article');card.className='mail-card';const icon=document.createElement('div');icon.className='mail-icon';icon.textContent='✉️';const body=document.createElement('div');const claimed=!!currentUser.mailRewardClaimed;body.innerHTML=`<h2>원격돌격 운영팀의 환영 선물 ${claimed?'<span class="mail-read">수령 완료</span>':'<span class="new-badge">NEW</span>'}</h2><p>원격돌격에 와 줘서 고마워! 전장에서 도움이 되도록 환영 보상을 준비했어. 보상은 계정당 한 번만 받을 수 있어.</p><div class="mail-rewards"><span class="mail-reward">🏆 트로피 +50</span><span class="mail-reward">🪙 원코인 +1000</span></div>`;const btn=document.createElement('button');btn.className='mail-claim';btn.textContent=claimed?'이미 수령한 보상':'보상 받기';btn.disabled=claimed;btn.addEventListener('click',()=>{if(!currentUser||currentUser.mailRewardClaimed)return;currentUser.trophies=(Number(currentUser.trophies)||0)+50;currentUser.coins=(Number(currentUser.coins)||0)+1000;const mailTrophyMilestones=processTrophyCoinRewards();currentUser.mailRewardClaimed=true;currentUser.mailRewardRead=true;syncUnlocks();saveProfile();refreshMenu();renderMail();const notice=document.createElement('p');notice.textContent='보상을 받았어! 트로피 50개와 원코인 1000개가 지급됐어.'+(mailTrophyMilestones.length?` 트로피 보상 원코인 ${trophyRewardCoinTotal(mailTrophyMilestones)}개도 추가 지급됐어.`:'');notice.style.color='#7be0b7';notice.style.fontWeight='900';list.appendChild(notice);});body.appendChild(btn);card.append(icon,body);list.appendChild(card);const halloween=document.createElement('article');halloween.className='mail-card';const hIcon=document.createElement('div');hIcon.className='mail-icon';hIcon.textContent='🎃';const hBody=document.createElement('div');const hClaimed=!!currentUser.halloweenGiftClaimed;hBody.innerHTML=`<h2>할로윈 선물 ${hClaimed?'<span class="mail-read">수령 완료</span>':'<span class="new-badge">NEW</span>'}</h2><p>할로윈 기념 선물이 도착했어! 한 계정당 한 번만 받을 수 있어.</p><div class="mail-rewards"><span class="mail-reward">🏆 트로피 +100</span></div>`;const hBtn=document.createElement('button');hBtn.className='mail-claim';hBtn.textContent=hClaimed?'이미 수령한 보상':'할로윈 선물 받기';hBtn.disabled=hClaimed;hBtn.addEventListener('click',()=>{if(!currentUser||currentUser.halloweenGiftClaimed)return;currentUser.trophies=(Number(currentUser.trophies)||0)+100;currentUser.halloweenGiftClaimed=true;currentUser.unlocked=currentUser.unlocked||{};currentUser.unlocked.halloweenGiftClaimed=true;const milestone=processTrophyCoinRewards();syncUnlocks();saveProfile();refreshMenu();renderMail();const n=document.createElement('p');n.textContent='할로윈 선물! 트로피 100개를 받았어.'+(milestone.length?` 트로피 보상 원코인 ${trophyRewardCoinTotal(milestone)}개도 지급됐어.`:'');n.style.color='#7be0b7';n.style.fontWeight='900';list.appendChild(n)});hBody.appendChild(hBtn);halloween.append(hIcon,hBody);list.appendChild(halloween)}
 
 function awardHalloweenMission(key,candy){if(!currentUser||!isHalloweenEventActive())return false;const ev=currentUser.halloweenEvent||(currentUser.halloweenEvent={aiWins:0,candy:0,claimed:{boss:false,ai:false,tower:false},rewardVersion:2});ev.claimed=ev.claimed||{boss:false,ai:false,tower:false};if(ev.claimed[key])return false;ev.claimed[key]=true;ev.candy=Math.min(20,(Number(ev.candy)||0)+candy);saveProfile();refreshMenu();renderHalloweenEvent();if(ev.candy>=20)showToast('사탕 20개를 모았어! 아래 버튼을 눌러 킁킁을 해금해 줘.');else showToast(`할로윈 미션 완료! 사탕 ${candy}개 획득!`);return true}
@@ -1046,7 +1046,7 @@ function updateGame(dt){if(!game||game.ended)return;if(game.bossIntro>0){game.bo
  // Halloween: candy appears every 10 seconds with a 70% chance. Collecting it sends a 15-damage homing candy to the boss.
  if(game.mode==='halloween'){game.halloweenCandyTimer=(game.halloweenCandyTimer??10)-dt;if(game.halloweenCandyTimer<=0){if(Math.random()<.7)game.powerups.push({type:'halloween-candy',x:ARENA.min+32+Math.random()*(ARENA.max-ARENA.min-64),y:ARENA.min+32+Math.random()*(ARENA.max-ARENA.min-64),life:16});game.halloweenCandyTimer=10;}for(let i=game.powerups.length-1;i>=0;i--){const item=game.powerups[i];if(item.type!=='halloween-candy')continue;item.life-=dt;if(Math.hypot(p.x-item.x,p.y-item.y)<p.r+16){const boss=(game.enemies||[game.enemy]).find(e=>e?.alive);if(boss){const dir=vecNorm(boss.x-p.x,boss.y-p.y);game.projectiles.push({owner:p,x:p.x+dir.x*(p.r+9),y:p.y+dir.y*(p.r+9),vx:dir.x*470,vy:dir.y*470,r:13,damage:25,life:4,color:'#ffdc50',kind:'halloween-candy-homing',charge:false,homingTarget:boss,homingSpeed:470,originX:p.x,originY:p.y});game.effects.push({type:'explosion',x:p.x,y:p.y,time:.28,max:.28,r:22,color:'#ffd84b'});const pickupCtx=getSfxContext();if(pickupCtx)sfxTone(pickupCtx,780,1320,.12,'triangle',.07);showToast('사탕 획득! 보스를 향해 유도탄 발사!');}game.powerups.splice(i,1);}else if(item.life<=0)game.powerups.splice(i,1);}}
  updateSummons(dt);
-  for(let i=game.projectiles.length-1;i>=0;i--){const pr=game.projectiles[i];if(pr.kind==='halloween-candy-homing'&&pr.homingTarget?.alive){const hdir=vecNorm(pr.homingTarget.x-pr.x,pr.homingTarget.y-pr.y);pr.vx=hdir.x*(pr.homingSpeed||470);pr.vy=hdir.y*(pr.homingSpeed||470);}else if(pr.kind==='sniff-homing'&&pr.homingTarget?.alive){const dOwner=Math.hypot(pr.homingTarget.x-(pr.owner?.x??pr.originX),pr.homingTarget.y-(pr.owner?.y??pr.originY));if(dOwner<=470){const hdir=vecNorm(pr.homingTarget.x-pr.x,pr.homingTarget.y-pr.y);pr.vx=hdir.x*(pr.homingSpeed||430);pr.vy=hdir.y*(pr.homingSpeed||430)}else pr.homingTarget=null;}const prevX=pr.x,prevY=pr.y;pr.x+=pr.vx*dt;pr.y+=pr.vy*dt;pr.life-=dt;if(pr.visualOnly){if(pr.life<=0||pr.x<ARENA.min-35||pr.x>ARENA.max+35||pr.y<ARENA.min-35||pr.y>ARENA.max+35)game.projectiles.splice(i,1);continue}pr.hitTargets=pr.hitTargets||[];const hitSummon=[...(game.summons||[]),...(game.remoteSummons||[])].find(s=>s.alive&&s.isPlayer!==pr.owner.isPlayer&&(!pr.pierce||!pr.hitTargets.includes(s))&&distanceSqToSegment(s.x,s.y,prevX,prevY,pr.x,pr.y)<(pr.r+s.r)*(pr.r+s.r));if(hitSummon){damageSummon(hitSummon,pr.damage,pr.owner);if(pr.remote)reportOnlineImpact(hitSummon,pr.owner,{id:pr.networkId,kind:pr.kind,amount:pr.damage,targetType:'summon',targetId:hitSummon.remoteId||hitSummon.id,pierce:!!pr.pierce});if(pr.pierce){pr.hitTargets.push(hitSummon);continue;}if(pr.kind==='root-cactus')detonateRootCactus(pr);game.projectiles.splice(i,1);continue}const targets=pr.remote?[p]:(pr.owner?.isPlayer?(game.enemies||[game.enemy]).filter(enemy=>enemy.alive):[p]);const target=targets.find(enemy=>enemy.alive&&(!pr.pierce||!pr.hitTargets.includes(enemy))&&distanceSqToSegment(enemy.x,enemy.y,prevX,prevY,pr.x,pr.y)<(pr.r+enemy.r)*(pr.r+enemy.r));if(target){if((target.invulnTime||0)>0){if(pr.remote)reportOnlineImpact(target,pr.owner,{id:pr.networkId,kind:'blocked',amount:0,pierce:!!pr.pierce});if(pr.pierce){pr.hitTargets.push(target);continue;}if(pr.kind==='root-cactus')detonateRootCactus(pr);game.projectiles.splice(i,1);continue;}if(pr.kind==='gumi-charm'){target.stunTime=Math.max(target.stunTime||0,1);target.charmTime=1;target.charmOwner=pr.owner;game.effects.push({type:'stun',x:target.x,y:target.y,time:1,max:1});if(pr.owner?.heroId==='gumi'){pr.owner.hp=Math.min(pr.owner.maxHp,pr.owner.hp+9);game.effects.push({type:'damage',x:pr.owner.x,y:pr.owner.y-26,text:'+9',time:.7,max:.7,color:'#ff8bd0'});}if(pr.remote)reportOnlineImpact(target,pr.owner,{id:pr.networkId,kind:'gumi-charm',amount:0,stun:1,charm:1,pierce:!!pr.pierce});if(game.mode==='user'&&pr.owner?.isPlayer&&window.wonjeokSocket?.connected)window.wonjeokSocket.emit('battle:damage',{amount:0,stun:1,charm:1});}else{let chargeHit=pr.charge!==false;if(pr.chargeGroup&&pr.owner?.heroId==='kuro'){pr.owner.kuroChargedGroups=pr.owner.kuroChargedGroups||new Set();if(pr.owner.kuroChargedGroups.has(pr.chargeGroup))chargeHit=false;else pr.owner.kuroChargedGroups.add(pr.chargeGroup)}const travelled=pr.damageByRange?Math.hypot(pr.x-(Number(pr.originX)||pr.x),pr.y-(Number(pr.originY)||pr.y)):0;const hitDamage=pr.damageByRange?Math.min(16,2+14*Math.min(1,travelled/(Number(pr.rangeCap)||804))):pr.damage;const isCrit=pr.critChance>0&&Math.random()<Math.min(.8,pr.critChance);const finalHitDamage=hitDamage+(isCrit?Math.max(0,Number(pr.critBonus)||0):0);const bitCharge=pr.damageByRange?Math.max(5,Math.min(40,hitDamage*2.5)):null;const chargeOverride=pr.chargeOverride==null?bitCharge:pr.chargeOverride;damage(target,finalHitDamage,pr.owner,chargeHit,pr.stun||0,pr.slow||0,chargeOverride,{id:pr.networkId,kind:pr.kind,charm:pr.charm||0,poison:pr.poison||0,pierce:!!pr.pierce});if(isCrit)game.effects.push({type:'damage',x:target.x,y:target.y-43,text:'치명타! 5 피해',time:.8,max:.8,color:'#ffd66b'});if(pr.remote&&window.wonjeokSocket?.connected&&pr.owner?.heroId){const confirmedCharge=ultimateChargeGainForHit(pr.owner,chargeHit,chargeOverride);if(confirmedCharge>0)window.wonjeokSocket.emit('battle:hit-confirm',{heroId:pr.owner.heroId,charge:confirmedCharge});}if(pr.poison){applyPoisonStack(target,pr.poison,pr.owner);game.effects.push({type:'teemo-poison',x:target.x,y:target.y,time:.45,max:.45})}if(pr.kind==='prma-starburst')game.effects.push({type:'prma-impact',x:target.x,y:target.y,time:.46,max:.46});if(pr.kind==='sniff-pumpkin')game.effects.push({type:'sniff-pumpkin-impact',x:target.x,y:target.y,time:.58,max:.58,seed:Math.random()*6.28});if(pr.kind==='sniff-homing')game.effects.push({type:'sniff-ult-impact',x:target.x,y:target.y,time:.62,max:.62,seed:Math.random()*6.28});if(pr.kind==='nova-star')game.effects.push({type:'nova-star-impact',x:target.x,y:target.y,time:.46,max:.46,seed:(target.x*7+target.y*11)})}if(pr.stun&&!(target.heroId==='kuro'&&(target.invulnTime||0)>0)){target.stunTime=Math.max(target.stunTime||0,pr.stun);game.effects.push({type:'stun',x:target.x,y:target.y,time:pr.stun,max:pr.stun,rainbow:pr.owner?.skinId==='mentos-meto'});if(pr.owner.isPlayer)showToast('명중! 적이 1초 동안 기절했어!')}if(pr.pierce){pr.hitTargets.push(target);continue;}if(pr.kind==='root-cactus')detonateRootCactus(pr);game.projectiles.splice(i,1);continue}if(pr.life<=0||pr.x<ARENA.min-10||pr.x>ARENA.max+10||pr.y<ARENA.min-10||pr.y>ARENA.max+10){if(pr.kind==='root-cactus')detonateRootCactus(pr);game.projectiles.splice(i,1)}}
+  for(let i=game.projectiles.length-1;i>=0;i--){const pr=game.projectiles[i];if(pr.kind==='halloween-candy-homing'&&pr.homingTarget?.alive){const hdir=vecNorm(pr.homingTarget.x-pr.x,pr.homingTarget.y-pr.y);pr.vx=hdir.x*(pr.homingSpeed||470);pr.vy=hdir.y*(pr.homingSpeed||470);}else if(pr.kind==='sniff-homing'&&pr.homingTarget?.alive){const dOwner=Math.hypot(pr.homingTarget.x-(pr.owner?.x??pr.originX),pr.homingTarget.y-(pr.owner?.y??pr.originY));if(dOwner<=470){const hdir=vecNorm(pr.homingTarget.x-pr.x,pr.homingTarget.y-pr.y);pr.vx=hdir.x*(pr.homingSpeed||430);pr.vy=hdir.y*(pr.homingSpeed||430)}else pr.homingTarget=null;}const prevX=pr.x,prevY=pr.y;pr.x+=pr.vx*dt;pr.y+=pr.vy*dt;pr.life-=dt;if(pr.visualOnly){if(pr.life<=0||pr.x<ARENA.min-35||pr.x>ARENA.max+35||pr.y<ARENA.min-35||pr.y>ARENA.max+35)game.projectiles.splice(i,1);continue}pr.hitTargets=pr.hitTargets||[];const hitSummon=[...(game.summons||[]),...(game.remoteSummons||[])].find(s=>s.alive&&s.isPlayer!==pr.owner.isPlayer&&(!pr.pierce||!pr.hitTargets.includes(s))&&distanceSqToSegment(s.x,s.y,prevX,prevY,pr.x,pr.y)<(pr.r+s.r)*(pr.r+s.r));if(hitSummon){damageSummon(hitSummon,pr.damage,pr.owner);if(pr.remote)reportOnlineImpact(hitSummon,pr.owner,{id:pr.networkId,kind:pr.kind,amount:pr.damage,targetType:'summon',targetId:hitSummon.remoteId||hitSummon.id,pierce:!!pr.pierce});if(pr.pierce){pr.hitTargets.push(hitSummon);continue;}if(pr.kind==='root-cactus')detonateRootCactus(pr);game.projectiles.splice(i,1);continue}const targets=pr.remote?[p]:(pr.owner?.isPlayer?(game.enemies||[game.enemy]).filter(enemy=>enemy.alive):[p]);const target=targets.find(enemy=>enemy.alive&&(!pr.pierce||!pr.hitTargets.includes(enemy))&&distanceSqToSegment(enemy.x,enemy.y,prevX,prevY,pr.x,pr.y)<(pr.r+enemy.r)*(pr.r+enemy.r));if(target){if((target.invulnTime||0)>0){if(pr.remote)reportOnlineImpact(target,pr.owner,{id:pr.networkId,kind:'blocked',amount:0,pierce:!!pr.pierce});if(pr.pierce){pr.hitTargets.push(target);continue;}if(pr.kind==='root-cactus')detonateRootCactus(pr);game.projectiles.splice(i,1);continue;}if(pr.kind==='gumi-charm'){target.stunTime=Math.max(target.stunTime||0,1);target.charmTime=1;target.charmOwner=pr.owner;game.effects.push({type:'stun',x:target.x,y:target.y,time:1,max:1});if(pr.owner?.heroId==='gumi'){pr.owner.hp=Math.min(pr.owner.maxHp,pr.owner.hp+9);game.effects.push({type:'damage',x:pr.owner.x,y:pr.owner.y-26,text:'+9',time:.7,max:.7,color:'#ff8bd0'});}if(pr.remote)reportOnlineImpact(target,pr.owner,{id:pr.networkId,kind:'gumi-charm',amount:0,stun:1,charm:1,pierce:!!pr.pierce});if(game.mode==='user'&&pr.owner?.isPlayer&&window.wonjeokSocket?.connected)window.wonjeokSocket.emit('battle:damage',{amount:0,stun:1,charm:1});}else{let chargeHit=pr.charge!==false;if(pr.chargeGroup&&pr.owner?.heroId==='kuro'){pr.owner.kuroChargedGroups=pr.owner.kuroChargedGroups||new Set();if(pr.owner.kuroChargedGroups.has(pr.chargeGroup))chargeHit=false;else pr.owner.kuroChargedGroups.add(pr.chargeGroup)}const travelled=pr.damageByRange?Math.hypot(pr.x-(Number(pr.originX)||pr.x),pr.y-(Number(pr.originY)||pr.y)):0;const hitDamage=pr.damageByRange?Math.min(16,2+14*Math.min(1,travelled/(Number(pr.rangeCap)||804))):pr.damage;const isCrit=pr.critChance>0&&Math.random()<Math.min(.8,pr.critChance);const finalHitDamage=hitDamage+(isCrit?Math.max(0,Number(pr.critBonus)||0):0);const bitCharge=pr.damageByRange?Math.max(5,Math.min(40,hitDamage*2.5)):null;const chargeOverride=pr.chargeOverride==null?bitCharge:pr.chargeOverride;damage(target,finalHitDamage,pr.owner,chargeHit,pr.stun||0,pr.slow||0,chargeOverride,{id:pr.networkId,kind:pr.kind,basicAttack:!!pr.zombieBasic,charm:pr.charm||0,poison:pr.poison||0,pierce:!!pr.pierce});if(isCrit)game.effects.push({type:'damage',x:target.x,y:target.y-43,text:'치명타! 5 피해',time:.8,max:.8,color:'#ffd66b'});if(pr.remote&&window.wonjeokSocket?.connected&&pr.owner?.heroId){const confirmedCharge=ultimateChargeGainForHit(pr.owner,chargeHit,chargeOverride);if(confirmedCharge>0)window.wonjeokSocket.emit('battle:hit-confirm',{heroId:pr.owner.heroId,charge:confirmedCharge});}if(pr.poison){applyPoisonStack(target,pr.poison,pr.owner);game.effects.push({type:'teemo-poison',x:target.x,y:target.y,time:.45,max:.45})}if(pr.kind==='prma-starburst')game.effects.push({type:'prma-impact',x:target.x,y:target.y,time:.46,max:.46});if(pr.kind==='sniff-pumpkin')game.effects.push({type:'sniff-pumpkin-impact',x:target.x,y:target.y,time:.58,max:.58,seed:Math.random()*6.28});if(pr.kind==='sniff-homing')game.effects.push({type:'sniff-ult-impact',x:target.x,y:target.y,time:.62,max:.62,seed:Math.random()*6.28});if(pr.kind==='nova-star')game.effects.push({type:'nova-star-impact',x:target.x,y:target.y,time:.46,max:.46,seed:(target.x*7+target.y*11)})}if(pr.stun&&!(target.heroId==='kuro'&&(target.invulnTime||0)>0)){target.stunTime=Math.max(target.stunTime||0,pr.stun);game.effects.push({type:'stun',x:target.x,y:target.y,time:pr.stun,max:pr.stun,rainbow:pr.owner?.skinId==='mentos-meto'});if(pr.owner.isPlayer)showToast('명중! 적이 1초 동안 기절했어!')}if(pr.pierce){pr.hitTargets.push(target);continue;}if(pr.kind==='root-cactus')detonateRootCactus(pr);game.projectiles.splice(i,1);continue}if(pr.life<=0||pr.x<ARENA.min-10||pr.x>ARENA.max+10||pr.y<ARENA.min-10||pr.y>ARENA.max+10){if(pr.kind==='root-cactus')detonateRootCactus(pr);game.projectiles.splice(i,1)}}
  for(let i=game.effects.length-1;i>=0;i--){const fx=game.effects[i];fx.time-=dt;if(fx.time<=0)game.effects.splice(i,1)}
 }
 function launchSniffOrbit(actor){if(!game||game.ended||!actor?.alive)return;const targets=(actor.isPlayer?(game.enemies||[game.enemy]):[game.player]).filter(t=>t?.alive&&Math.hypot(t.x-actor.x,t.y-actor.y)<=470);if(!targets.length){if(actor.isPlayer)showToast('중거리 안에 적이 없어 호박 표창이 발사되지 않았어.');return}const bullets=[];for(let i=0;i<4;i++){const target=targets[i%targets.length],spawnAngle=i*Math.PI/2+Math.PI/4;const sx=actor.x+Math.cos(spawnAngle)*(actor.r+18),sy=actor.y+Math.sin(spawnAngle)*(actor.r+18);const aim=Math.atan2(target.y-sy,target.x-sx)+(i-1.5)*.025;const pr={owner:actor,x:sx,y:sy,vx:Math.cos(aim)*430,vy:Math.sin(aim)*430,r:12,damage:4,life:2.5,color:'#ff9d36',kind:'sniff-homing',charge:false,homingTarget:target,homingSpeed:430,originX:actor.x,originY:actor.y};game.projectiles.push(pr);bullets.push(projectilePayload(pr))}game.effects.push({type:'explosion',x:actor.x,y:actor.y,time:.35,max:.35,r:28,color:'#ff9b37'});if(game.mode==='user'&&actor.isPlayer&&window.wonjeokSocket?.connected)window.wonjeokSocket.emit('battle:attack',{kind:'projectiles',heroId:'sniff',x:actor.x,y:actor.y,facing:actor.facing,bullets});if(actor.isPlayer)showToast('호박 표창 4개가 각각 흩어져 적을 추적해!')}
@@ -1905,8 +1905,8 @@ setAuthMode('login');
 <script id="zombie-bolt-update">
 (()=>{
   // 볼트는 일반 전사와 같은 계정/도감/상점 흐름을 사용한다.
-  HEROES.bolt={id:'bolt',name:'볼트',hp:90,speed:235,r:22,ultMax:5,ultMode:'self',reloadInterval:2.0,short:'지정 위치 번개 낙하',basic:'기존보다 1.4배 넓어진 범위까지 원하는 위치를 조준해. 조준한 곳에 0.5초 예고 표시가 나온 뒤 번개가 내려쳐 피해 6을 줘. 적중할 때마다 궁극기가 충전돼.',ult:'일반 공격 5회 적중으로 충전. 자신을 중심으로 360° 전기파를 방출해. 기본 피해 4, 기본 범위는 엘리 궁극기의 절반이며 0.5초 기절시켜. 5회 초과 명중할 때마다 범위 10%와 피해 1이 증가해. 범위 증가는 최대 100%, 피해는 최대 10이야.',desc:'번개 마법사가 되고 싶은 귀염둥이.',unlock:'상점에서 원코인 1500개로 구매',unlockAt:-1,price:1500,currency:'coins'};
-  const BOLT_BASIC_RANGE=ELLIE_ULT_RANGE*4*1.4;
+  HEROES.bolt={id:'bolt',name:'볼트',hp:90,speed:235,r:22,ultMax:5,ultMode:'self',reloadInterval:2.0,short:'지정 위치 번개 낙하',basic:'엘리 궁극기 사거리의 1.4배 범위에서 가까운 적을 자동 조준해. 조준한 곳에 0.5초 예고 표시가 나온 뒤 번개가 내려쳐 피해 6을 줘. 적중할 때마다 궁극기가 충전돼.',ult:'일반 공격 5회 적중으로 충전. 자신을 중심으로 360° 전기파를 방출해. 기본 피해 4, 기본 범위는 엘리 궁극기의 절반이며 0.5초 기절시켜. 5회 초과 명중할 때마다 범위 10%와 피해 1이 증가해. 범위 증가는 최대 100%, 피해는 최대 10이야.',desc:'번개 마법사가 되고 싶은 귀염둥이.',unlock:'상점에서 원코인 1500개로 구매',unlockAt:-1,price:1500,currency:'coins'};
+  const BOLT_BASIC_RANGE=ELLIE_ULT_RANGE*1.4;
   const ZOMBIE_ARENA_MAX=ARENA.min+(ARENA.max-ARENA.min)*2;
   function getZombieCameraOffset(){
     if(!game||game.mode!=='zombie')return {x:0,y:0};
@@ -1945,15 +1945,19 @@ setAuthMode('login');
   const originalFireBasic=fireBasic;
   fireBasic=function(attacker,dir,aimPoint=null){
     if(attacker?.heroId!=='bolt')return originalFireBasic(attacker,dir);
+    attacker.maxAmmo=3;attacker.reloadInterval=2.0;
+    if(!Number.isFinite(Number(attacker.ammo)))attacker.ammo=3;
     if(!game||game.ended||!attacker.alive||attacker.stunTime>0||attacker.attackCd>0||attacker.ammo<=0)return;
-    attacker.ammo=Math.max(0,attacker.ammo-1);
+    attacker.ammo=Math.max(0,Math.min(3,Number(attacker.ammo))-1);
     if(attacker.reloadTimer<=0&&attacker.ammo<attacker.maxAmmo)attacker.reloadTimer=attacker.reloadInterval;
     attacker.facing=vecNorm(dir?.x||0,dir?.y||0);if(!attacker.facing.x&&!attacker.facing.y)attacker.facing={x:attacker.isPlayer?1:-1,y:0};
-    const target=opponentOf(attacker);
+    const target=attacker.isPlayer
+      ?(game.enemies||[game.enemy]).filter(enemy=>enemy?.alive).sort((a,b)=>Math.hypot(a.x-attacker.x,a.y-attacker.y)-Math.hypot(b.x-attacker.x,b.y-attacker.y))[0]||null
+      :game.player;
     if(!aimPoint){if(target&&target.alive&&Math.hypot(target.x-attacker.x,target.y-attacker.y)<=BOLT_BASIC_RANGE)aimPoint={x:target.x,y:target.y};else aimPoint={x:attacker.x+attacker.facing.x*BOLT_BASIC_RANGE,y:attacker.y+attacker.facing.y*BOLT_BASIC_RANGE};}
     const dist=Math.hypot(aimPoint.x-attacker.x,aimPoint.y-attacker.y);if(dist>BOLT_BASIC_RANGE){const k=BOLT_BASIC_RANGE/Math.max(1,dist);aimPoint={x:attacker.x+(aimPoint.x-attacker.x)*k,y:attacker.y+(aimPoint.y-attacker.y)*k};}
     const point={x:clamp(aimPoint.x,ARENA.min+12,ARENA.max-12),y:clamp(aimPoint.y,ARENA.min+12,ARENA.max-12)};
-    attacker.facing=vecNorm(point.x-attacker.x,point.y-attacker.y);attacker.attackCd=2.0;attacker.attackAnim=.28;
+    attacker.facing=vecNorm(point.x-attacker.x,point.y-attacker.y);attacker.attackCd=.22;attacker.attackAnim=.28;
     playHeroSound('bolt','attack');game.boltStrikes=game.boltStrikes||[];game.boltStrikes.push({x:point.x,y:point.y,time:.5,max:.5,r:40,owner:attacker});
     game.effects.push({type:'bolt-target',x:point.x,y:point.y,time:.5,max:.5,r:40});
   };
@@ -1968,7 +1972,7 @@ setAuthMode('login');
     const wasAlive=!!target?.alive,beforeHp=Number(target?.hp)||0;
     originalDamage(target,amount,source,charge,stun,slow,chargeOverride,impactMeta,reportOnline);
     if(holdFinal){game.enemies=originalList;game.enemy=originalList.find(z=>z.alive)||originalList[0]||null;if(wasAlive&&!target.alive&&!game.ended)handleZombieWaveClear();}
-    if(source?.heroId==='bolt'&&source!==target&&charge&&wasAlive&&(Number(target?.hp)||0)<beforeHp){source.boltHitCount=Math.min(30,(Number(source.boltHitCount)||0)+1);source.ultCharge=Math.min(source.ultMax,source.boltHitCount);if(game)updateHUD();}
+    if(source?.heroId==='bolt'&&source!==target&&charge&&wasAlive&&(Number(target?.hp)||0)<beforeHp){const bonus=game?.mode==='zombie'&&zombieHasPerk('charge')?1.3:1;source.boltHitCount=Math.min(30,(Number(source.boltHitCount)||0)+bonus);source.ultCharge=Math.min(source.ultMax,source.boltHitCount);if(game)updateHUD();}
   };
   const originalUseUltimate=useUltimate;
   useUltimate=function(actor,dir){
@@ -1984,64 +1988,22 @@ setAuthMode('login');
     if(actor.isPlayer)showToast(`볼트 전기파! 피해 ${hitDamage} · 범위 ${Math.round(radius)} · ${count}명 적중`);updateHUD();return true;
   };
 
-  // Bolt uses the same hold-drag targeting state, distance mapping and release flow as Ellie's ultimate.
-  const oldBeginInputGesture=beginInputGesture;
-  beginInputGesture=function(kind,source,pointerId=null,x=0,y=0,element=null){
-    if(kind==='attack'&&game?.player?.heroId==='bolt'){
-      if(!game||game.ended)return;
-      if(element&&pointerId!==null)element.setPointerCapture?.(pointerId);
-      inputGesture={kind,source,pointerId,startX:x,startY:y,dir:null,dragged:false,boltPlace:true,hasTarget:false,boltPoint:null};
-      $('#touch-attack')?.classList.add('aiming');
-      game.boltAimPoint=null;game.ellieAimPoint=null;game.aimPreview=null;
-      if(source==='touch')aimSource='touch';
-      return;
+
+  const originalBoltAutoAim=autoAim;
+  autoAim=function(actor=game?.player){
+    if(actor?.heroId==='bolt'&&actor.isPlayer&&game){
+      const nearest=(game.enemies||[game.enemy]).filter(enemy=>enemy?.alive).sort((a,b)=>Math.hypot(a.x-actor.x,a.y-actor.y)-Math.hypot(b.x-actor.x,b.y-actor.y))[0];
+      if(nearest)return vecNorm(nearest.x-actor.x,nearest.y-actor.y);
     }
-    return oldBeginInputGesture(kind,source,pointerId,x,y,element);
+    return originalBoltAutoAim(actor);
   };
-  const oldMoveInputGesture=moveInputGesture;
+
+  // Bolt mobile attack is a simple tap: the dedicated pointer handler below auto-aims on press.
+  // Keep touch movement from changing Bolt's target or creating an Ellie's-style drag preview.
+  const previousBoltMoveInputGesture=moveInputGesture;
   moveInputGesture=function(e){
-    const g=inputGesture;
-    if(g?.boltPlace&&g.source==='touch'&&g.pointerId===e.pointerId&&game){
-      const button=$('#touch-attack'),rect=button?.getBoundingClientRect();
-      if(!rect||!game.player){g.hasTarget=false;g.boltPoint=null;game.boltAimPoint=null;game.ellieAimPoint=null;return;}
-      const dx=e.clientX-g.startX,dy=e.clientY-g.startY,len=Math.hypot(dx,dy);
-      if(len>10)g.dragged=true;
-      if(!g.dragged)return;
-      // This is the same mapping used by Ellie's ultimate targeting.
-      const dir=vecNorm(dx,dy),maxDrag=Math.max(48,Math.min(120,Math.min(rect.width,rect.height)*1.5));
-      const reach=BOLT_BASIC_RANGE*Math.min(1,Math.max(.12,len/maxDrag));
-      const point={x:clamp(game.player.x+dir.x*reach,ARENA.min+8,ARENA.max-8),y:clamp(game.player.y+dir.y*reach,ARENA.min+8,ARENA.max-8)};
-      g.hasTarget=true;g.boltPoint=point;g.dir=dir;
-      game.boltAimPoint=point;game.ellieAimPoint=point;game.player.facing=dir;aimSource='touch';
-      return;
-    }
-    return oldMoveInputGesture(e);
-  };
-  // The base button registered its original move handler before this wrapper existed.
-  // Capture pointermove here so Bolt's shared placement handler updates the marker live.
-  $('#touch-attack')?.addEventListener('pointermove',e=>{if(game?.player?.heroId==='bolt')moveInputGesture(e);},true);
-  // Capture the final finger position before the normal button release handler completes the gesture.
-  $('#touch-attack')?.addEventListener('pointerup',e=>{if(game?.player?.heroId==='bolt')moveInputGesture(e);},true);
-  const oldCancelInputGesture=cancelInputGesture;
-  cancelInputGesture=function(pointerId=null){
-    const prior=inputGesture;oldCancelInputGesture(pointerId);
-    if(prior?.boltPlace&&game){game.boltAimPoint=null;game.ellieAimPoint=null;$('#touch-attack')?.classList.remove('aiming');}
-  };
-  const oldFinishInputGesture=finishInputGesture;
-  finishInputGesture=function(pointerId=null){
-    const g=inputGesture;
-    if(g?.boltPlace&&game&&(pointerId===null||g.pointerId===pointerId)){
-      inputGesture=null;$('#touch-attack')?.classList.remove('aiming');game.aimPreview=null;
-      if(g.hasTarget&&g.boltPoint){
-        const dir=g.dir||vecNorm(g.boltPoint.x-game.player.x,g.boltPoint.y-game.player.y);
-        fireBasic(game.player,dir,g.boltPoint);
-      }else if(g.source==='gamepad'&&g.dir){
-        const pt={x:clamp(game.player.x+g.dir.x*BOLT_BASIC_RANGE,ARENA.min+8,ARENA.max-8),y:clamp(game.player.y+g.dir.y*BOLT_BASIC_RANGE,ARENA.min+8,ARENA.max-8)};
-        fireBasic(game.player,g.dir,pt);
-      }
-      game.boltAimPoint=null;game.ellieAimPoint=null;return;
-    }
-    return oldFinishInputGesture(pointerId);
+    if(inputGesture?.kind==='attack'&&inputGesture.source==='touch'&&game?.player?.heroId==='bolt')return;
+    return previousBoltMoveInputGesture(e);
   };
 
   // Zombie waves are built from ordinary fighter objects so the existing hit, projectile,
@@ -2054,7 +2016,7 @@ setAuthMode('login');
     for(let i=specs.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[specs[i],specs[j]]=[specs[j],specs[i]];}
     game.enemies=specs.map((spec,i)=>{const pos=zombieSpawnPoint(),z=createFighter('shooter',false,pos.x,pos.y,{maxHp:spec.hp,isBoss:spec.kind==='boss',name:spec.kind==='normal'?'일반좀비':spec.kind==='steel'?'강철좀비':spec.kind==='ranged'?'원거리좀비':'좀비보스'});z.isZombie=true;z.zombieKind=spec.kind;z.heroId='zombie-'+spec.kind;z.name=spec.kind==='normal'?'일반좀비':spec.kind==='steel'?'강철좀비':spec.kind==='ranged'?'원거리좀비':'좀비보스';z.hp=z.maxHp=spec.hp;z.speed=spec.speed;z.r=spec.r;z.meleeDamage=spec.damage;z.attackCd=.6+Math.random()*.8;z.isBoss=spec.kind==='boss';z.bossRegenCheck=10;z.bossRegenTime=0;z.bossRegenTick=1;z.bossCannonTimer=5;z.bossVolleyLeft=0;z.bossVolleyTimer=0;z.facing=vecNorm(game.player.x-z.x,game.player.y-z.y);z.side=Math.random()<.5?-1:1;return z;});
     game.enemy=game.enemies[0];game.zombieWave=wave;game.zombieIntermission=0;game.zombieClearedWave=0;game.simLabel=`좀비모드 · ${wave}웨이브`;$('#game-mode-label').textContent=game.simLabel;$('#enemy-hud-name').textContent=`좀비 ${game.enemies.length}마리`;
-    game.effects.push({type:'zombie-wave-start',x:450,y:450,time:.8,max:.8});updateHUD();
+    game.effects.push({type:'zombie-wave-start',x:(ARENA.min+ARENA.max)/2,y:(ARENA.min+ARENA.max)/2,time:.8,max:.8});updateHUD();
   }
   function handleZombieWaveClear(){
     if(!game||game.mode!=='zombie'||game.zombieIntermission>0||game.zombieClearedWave===game.zombieWave||game.ended)return;
@@ -2090,7 +2052,7 @@ setAuthMode('login');
       z.x=clamp(z.x,ARENA.min+z.r,ARENA.max-z.r);z.y=clamp(z.y,ARENA.min+z.r,ARENA.max-z.r);
     }
   }
-  function updateBoltStrikes(dt){if(!game)return;game.boltStrikes=game.boltStrikes||[];for(let i=game.boltStrikes.length-1;i>=0;i--){const strike=game.boltStrikes[i];strike.time-=dt;if(strike.time<=0){const targets=strike.owner?.isPlayer?(game.enemies||[game.enemy]):[game.player];for(const target of targets){if(!target?.alive)continue;if(Math.hypot(target.x-strike.x,target.y-strike.y)<=strike.r+target.r){damage(target,6,strike.owner,true,0,0,null,{kind:'bolt-lightning'});game.effects.push({type:'bolt-lightning-hit',x:target.x,y:target.y,time:.42,max:.42});}}game.boltImpactEffects=game.boltImpactEffects||[];game.boltImpactEffects.push({x:strike.x,y:strike.y,time:.34,max:.34});game.boltStrikes.splice(i,1);game.boltPulses=game.boltPulses||[];game.boltPulses.push({x:strike.x,y:strike.y,r:48,time:.4,max:.4});}}
+  function updateBoltStrikes(dt){if(!game)return;game.boltStrikes=game.boltStrikes||[];for(let i=game.boltStrikes.length-1;i>=0;i--){const strike=game.boltStrikes[i];strike.time-=dt;if(strike.time<=0){const targets=strike.owner?.isPlayer?(game.enemies||[game.enemy]):[game.player];for(const target of targets){if(!target?.alive)continue;if(Math.hypot(target.x-strike.x,target.y-strike.y)<=strike.r+target.r){damage(target,6,strike.owner,true,0,0,null,{kind:'bolt-lightning',basicAttack:true});game.effects.push({type:'bolt-lightning-hit',x:target.x,y:target.y,time:.42,max:.42});}}game.boltImpactEffects=game.boltImpactEffects||[];game.boltImpactEffects.push({x:strike.x,y:strike.y,time:.34,max:.34});game.boltStrikes.splice(i,1);game.boltPulses=game.boltPulses||[];game.boltPulses.push({x:strike.x,y:strike.y,r:48,time:.4,max:.4});}}
     if(game.boltPulses){for(let i=game.boltPulses.length-1;i>=0;i--){game.boltPulses[i].time-=dt;if(game.boltPulses[i].time<=0)game.boltPulses.splice(i,1);}}
     if(game.boltImpactEffects){for(let i=game.boltImpactEffects.length-1;i>=0;i--){game.boltImpactEffects[i].time-=dt;if(game.boltImpactEffects[i].time<=0)game.boltImpactEffects.splice(i,1);}}
   }
@@ -2102,7 +2064,7 @@ setAuthMode('login');
   const originalStartMatch=startMatch;
   startMatch=function(mode,onlineInfo=null,towerFloor=null){
     if(mode!=='zombie'){ARENA.max=852;return originalStartMatch(mode,onlineInfo,towerFloor);}
-    ARENA.max=852;originalStartMatch('ai');if(!game)return;game.mode='zombie';ARENA.max=ZOMBIE_ARENA_MAX;game.player.x=450;game.player.y=450;game.player.vx=0;game.player.vy=0;game.cameraX=0;game.cameraY=0;game.onlineInfo=null;game.time=999999;game.bossIntro=0;game.zombieWave=1;game.zombieHighestCleared=0;game.zombieRewardPending=0;game.zombieIntermission=0;game.zombieRestTimer=0;game.boltStrikes=[];game.boltPulses=[];game.player.boltHitCount=0;game.player.ultCharge=0;spawnZombieWave(1);game.simLabel='좀비모드 · 1웨이브';$('#game-mode-label').textContent=game.simLabel;if(game.player.heroId==='bolt')$('#game-tip').textContent='볼트: 엘리 궁 조준처럼 공격 버튼을 누른 채 끌어 원하는 곳을 지정해. 사거리 안의 위치에 0.5초 뒤 피해 6 번개가 떨어져. 5회 명중으로 360° 번개파가 충전되고, 추가 명중마다 범위와 피해가 증가해.';$('#enemy-hud-name').textContent='일반좀비';if(game.player.heroId==='bolt')$('#touch-ult').textContent='번개파';$('#ult-key-label').textContent=game.player.heroId==='bolt'?'E 즉시 사용':$('#ult-key-label').textContent;updateHUD();
+    ARENA.max=852;originalStartMatch('ai');if(!game)return;game.mode='zombie';ARENA.max=ZOMBIE_ARENA_MAX;startRandomGameTrack('zombie');const zombieWorldCenter=(ARENA.min+ZOMBIE_ARENA_MAX)/2;game.player.x=zombieWorldCenter;game.player.y=zombieWorldCenter;game.player.vx=0;game.player.vy=0;game.cameraX=0;game.cameraY=0;game.onlineInfo=null;game.time=999999;game.bossIntro=0;game.zombieWave=1;game.zombieHighestCleared=0;game.zombieRewardPending=0;game.zombieIntermission=0;game.zombieRestTimer=0;game.zombiePerks=[];game.zombieCardPicking=false;game.zombieUndyingUsed=false;game.zombieDoubleCoinNext=false;game.zombieShadowClone={active:false,time:0,cooldown:10,damageTimer:.6};game.boltStrikes=[];game.boltPulses=[];game.boltAimPoint=null;game.ellieAimPoint=null;game.player.boltHitCount=0;game.player.ultCharge=0;game.player.ammo=3;game.player.maxAmmo=3;game.player.reloadTimer=0;game.player.reloadInterval=game.player.heroId==='bolt'?2.0:game.player.reloadInterval;spawnZombieWave(1);game.simLabel='좀비모드 · 1웨이브';$('#game-mode-label').textContent=game.simLabel;if(game.player.heroId==='bolt')$('#game-tip').textContent='볼트: 모바일은 일반 공격 버튼을 누르면 가까운 좀비를 자동 조준해. 3발 탄약 · 0.5초 예고 후 번개 피해 6 · 사거리 엘리 궁극기의 1.4배. 5회 명중으로 번개파가 충전돼.';$('#enemy-hud-name').textContent='일반좀비';if(game.player.heroId==='bolt')$('#touch-ult').textContent='번개파';$('#ult-key-label').textContent=game.player.heroId==='bolt'?'E 즉시 사용':$('#ult-key-label').textContent;updateHUD();
   };
 
   // Keep the normal update engine for the player, projectiles and effects. Only zombie
@@ -2133,12 +2095,7 @@ setAuthMode('login');
   const originalDrawGame=drawGame;
   drawGame=function(t){
     originalDrawGame(t);if(!game)return;ctx.save();if(game.mode==='zombie'){ctx.beginPath();ctx.rect(ARENA.min,ARENA.min,804,804);ctx.clip();ctx.translate(-(game.cameraX||0),-(game.cameraY||0));}
-    // Bolt uses Ellie's placement-style preview: full reach circle plus a movable landing marker.
-    if(game.player?.heroId==='bolt'&&(inputGesture?.boltPlace||game.boltAimPoint)){
-      const p=game.player,pt=game.boltAimPoint||inputGesture?.boltPoint;
-      ctx.globalAlpha=.72;ctx.strokeStyle='#ffe27a';ctx.fillStyle='#ffe27a0d';ctx.lineWidth=3;ctx.setLineDash([8,7]);ctx.beginPath();ctx.arc(p.x,p.y,BOLT_BASIC_RANGE,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.setLineDash([]);
-      if(pt){ctx.globalAlpha=.95;ctx.strokeStyle='#fff2a1';ctx.fillStyle='#ffe45a24';ctx.shadowColor='#ffe45a';ctx.shadowBlur=18;ctx.lineWidth=3;ctx.beginPath();ctx.arc(pt.x,pt.y,40,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.shadowBlur=0;ctx.fillStyle='#fff6ad';ctx.font='900 22px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('⚡',pt.x,pt.y);}
-    }
+    // Bolt uses instant mobile auto-aim; no dragged targeting preview is shown.
     for(const strike of (game.boltStrikes||[])){
       ctx.globalAlpha=.65+.25*Math.sin(t*18);ctx.strokeStyle='#ffe76b';ctx.fillStyle='#ffe45a18';ctx.lineWidth=3;ctx.setLineDash([7,6]);ctx.beginPath();ctx.arc(strike.x,strike.y,strike.r*(.88+.12*Math.sin(t*15)),0,Math.PI*2);ctx.fill();ctx.stroke();ctx.setLineDash([]);ctx.fillStyle='#fff5a0';ctx.font='900 22px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('⚡',strike.x,strike.y);
       ctx.font='900 12px system-ui';ctx.fillStyle='#fff8c9';ctx.fillText(Math.max(0,strike.time).toFixed(1),strike.x,strike.y-28);
@@ -2187,6 +2144,280 @@ setAuthMode('login');
   // remain intact and a zombie rematch cannot fall through to the regular AI mode.
   $('#ai-zombie-btn')?.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();startMatch('zombie');},true);
   $('#result-rematch-btn')?.addEventListener('click',e=>{if(game?.mode==='zombie'){e.preventDefault();e.stopImmediatePropagation();stopGame();startMatch('zombie');}},true);
+
+
+  // ---------------- Zombie mode: wave perks, combat modifiers and off-screen cues ----------------
+  const ZOMBIE_PERK_CARDS=[
+    {id:'burn',title:'화염 탄환',icon:'🔥',desc:'일반 공격 적중 시 3초 화상. 초당 추가 피해 3.'},
+    {id:'chain',title:'연쇄 번개',icon:'⚡',desc:'일반 공격 적중 시 주변 좀비 최대 2마리에게 피해 50%의 번개가 튀어.'},
+    {id:'explosion',title:'폭발 탄환',icon:'💥',desc:'좀비 처치 시 폭발이 발생해 주변 좀비에게 피해 5.'},
+    {id:'critical',title:'치명적인 조준',icon:'🎯',desc:'일반 공격 피해량 20% 증가.'},
+    {id:'heart',title:'생명의 심장',icon:'❤️',desc:'웨이브가 끝날 때마다 최대 체력의 15% 회복.'},
+    {id:'armor',title:'강철 방어막',icon:'🛡️',desc:'좀비에게 받는 피해 15% 감소.'},
+    {id:'ghost',title:'유령의 발걸음',icon:'👻',desc:'이동속도 20% 증가.'},
+    {id:'undying',title:'불사의 계약',icon:'♾️',desc:'한 판에 한 번, 쓰러질 피해를 받으면 체력 30%로 부활.'},
+    {id:'charge',title:'궁극의 충전',icon:'🔋',desc:'궁극기 충전 속도 30% 증가.'},
+    {id:'shadow',title:'그림자 분신',icon:'🌑',desc:'10초 뒤 분신 등장. 10초 동안 주변 좀비를 공격하고, 이후 10초 재사용 대기.'},
+    {id:'luck',title:'행운의 상자',icon:'🎁',desc:'다음 웨이브 클리어 코인 보상을 2배로 획득.'}
+  ];
+
+  function zombieHasPerk(id){return !!game?.zombiePerks?.includes(id)}
+
+  function ensureZombiePerkOverlay(){
+    let el=document.getElementById('zombie-perk-overlay');
+    if(el)return el;
+    const style=document.createElement('style');
+    style.id='zombie-perk-style';
+    style.textContent=`
+      #zombie-perk-overlay{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;padding:18px;background:#050b17dd;backdrop-filter:blur(7px)}
+      #zombie-perk-overlay.active{display:flex}
+      #zombie-perk-panel{width:min(720px,96vw);padding:22px;border:1px solid #7c99bd66;border-radius:22px;background:linear-gradient(145deg,#1c2b47,#101a2e);box-shadow:0 24px 80px #000a;color:#f3f7ff;text-align:center}
+      #zombie-perk-panel h2{margin:0 0 7px;font-size:clamp(21px,4vw,30px);color:#fff0a1}
+      #zombie-perk-panel p{margin:0 0 17px;color:#bfcee5;font-size:14px}
+      #zombie-perk-choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+      .zombie-perk-choice{min-height:165px;padding:17px 14px;border:1px solid #6984aa;border-radius:16px;background:linear-gradient(150deg,#263d5d,#17263d);color:#fff;text-align:left;cursor:pointer;transition:transform .12s,border-color .12s,background .12s}
+      .zombie-perk-choice:active{transform:scale(.98)}.zombie-perk-choice:hover{border-color:#ffe58a;background:linear-gradient(150deg,#354e72,#1c304a)}
+      .zombie-perk-choice .perk-icon{font-size:30px;display:block;margin-bottom:8px}
+      .zombie-perk-choice strong{display:block;font-size:17px;margin-bottom:7px;color:#fff0a1}
+      .zombie-perk-choice small{display:block;font-size:13px;line-height:1.5;color:#d1def1}
+      @media(max-width:520px){#zombie-perk-panel{padding:15px}#zombie-perk-choices{gap:9px}.zombie-perk-choice{min-height:175px;padding:12px 10px}.zombie-perk-choice strong{font-size:15px}.zombie-perk-choice small{font-size:12px}}
+    `;
+    document.head.appendChild(style);
+    el=document.createElement('div');el.id='zombie-perk-overlay';
+    el.innerHTML='<section id="zombie-perk-panel"><h2>웨이브 보상 선택!</h2><p>버프 카드 두 장 중 하나를 선택해. 이미 획득한 카드는 다시 나오지 않아.</p><div id="zombie-perk-choices"></div></section>';
+    document.body.appendChild(el);
+    return el;
+  }
+
+  function applyZombiePerk(id){
+    if(!game||game.mode!=='zombie'||zombieHasPerk(id))return;
+    game.zombiePerks=game.zombiePerks||[];game.zombiePerks.push(id);
+    const p=game.player;
+    if(id==='ghost'){p.speed=(Number(p.speed)||235)*1.2;p.zombieSpeedBoosted=true;}
+    if(id==='undying')game.zombieUndyingUsed=false;
+    if(id==='luck')game.zombieDoubleCoinNext=true;
+    if(id==='shadow')game.zombieShadowClone={active:false,time:0,cooldown:10,damageTimer:.5};
+    const card=ZOMBIE_PERK_CARDS.find(c=>c.id===id);
+    showToast(`${card?.title||'버프'} 획득!`);
+    updateHUD();
+  }
+
+  function showZombiePerkChoice(){
+    if(!game||game.mode!=='zombie')return;
+    const owned=new Set(game.zombiePerks||[]);
+    const choices=ZOMBIE_PERK_CARDS.filter(c=>!owned.has(c.id));
+    if(!choices.length){game.zombieCardPicking=false;return;}
+    for(let i=choices.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[choices[i],choices[j]]=[choices[j],choices[i]];}
+    const picked=choices.slice(0,2),overlay=ensureZombiePerkOverlay(),list=overlay.querySelector('#zombie-perk-choices');
+    list.replaceChildren();
+    for(const card of picked){
+      const button=document.createElement('button');button.type='button';button.className='zombie-perk-choice';
+      const icon=document.createElement('span');icon.className='perk-icon';icon.textContent=card.icon;
+      const title=document.createElement('strong');title.textContent=card.title;
+      const desc=document.createElement('small');desc.textContent=card.desc;
+      button.append(icon,title,desc);
+      button.addEventListener('click',()=>{
+        if(!game||game.mode!=='zombie'||!game.zombieCardPicking)return;
+        applyZombiePerk(card.id);game.zombieCardPicking=false;overlay.classList.remove('active');
+        showToast(`${card.title} 선택 완료 · 다음 웨이브까지 휴식`);
+        updateHUD();
+      },{once:true});
+      list.appendChild(button);
+    }
+    overlay.classList.add('active');
+  }
+
+  const previousZombieWaveClearForCards=handleZombieWaveClear;
+  handleZombieWaveClear=function(){
+    const before=game?.zombieWave||0,alreadyCleared=game?.zombieClearedWave===before;
+    previousZombieWaveClear();
+    if(!game||game.mode!=='zombie'||alreadyCleared||game.zombieClearedWave!==before||before%5!==0)return;
+    if((game.zombiePerks||[]).length>=ZOMBIE_PERK_CARDS.length)return;
+    game.zombieCardPicking=true;
+    showZombiePerkChoice();
+  };
+
+  const previousZombieUpdateForCards=updateZombieEnemies;
+  updateZombieEnemies=function(dt){
+    if(game?.mode==='zombie'&&game.zombieCardPicking)return;
+    previousZombieUpdateForCards(dt);
+    if(!game||game.mode!=='zombie'||game.ended)return;
+    // Fire damage-over-time from the Flame Rounds card.
+    if(zombieHasPerk('burn')){
+      for(const z of (game.enemies||[])){
+        if(!z.alive||!(z.burnTime>0))continue;
+        z.burnTime=Math.max(0,z.burnTime-dt);z.burnTick=(z.burnTick??1)-dt;
+        while(z.burnTick<=0&&z.burnTime>=0&&z.alive){damage(z,3,game.player,false,0,0,null,{kind:'zombie-burn',periodic:true});z.burnTick+=1;}
+      }
+    }
+    // Shadow clone: 10 seconds active, then 10 seconds of cooldown.
+    if(zombieHasPerk('shadow')){
+      const clone=game.zombieShadowClone||(game.zombieShadowClone={active:false,time:0,cooldown:10,damageTimer:.5});
+      if(!clone.active){clone.cooldown-=dt;if(clone.cooldown<=0){clone.active=true;clone.time=10;clone.damageTimer=.35;clone.x=game.player.x-34;clone.y=game.player.y+28;game.effects.push({type:'zombie-shadow-enter',x:clone.x,y:clone.y,time:.5,max:.5});}}
+      if(clone.active){
+        clone.time-=dt;clone.damageTimer-=dt;
+        clone.x=game.player.x-34;clone.y=game.player.y+28;
+        if(clone.damageTimer<=0){
+          const nearby=(game.enemies||[]).filter(z=>z.alive&&Math.hypot(z.x-clone.x,z.y-clone.y)<=190).sort((a,b)=>Math.hypot(a.x-clone.x,a.y-clone.y)-Math.hypot(b.x-clone.x,b.y-clone.y)).slice(0,2);
+          for(const z of nearby){damage(z,8,game.player,false,0,0,null,{kind:'shadow-clone',periodic:true});game.effects.push({type:'zombie-shadow-hit',x:z.x,y:z.y,time:.35,max:.35});}
+          clone.damageTimer=1;
+        }
+        if(clone.time<=0){clone.active=false;clone.cooldown=10;game.effects.push({type:'zombie-shadow-exit',x:clone.x,y:clone.y,time:.45,max:.45});}
+      }
+    }
+  };
+
+  // Keep the sixth/eleventh etc. wave's zombie damage increased by 10% after each ten cleared waves.
+  const previousZombieSpawnForScaling=spawnZombieWave;
+  spawnZombieWave=function(wave){
+    previousZombieSpawnForScaling(wave);
+    if(game?.mode==='zombie'){
+      const scale=1+Math.floor((Math.max(1,Number(wave)||1)-1)/10)*.1;
+      for(const z of (game.enemies||[]))z.damageScale=scale;
+    }
+  };
+
+  // Card effects are applied only to zombie-mode damage. Existing AI/Tower damage is untouched.
+  const previousDamageForZombiePerks=damage;
+  damage=function(target,amount,source,charge=true,stun=0,slow=0,chargeOverride=null,impactMeta=null,reportOnline=true){
+    const inZombie=game?.mode==='zombie',isZombieTarget=inZombie&&target?.isZombie;
+    let finalAmount=Number(amount)||0;
+    if(inZombie&&source?.isZombie){finalAmount*=Number(source.damageScale)||1;if(target===game.player&&zombieHasPerk('armor'))finalAmount*=.85;}
+    const basicHit=inZombie&&target?.isZombie&&source===game.player&&!impactMeta?.periodic&&!impactMeta?.chain&&!impactMeta?.explosion&&(!!impactMeta?.basicAttack||!!source.zombieBasicHitActive||(Number(source.zombieBasicTagUntil)||0)>performance.now());
+    if(basicHit&&zombieHasPerk('critical'))finalAmount*=1.2;
+    if(inZombie&&target===game.player&&source?.isZombie&&zombieHasPerk('undying')&&!game.zombieUndyingUsed&&finalAmount>=target.hp){
+      game.zombieUndyingUsed=true;target.hp=Math.max(1,target.maxHp*.3);target.invulnTime=Math.max(target.invulnTime||0,.8);
+      game.effects.push({type:'damage',x:target.x,y:target.y-34,text:'불사의 계약!',time:1,max:1,color:'#d6c6ff'});updateHUD();return;
+    }
+    const wasAlive=!!target?.alive,beforeHp=Number(target?.hp)||0;
+    previousDamageForZombiePerks(target,finalAmount,source,charge,stun,slow,chargeOverride,impactMeta,reportOnline);
+    if(!inZombie||!isZombieTarget||!wasAlive||!source?.isPlayer||source!==game.player||beforeHp<=Number(target.hp))return;
+    // Flame Rounds leave a three-second burn; each tick deals three damage.
+    if(basicHit&&zombieHasPerk('burn')){target.burnTime=3;target.burnTick=1;game.effects.push({type:'zombie-burn',x:target.x,y:target.y,time:.55,max:.55});}
+    // Chain Lightning jumps to up to two nearby zombies for half the triggering hit damage.
+    if(basicHit&&zombieHasPerk('chain')&&!impactMeta?.chain){
+      const neighbors=(game.enemies||[]).filter(z=>z.alive&&z!==target&&Math.hypot(z.x-target.x,z.y-target.y)<=155).sort((a,b)=>Math.hypot(a.x-target.x,a.y-target.y)-Math.hypot(b.x-target.x,b.y-target.y)).slice(0,2);
+      for(const z of neighbors){previousDamageForZombiePerks(z,Math.max(1,finalAmount*.5),source,false,0,0,null,{kind:'chain-lightning',chain:true},false);game.effects.push({type:'zombie-chain',x:target.x,y:target.y,toX:z.x,toY:z.y,time:.28,max:.28});}
+    }
+    // Explosive Rounds detonate when a zombie is killed.
+    if(target.hp<=0&&zombieHasPerk('explosion')&&source===game.player){
+      const neighbors=(game.enemies||[]).filter(z=>z.alive&&z!==target&&Math.hypot(z.x-target.x,z.y-target.y)<=112);
+      for(const z of neighbors){previousDamageForZombiePerks(z,5,source,false,0,0,null,{kind:'zombie-death-explosion',explosion:true},false);game.effects.push({type:'zombie-explosion',x:z.x,y:z.y,time:.32,max:.32});}
+      game.effects.push({type:'zombie-explosion',x:target.x,y:target.y,time:.48,max:.48});
+    }
+  };
+
+  // Normal projectiles created by the player's basic attack carry a card-effect marker.
+  const previousFireBasicForCards=fireBasic;
+  fireBasic=function(attacker,dir,aimPoint=null){
+    if(game?.mode==='zombie'&&game.zombieCardPicking)return;
+    if(game?.mode!=='zombie'||attacker!==game.player)return previousFireBasicForCards(attacker,dir,aimPoint);
+    const projectileStart=game.projectiles.length,strikeStart=(game.boltStrikes||[]).length;
+    attacker.zombieBasicHitActive=true;attacker.zombieBasicTagUntil=performance.now()+1300;
+    try{return previousFireBasicForCards(attacker,dir,aimPoint);}
+    finally{
+      attacker.zombieBasicHitActive=false;
+      for(const pr of game.projectiles.slice(projectileStart))if(pr.owner===attacker)pr.zombieBasic=true;
+      for(const strike of (game.boltStrikes||[]).slice(strikeStart))strike.basicAttack=true;
+    }
+  };
+
+  // Bolt's mobile attack button is tap-to-auto-aim; prevent the original target-phase drag handler from overriding it.
+  $('#touch-attack')?.addEventListener('pointermove',e=>{
+    if(game?.player?.heroId==='bolt'&&inputGesture?.kind==='attack'&&inputGesture?.source==='touch')e.stopImmediatePropagation();
+  },true);
+
+  // Freeze the whole zombie battle while the player is choosing one of the two cards.
+  const previousUpdateForCardPause=updateGame;
+  updateGame=function(dt){if(game?.mode==='zombie'&&game.zombieCardPicking)return;return previousUpdateForCardPause(dt);};
+
+  // Subsequent burst bullets (multi-shot basic attacks) inherit the basic-attack marker.
+  const previousBurstSpawnForCards=spawnBurstShot;
+  spawnBurstShot=function(attacker){
+    const before=game?.projectiles?.length||0;previousBurstSpawnForCards(attacker);
+    if(game?.mode==='zombie'&&attacker===game.player&&(Number(attacker.zombieBasicTagUntil)||0)>performance.now()){
+      for(const pr of game.projectiles.slice(before))if(pr.owner===attacker)pr.zombieBasic=true;
+    }
+  };
+
+  // A queued basic-attack marker must never leak into an ultimate.
+  const previousUltimateForCards=useUltimate;
+  useUltimate=function(actor,...args){if(game?.mode==='zombie'&&game.zombieCardPicking)return false;if(game?.mode==='zombie'&&actor===game.player)actor.zombieBasicTagUntil=0;return previousUltimateForCards(actor,...args);};
+
+  // Ultimate charge bonus: apply +30% to charge gained by basic attack hits.
+  const previousChargeGainForCards=ultimateChargeGainForHit;
+  ultimateChargeGainForHit=function(actor,...args){const value=previousChargeGainForCards(actor,...args);return game?.mode==='zombie'&&actor===game.player&&zombieHasPerk('charge')?value*1.3:value;};
+
+  // Apply the one-time Lucky Box reward multiplier to the very next cleared wave.
+  const previousWaveClearForReward=handleZombieWaveClear;
+  // The first wrapper already opens cards; this second wrapper adjusts its pending reward without touching other modes.
+  // Reward is changed at the moment of clear by tracking the pending amount before the original operation.
+  handleZombieWaveClear=function(){
+    const wasZombie=game?.mode==='zombie',before=Number(game?.zombieRewardPending)||0,wasLucky=!!game?.zombieDoubleCoinNext;
+    previousWaveClearForReward();
+    if(wasZombie&&wasLucky&&game&&game.zombieRewardPending>before){
+      const delta=game.zombieRewardPending-before;game.zombieRewardPending+=delta;game.zombieDoubleCoinNext=false;
+      showToast(`행운의 상자 발동! 다음 웨이브 보상 ${delta*2}코인`);
+    }
+  };
+
+  // Healing Heart grants 15% of the current maximum HP at every wave clear.
+  const previousWaveClearForHealing=handleZombieWaveClear;
+  handleZombieWaveClear=function(){
+    const before=Number(game?.zombieHighestCleared)||0;previousWaveClearForHealing();
+    if(game?.mode==='zombie'&&zombieHasPerk('heart')&&(Number(game.zombieHighestCleared)||0)>before){
+      const p=game.player,gain=p.maxHp*.15;p.hp=Math.min(p.maxHp,p.hp+gain);
+      game.effects.push({type:'damage',x:p.x,y:p.y-48,text:`+${Math.round(gain)} HP`,time:.9,max:.9,color:'#ff9bb8'});updateHUD();
+    }
+  };
+
+  // Render off-screen zombie arrows in screen coordinates, independent of the world camera transform.
+  const previousDrawGameForZombieArrows=drawGame;
+  drawGame=function(t){
+    previousDrawGameForZombieArrows(t);
+    if(!game||game.mode!=='zombie')return;
+    const camera={x:game.cameraX||0,y:game.cameraY||0},left=ARENA.min+22,right=ARENA.min+782,top=ARENA.min+22,bottom=ARENA.min+782,cx=450,cy=450;
+    ctx.save();ctx.setTransform(1,0,0,1,0,0);
+    for(const z of (game.enemies||[])){
+      if(!z.alive)continue;
+      const sx=z.x-camera.x,sy=z.y-camera.y;
+      if(sx>=left&&sx<=right&&sy>=top&&sy<=bottom)continue;
+      const dx=sx-cx,dy=sy-cy;if(Math.hypot(dx,dy)<1)continue;
+      const tx=Math.abs(dx)<.001?Infinity:(dx>0?(right-cx)/dx:(left-cx)/dx);
+      const ty=Math.abs(dy)<.001?Infinity:(dy>0?(bottom-cy)/dy:(top-cy)/dy);
+      const k=Math.max(0,Math.min(tx,ty));const ax=cx+dx*k,ay=cy+dy*k,angle=Math.atan2(dy,dx);
+      ctx.save();ctx.translate(ax,ay);ctx.rotate(angle);ctx.fillStyle=z.zombieKind==='boss'?'#d8a6ff':z.zombieKind==='steel'?'#d8e6ef':z.zombieKind==='ranged'?'#dbef8d':'#9ff18c';ctx.shadowColor=ctx.fillStyle;ctx.shadowBlur=10;
+      ctx.beginPath();ctx.moveTo(15,0);ctx.lineTo(-9,-9);ctx.lineTo(-5,0);ctx.lineTo(-9,9);ctx.closePath();ctx.fill();ctx.shadowBlur=0;ctx.restore();
+      ctx.fillStyle='#f3f7ff';ctx.font='800 11px system-ui';ctx.textAlign='center';ctx.fillText(String(Math.round(Math.hypot(z.x-game.player.x,z.y-game.player.y))),ax,ay+24);
+    }
+    // Brief visual cues for card effects.
+    for(const fx of (game.effects||[])){
+      if(fx.type==='zombie-chain'&&fx.toX!=null){ctx.save();ctx.globalAlpha=Math.max(0,fx.time/fx.max);ctx.strokeStyle='#8ff7ff';ctx.shadowColor='#48ddff';ctx.shadowBlur=13;ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(fx.x-camera.x,fx.y-camera.y);ctx.lineTo(fx.toX-camera.x,fx.toY-camera.y);ctx.stroke();ctx.restore();}
+      if(fx.type==='zombie-explosion'){ctx.save();ctx.globalAlpha=Math.max(0,fx.time/fx.max);ctx.strokeStyle='#ffbf64';ctx.fillStyle='#ff8a3620';ctx.shadowColor='#ff792f';ctx.shadowBlur=18;ctx.lineWidth=4;ctx.beginPath();ctx.arc(fx.x-camera.x,fx.y-camera.y,14+(1-fx.time/fx.max)*38,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.restore();}
+      if(fx.type==='zombie-burn'){ctx.save();ctx.globalAlpha=Math.max(0,fx.time/fx.max);ctx.fillStyle='#ff9a43';ctx.shadowColor='#ff4d24';ctx.shadowBlur=14;ctx.beginPath();ctx.arc(fx.x-camera.x,fx.y-camera.y,8,0,Math.PI*2);ctx.fill();ctx.restore();}
+    }
+    // A small translucent echo shows the Shadow Clone beside the player.
+    const clone=game.zombieShadowClone;
+    if(clone?.active){const x=clone.x-camera.x,y=clone.y-camera.y;ctx.globalAlpha=.48;ctx.fillStyle='#b6c9ff';ctx.shadowColor='#b7caff';ctx.shadowBlur=15;ctx.beginPath();ctx.arc(x,y,17,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;ctx.fillStyle='#293a62';ctx.beginPath();ctx.arc(x-5,y-2,2.5,0,Math.PI*2);ctx.arc(x+5,y-2,2.5,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;}
+    ctx.restore();
+  };
+
+  // Bolt mobile: pressing the basic-attack button immediately fires one auto-aimed strike.
+  // This deliberately bypasses the normal drag-to-aim gesture used by other fighters.
+  const boltTapAttackButton=$('#touch-attack');
+  boltTapAttackButton?.addEventListener('pointerdown',e=>{
+    if(game?.player?.heroId!=='bolt')return;
+    e.preventDefault();e.stopImmediatePropagation();
+    if(!game||game.ended||game.zombieCardPicking)return;
+    const direction=autoAim(game.player);
+    game.player.facing=direction;
+    fireBasic(game.player,direction);
+  },true);
+
+  // Remove any visible perk prompt on leaving/restarting zombie mode.
+  const previousStopZombiePerks=stopGame;
+  stopGame=function(...args){document.getElementById('zombie-perk-overlay')?.classList.remove('active');previousStopZombiePerks(...args);};
+
 })();
 </script>
 
