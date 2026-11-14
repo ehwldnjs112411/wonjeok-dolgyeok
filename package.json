@@ -1,8 +1,8 @@
 {
   "name": "wonjeok-dolgyeok",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "private": true,
-  "description": "원격돌격 티모 전사 추가, 원 도감 상세설명 UI 및 온라인 중독·버섯 효과",
+  "description": "원격돌격 좀비모드 무한 웨이브 및 신규 전사 볼트 추가",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
