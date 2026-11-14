@@ -1961,19 +1961,47 @@ setAuthMode('login');
   beginInputGesture=function(kind,source,pointerId=null,x=0,y=0,element=null){
     if(kind==='attack'&&game?.player?.heroId==='bolt'){
       if(!game||game.ended)return;if(element&&pointerId!==null)element.setPointerCapture?.(pointerId);
-      inputGesture={kind,source,pointerId,startX:x,startY:y,dir:null,dragged:false,boltPlace:true,boltPoint:null};
+      const target=opponentOf(game.player),aim=autoAim(game.player);
+      const fallback=target&&target.alive&&Math.hypot(target.x-game.player.x,target.y-game.player.y)<=BOLT_BASIC_RANGE
+        ?{x:target.x,y:target.y}
+        :{x:game.player.x+aim.x*BOLT_BASIC_RANGE,y:game.player.y+aim.y*BOLT_BASIC_RANGE};
+      inputGesture={kind,source,pointerId,startX:x,startY:y,dir:aim,dragged:false,boltPlace:true,boltPoint:fallback,hasTarget:true};
+      game.boltAimPoint=fallback;
       if(source==='touch')aimSource='touch';$('#touch-attack')?.classList.add('aiming');return;
     }
     return oldBeginInputGesture(kind,source,pointerId,x,y,element);
   };
   const oldMoveInputGesture=moveInputGesture;
   moveInputGesture=function(e){
-    const g=inputGesture;if(g?.boltPlace&&g.source==='touch'&&g.pointerId===e.pointerId&&game){const dx=e.clientX-g.startX,dy=e.clientY-g.startY,len=Math.hypot(dx,dy);if(len>10)g.dragged=true;if(g.dragged){const dir=vecNorm(dx,dy),maxDrag=115,reach=BOLT_BASIC_RANGE*Math.min(1,Math.max(.1,len/maxDrag));g.dir=dir;g.boltPoint={x:clamp(game.player.x+dir.x*reach,ARENA.min+10,ARENA.max-10),y:clamp(game.player.y+dir.y*reach,ARENA.min+10,ARENA.max-10)};game.boltAimPoint=g.boltPoint;game.player.facing=dir;game.aimPreview={kind:'attack',dir};}return;}
+    const g=inputGesture;
+    if(g?.boltPlace&&g.source==='touch'&&g.pointerId===e.pointerId&&game){
+      const button=$('#touch-attack'),rect=button?.getBoundingClientRect();
+      const dx=e.clientX-g.startX,dy=e.clientY-g.startY,len=Math.hypot(dx,dy);
+      if(len>10)g.dragged=true;
+      if(g.dragged){
+        const dir=vecNorm(dx,dy),maxDrag=Math.max(48,Math.min(120,Math.min(rect?.width||76,rect?.height||76)*1.5));
+        const reach=BOLT_BASIC_RANGE*Math.min(1,Math.max(.12,len/maxDrag));
+        g.dir=dir;g.boltPoint={x:clamp(game.player.x+dir.x*reach,ARENA.min+10,ARENA.max-10),y:clamp(game.player.y+dir.y*reach,ARENA.min+10,ARENA.max-10)};
+        g.hasTarget=true;game.boltAimPoint=g.boltPoint;game.player.facing=dir;aimSource='touch';
+      }
+      return;
+    }
     return oldMoveInputGesture(e);
   };
+  // Capture the final touch position before the original pointerup handler releases the gesture.
+  $('#touch-attack')?.addEventListener('pointerup',e=>{if(game?.player?.heroId==='bolt')moveInputGesture(e);},true);
+  const oldCancelInputGesture=cancelInputGesture;
+  cancelInputGesture=function(pointerId=null){const prior=inputGesture;oldCancelInputGesture(pointerId);if(prior?.boltPlace&&game)game.boltAimPoint=null;};
   const oldFinishInputGesture=finishInputGesture;
   finishInputGesture=function(pointerId=null){
-    const g=inputGesture;if(g?.boltPlace&&game&&(pointerId===null||g.pointerId===pointerId)){inputGesture=null;$('#touch-attack')?.classList.remove('aiming');game.aimPreview=null;const dir=g.dragged&&g.dir?g.dir:autoAim();let pt=g.boltPoint;if(!pt){const target=opponentOf(game.player);pt=target&&target.alive&&Math.hypot(target.x-game.player.x,target.y-game.player.y)<=BOLT_BASIC_RANGE?{x:target.x,y:target.y}:{x:game.player.x+dir.x*BOLT_BASIC_RANGE,y:game.player.y+dir.y*BOLT_BASIC_RANGE};}fireBasic(game.player,dir,pt);game.boltAimPoint=null;return;}
+    const g=inputGesture;
+    if(g?.boltPlace&&game&&(pointerId===null||g.pointerId===pointerId)){
+      inputGesture=null;$('#touch-attack')?.classList.remove('aiming');game.aimPreview=null;
+      const dir=g.dragged&&g.dir?g.dir:(g.dir||autoAim());
+      let pt=g.boltPoint;
+      if(!pt){const target=opponentOf(game.player);pt=target&&target.alive&&Math.hypot(target.x-game.player.x,target.y-game.player.y)<=BOLT_BASIC_RANGE?{x:target.x,y:target.y}:{x:game.player.x+dir.x*BOLT_BASIC_RANGE,y:game.player.y+dir.y*BOLT_BASIC_RANGE};}
+      fireBasic(game.player,dir,pt);game.boltAimPoint=null;return;
+    }
     return oldFinishInputGesture(pointerId);
   };
 
@@ -1999,7 +2027,12 @@ setAuthMode('login');
     if(!game||game.mode!=='zombie'||game.ended)return;
     if(game.zombieIntermission>0){game.zombieIntermission=Math.max(0,game.zombieIntermission-dt);if(game.zombieIntermission===0){spawnZombieWave(game.zombieWave+1);}return;}
     const p=game.player;if(!p?.alive)return;
-    for(const z of game.enemies){if(!z.alive)continue;z.flash=Math.max(0,(z.flash||0)-dt);z.stunTime=Math.max(0,(z.stunTime||0)-dt);z.slowTime=Math.max(0,(z.slowTime||0)-dt);z.attackCd=Math.max(0,(z.attackCd||0)-dt);if(z.stunTime>0)continue;
+    for(const z of game.enemies){if(!z.alive)continue;z.flash=Math.max(0,(z.flash||0)-dt);z.stunTime=Math.max(0,(z.stunTime||0)-dt);z.slowTime=Math.max(0,(z.slowTime||0)-dt);z.attackCd=Math.max(0,(z.attackCd||0)-dt);
+      // Match the regular fighter status order: pulls move the zombie toward their source.
+      if(z.pull){const source=z.pull.source||p,dx=source.x-z.x,dy=source.y-z.y,d=Math.hypot(dx,dy),dir=vecNorm(dx,dy),step=Math.min(d,620*dt);z.x=clamp(z.x+dir.x*step,ARENA.min+z.r,ARENA.max-z.r);z.y=clamp(z.y+dir.y*step,ARENA.min+z.r,ARENA.max-z.r);z.pull.time-=dt;if(z.pull.time<=0||d<45)z.pull=null;continue;}
+      // Gumi's charm is not a normal stun: the charmed zombie approaches Gumi for 1 second.
+      if(z.charmTime>0){z.charmTime=Math.max(0,z.charmTime-dt);const charmer=z.charmOwner;if(charmer?.alive){const toward=vecNorm(charmer.x-z.x,charmer.y-z.y);z.x=clamp(z.x+toward.x*z.speed*.28*dt,ARENA.min+z.r,ARENA.max-z.r);z.y=clamp(z.y+toward.y*z.speed*.28*dt,ARENA.min+z.r,ARENA.max-z.r);z.facing=toward;}if(z.charmTime<=0){z.charmOwner=null;z.stunTime=0;}else continue;}
+      if(z.stunTime>0)continue;
       const dx=p.x-z.x,dy=p.y-z.y,d=Math.max(1,Math.hypot(dx,dy)),dir=vecNorm(dx,dy);z.facing=dir;
       if(z.zombieKind==='boss'){
         if(d>260){z.x+=dir.x*z.speed*dt;z.y+=dir.y*z.speed*dt;}
@@ -2018,8 +2051,9 @@ setAuthMode('login');
       z.x=clamp(z.x,ARENA.min+z.r,ARENA.max-z.r);z.y=clamp(z.y,ARENA.min+z.r,ARENA.max-z.r);
     }
   }
-  function updateBoltStrikes(dt){if(!game?.boltStrikes)return;for(let i=game.boltStrikes.length-1;i>=0;i--){const strike=game.boltStrikes[i];strike.time-=dt;if(strike.time<=0){const targets=strike.owner?.isPlayer?(game.enemies||[game.enemy]):[game.player];for(const target of targets){if(!target?.alive)continue;if(Math.hypot(target.x-strike.x,target.y-strike.y)<=strike.r+target.r){damage(target,6,strike.owner,true,0,0,null,{kind:'bolt-lightning'});game.effects.push({type:'bolt-lightning-hit',x:target.x,y:target.y,time:.42,max:.42});}}game.boltStrikes.splice(i,1);game.boltPulses=game.boltPulses||[];game.boltPulses.push({x:strike.x,y:strike.y,r:48,time:.4,max:.4});}}
+  function updateBoltStrikes(dt){if(!game)return;game.boltStrikes=game.boltStrikes||[];for(let i=game.boltStrikes.length-1;i>=0;i--){const strike=game.boltStrikes[i];strike.time-=dt;if(strike.time<=0){const targets=strike.owner?.isPlayer?(game.enemies||[game.enemy]):[game.player];for(const target of targets){if(!target?.alive)continue;if(Math.hypot(target.x-strike.x,target.y-strike.y)<=strike.r+target.r){damage(target,6,strike.owner,true,0,0,null,{kind:'bolt-lightning'});game.effects.push({type:'bolt-lightning-hit',x:target.x,y:target.y,time:.42,max:.42});}}game.boltImpactEffects=game.boltImpactEffects||[];game.boltImpactEffects.push({x:strike.x,y:strike.y,time:.34,max:.34});game.boltStrikes.splice(i,1);game.boltPulses=game.boltPulses||[];game.boltPulses.push({x:strike.x,y:strike.y,r:48,time:.4,max:.4});}}
     if(game.boltPulses){for(let i=game.boltPulses.length-1;i>=0;i--){game.boltPulses[i].time-=dt;if(game.boltPulses[i].time<=0)game.boltPulses.splice(i,1);}}
+    if(game.boltImpactEffects){for(let i=game.boltImpactEffects.length-1;i>=0;i--){game.boltImpactEffects[i].time-=dt;if(game.boltImpactEffects[i].time<=0)game.boltImpactEffects.splice(i,1);}}
   }
 
   // Build zombie mode by reusing the existing battle setup, then replacing its single
@@ -2034,7 +2068,8 @@ setAuthMode('login');
   // brains replace the regular AI update loop; the clock is unlimited in this mode.
   const originalUpdateGame=updateGame;
   updateGame=function(dt){
-    if(game?.mode==='zombie'){const before=game.enemies; if(!game.zombieIntermission)updateZombieEnemies(dt);updateBoltStrikes(dt);}
+    if(game?.mode==='zombie'&&!game.zombieIntermission)updateZombieEnemies(dt);
+    updateBoltStrikes(dt);
     return originalUpdateGame(dt);
   };
   // The legacy update loop needs two tiny mode guards to avoid a timer and normal AI logic.
@@ -2045,7 +2080,7 @@ setAuthMode('login');
     .replace("if(game.mode!=='user'){\n  for(const enemy of enemies)", "if(game.mode!=='user'&&game.mode!=='zombie'){\n  for(const enemy of enemies)");
   if(patchedUpdateSource!==originalUpdateSource){
     const patchedUpdate=Function('return ('+patchedUpdateSource+')')();
-    updateGame=function(dt){if(game?.mode==='zombie'&&game.countdown<=0&&game.fightTimer<=0&&game.bossIntro<=0){updateZombieEnemies(dt);updateBoltStrikes(dt);}return patchedUpdate(dt);};
+    updateGame=function(dt){if(game?.mode==='zombie'&&game.countdown<=0&&game.fightTimer<=0&&game.bossIntro<=0)updateZombieEnemies(dt);updateBoltStrikes(dt);return patchedUpdate(dt);};
   }
 
   // Bolt and zombies get their own canvas art; other fighter rendering stays unchanged.
@@ -2055,7 +2090,26 @@ setAuthMode('login');
     ctx.fillStyle=boss?'#ffcf72':steel?'#f7fcff':'#dfff9b';ctx.shadowColor=boss?'#ffaf54':'#d9ff9a';ctx.shadowBlur=8;ctx.beginPath();ctx.ellipse(f.x-r*.3,f.y-r*.12,r*.13,r*.19,0,0,Math.PI*2);ctx.ellipse(f.x+r*.3,f.y-r*.12,r*.13,r*.19,0,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;ctx.fillStyle='#1b2530';ctx.beginPath();ctx.arc(f.x-r*.3,f.y-r*.1,r*.06,0,Math.PI*2);ctx.arc(f.x+r*.3,f.y-r*.1,r*.06,0,Math.PI*2);ctx.fill();if(f.zombieKind==='ranged'){ctx.strokeStyle='#a8d76e';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(f.x+r*.4,f.y+r*.42);ctx.lineTo(f.x+r*1.15,f.y+r*.75);ctx.stroke();}if(boss&&f.bossRegenTime>0){ctx.strokeStyle='#76efa6';ctx.shadowColor='#4aff9a';ctx.shadowBlur=14;ctx.lineWidth=3;ctx.beginPath();ctx.arc(f.x,f.y,r+8+Math.sin(t*10)*2,0,Math.PI*2);ctx.stroke();}if(boss&&f.bossVolleyLeft>0){ctx.strokeStyle='#ffbd66';ctx.lineWidth=3;ctx.setLineDash([5,5]);ctx.beginPath();ctx.arc(f.x,f.y,r+14,0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);}ctx.fillStyle='#071020dd';ctx.fillRect(f.x-38,f.y-r-18,76,5);ctx.fillStyle=boss?'#bd87f2':steel?'#c0d6e4':'#7edb78';ctx.fillRect(f.x-37,f.y-r-17,74*Math.max(0,f.hp/f.maxHp),3);ctx.font=`900 ${boss?14:11}px system-ui`;ctx.textAlign='center';ctx.fillStyle=boss?'#f0d9ff':'#dbf3d0';ctx.fillText(f.name,f.x,f.y-r-24);if(f.flash>0){ctx.strokeStyle='#fff';ctx.lineWidth=3;ctx.beginPath();ctx.arc(f.x,f.y,r+3,0,Math.PI*2);ctx.stroke();}ctx.restore();}
   drawFighter=function(f,t){if(f?.isZombie){if(f.alive)drawZombieFighter(f,t);return;}if(f?.heroId==='bolt'){if(f.alive)drawBoltFighter(f,t);return;}return originalDrawFighter(f,t);};
   const originalDrawGame=drawGame;
-  drawGame=function(t){originalDrawGame(t);if(!game)return;ctx.save();for(const strike of (game.boltStrikes||[])){const phase=1-strike.time/strike.max;ctx.globalAlpha=.65+.25*Math.sin(t*18);ctx.strokeStyle='#ffe76b';ctx.fillStyle='#ffe45a18';ctx.lineWidth=3;ctx.setLineDash([7,6]);ctx.beginPath();ctx.arc(strike.x,strike.y,strike.r*(.88+.12*Math.sin(t*15)),0,Math.PI*2);ctx.fill();ctx.stroke();ctx.setLineDash([]);ctx.fillStyle='#fff5a0';ctx.font='900 12px system-ui';ctx.textAlign='center';ctx.fillText('⚡',strike.x,strike.y+4);}for(const pulse of (game.boltPulses||[])){ctx.globalAlpha=Math.max(0,pulse.time/pulse.max);ctx.strokeStyle='#fff17c';ctx.shadowColor='#ffe65e';ctx.shadowBlur=20;ctx.lineWidth=5;ctx.beginPath();ctx.arc(pulse.x,pulse.y,pulse.r*(1-pulse.time/pulse.max*.12),0,Math.PI*2);ctx.stroke();}ctx.restore();};
+  drawGame=function(t){
+    originalDrawGame(t);if(!game)return;ctx.save();
+    // Bolt's normal attack uses Ellie's placement-style range preview on mobile.
+    if(game.player?.heroId==='bolt'&&(inputGesture?.boltPlace||game.boltAimPoint)){
+      const p=game.player,pt=game.boltAimPoint||inputGesture?.boltPoint;
+      ctx.globalAlpha=.72;ctx.strokeStyle='#ffe27a';ctx.fillStyle='#ffe27a0d';ctx.lineWidth=3;ctx.setLineDash([10,8]);ctx.beginPath();ctx.arc(p.x,p.y,BOLT_BASIC_RANGE,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.setLineDash([]);
+      if(pt){ctx.globalAlpha=.95;ctx.strokeStyle='#fff2a1';ctx.fillStyle='#ffe45a24';ctx.shadowColor='#ffe45a';ctx.shadowBlur=18;ctx.lineWidth=3;ctx.beginPath();ctx.arc(pt.x,pt.y,40,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.shadowBlur=0;ctx.fillStyle='#fff6ad';ctx.font='900 22px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('⚡',pt.x,pt.y);}
+    }
+    for(const strike of (game.boltStrikes||[])){
+      ctx.globalAlpha=.65+.25*Math.sin(t*18);ctx.strokeStyle='#ffe76b';ctx.fillStyle='#ffe45a18';ctx.lineWidth=3;ctx.setLineDash([7,6]);ctx.beginPath();ctx.arc(strike.x,strike.y,strike.r*(.88+.12*Math.sin(t*15)),0,Math.PI*2);ctx.fill();ctx.stroke();ctx.setLineDash([]);ctx.fillStyle='#fff5a0';ctx.font='900 22px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('⚡',strike.x,strike.y);
+      ctx.font='900 12px system-ui';ctx.fillStyle='#fff8c9';ctx.fillText(Math.max(0,strike.time).toFixed(1),strike.x,strike.y-28);
+    }
+    for(const hit of (game.boltImpactEffects||[])){
+      const q=1-hit.time/hit.max,fade=Math.max(0,hit.time/hit.max);ctx.save();ctx.globalAlpha=fade;ctx.strokeStyle='#fff7a8';ctx.fillStyle='#fff7a8';ctx.shadowColor='#ffe43b';ctx.shadowBlur=30;ctx.lineWidth=8;
+      ctx.beginPath();ctx.moveTo(hit.x-4,ARENA.min+2);ctx.lineTo(hit.x+8,hit.y-55);ctx.lineTo(hit.x-7,hit.y-35);ctx.lineTo(hit.x+3,hit.y-12);ctx.lineTo(hit.x,hit.y+4);ctx.lineTo(hit.x+7,hit.y-10);ctx.lineTo(hit.x+14,hit.y+5);ctx.lineTo(hit.x+2,hit.y-30);ctx.lineTo(hit.x+13,hit.y-52);ctx.lineTo(hit.x-4,ARENA.min+2);ctx.stroke();
+      ctx.lineWidth=3;ctx.beginPath();ctx.ellipse(hit.x,hit.y,14+q*34,7+q*18,0,0,Math.PI*2);ctx.stroke();ctx.restore();
+    }
+    for(const pulse of (game.boltPulses||[])){ctx.globalAlpha=Math.max(0,pulse.time/pulse.max);ctx.strokeStyle='#fff17c';ctx.shadowColor='#ffe65e';ctx.shadowBlur=20;ctx.lineWidth=5;ctx.beginPath();ctx.arc(pulse.x,pulse.y,pulse.r*(1-pulse.time/pulse.max*.12),0,Math.PI*2);ctx.stroke();}
+    ctx.restore();
+  };
 
   const originalUpdateHUD=updateHUD;
   updateHUD=function(){originalUpdateHUD();if(!game||game.mode!=='zombie')return;const alive=(game.enemies||[]).filter(z=>z.alive);$('#enemy-hud-name').textContent=`좀비 ${alive.length}/${game.enemies.length}마리 · ${game.zombieWave}웨이브`;$('#enemy-hp-text').textContent=alive.length?`${alive.length}마리 남음`:'웨이브 클리어';$('#enemy-hp-bar').style.width=alive.length?Math.max(0,alive.length/game.enemies.length*100)+'%':'0%';$('#timer-label').textContent=game.zombieIntermission>0?`휴식 ${Math.ceil(game.zombieIntermission)}초`:`WAVE ${game.zombieWave}`;$('#ult-charge-text').textContent=game.player.heroId==='bolt'?`${game.player.boltHitCount||0}회 명중 · 궁 ${game.player.ultCharge}/5`:`${game.player.ultCharge} / ${game.player.ultMax} 명중`;if(game.player.heroId==='bolt')$('#touch-ult').textContent='번개파';};
