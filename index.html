@@ -1085,7 +1085,7 @@ function endMatch(result,reason='ko',force=false){if(!game||(game.ended&&!force)
  if(isTower){if(win&&game.towerFloor===100){$('#result-description').textContent='축하합니다. 모든 층을 이겼습니다.';$('#trophy-change').textContent=(towerFirstClear?'+1000':'보상 수령 완료')+' 🪙';$('#result-rematch-btn').textContent='100층 완료';}else if(win&&game.towerFloor===50){$('#result-description').textContent='50층 클리어! 다음은 51층이야.';$('#trophy-change').textContent=(towerFirstClear?'+1000':'보상 수령 완료')+' 🪙';$('#result-rematch-btn').textContent='다음 층';}else if(win){$('#result-description').textContent=`${game.towerFloor}층 클리어! ${towerFirstClear?`원코인 ${towerReward}개를 받았어.`:'이미 받은 층 보상이야.'} 다음은 ${Math.min(100,game.towerFloor+1)}층이야.`;$('#trophy-change').textContent=towerFirstClear?`+${towerReward} 🪙`:'보상 수령 완료';$('#result-rematch-btn').textContent=game.towerFloor>=100?'탑 모드 완료':'다음 층';}else{$('#result-description').textContent=`${game.towerFloor}층에서 패배했어. 보상은 층을 처음 클리어했을 때 지급돼. 다시 도전해 봐!` ;$('#trophy-change').textContent='층 보상: 첫 클리어 시 지급';$('#result-rematch-btn').textContent='다시 도전';}}
  else{const milestoneText=trophyMilestones.length?` 트로피 보상으로 원코인 ${trophyRewardCoinTotal(trophyMilestones)}개 추가 지급! (${trophyMilestones.map(v=>v+'개').join(', ')} 달성)`:'';$('#result-description').textContent=(game.mode==='halloween'?(win?'할로윈 보스를 쓰러뜨렸어! 트로피 8개와 원코인 100개, 클리어 보상 사탕 1개를 받았어.':'할로윈 보스전에서 패배했어. 이벤트 보스전은 패배해도 트로피가 차감되지 않아.'):(reason==='time'?'시간 종료! 남은 체력 비율로 승부를 결정했어.':win?'상대를 쓰러뜨렸어! 트로피 8개와 원코인 100개를 받았어.':'아쉽게 패배했어. 트로피는 줄지만 원코인은 잃지 않아.'))+milestoneText;$('#trophy-change').textContent=(win?'+8':game.mode==='halloween'?'변동 없음':'−4')+' 🏆'+(win?'  · +100 🪙':'')+(trophyMilestones.length?' · +'+trophyRewardCoinTotal(trophyMilestones)+' 🪙':'');$('#result-rematch-btn').textContent='다시 대전';}
  $('#result-overlay').classList.remove('hidden');refreshMenu();renderTowerMenu();if(!(isTower&&win&&game.towerFloor===100))returnToMenuMusic();updateHUD();if(isTower&&win&&(game.towerFloor===50||game.towerFloor===100))showTowerStory(game.towerFloor)}
-function drawGame(t){if(!game)return;ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,900,900);const bg=ctx.createLinearGradient(0,0,900,900);bg.addColorStop(0,'#182744');bg.addColorStop(1,'#0c1426');ctx.fillStyle=bg;ctx.fillRect(0,0,900,900);ctx.save();if(game.mode==='zombie'){const camera=getZombieCameraOffset();game.cameraX=camera.x;game.cameraY=camera.y;ctx.beginPath();ctx.rect(ARENA.min,ARENA.min,804,804);ctx.clip();ctx.translate(-camera.x,-camera.y);}else{ctx.beginPath();ctx.rect(ARENA.min,ARENA.min,ARENA.max-ARENA.min,ARENA.max-ARENA.min);ctx.clip();}ctx.fillStyle='#101d33';ctx.fillRect(ARENA.min,ARENA.min,ARENA.max-ARENA.min,ARENA.max-ARENA.min);
+function drawGame(t){if(!game)return;ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,900,900);const bg=ctx.createLinearGradient(0,0,900,900);bg.addColorStop(0,'#182744');bg.addColorStop(1,'#0c1426');ctx.fillStyle=bg;ctx.fillRect(0,0,900,900);ctx.save();if(game.mode==='zombie'){const camera=window.getZombieCameraOffset();game.cameraX=camera.x;game.cameraY=camera.y;ctx.beginPath();ctx.rect(ARENA.min,ARENA.min,804,804);ctx.clip();ctx.translate(-camera.x,-camera.y);}else{ctx.beginPath();ctx.rect(ARENA.min,ARENA.min,ARENA.max-ARENA.min,ARENA.max-ARENA.min);ctx.clip();}ctx.fillStyle='#101d33';ctx.fillRect(ARENA.min,ARENA.min,ARENA.max-ARENA.min,ARENA.max-ARENA.min);
  ctx.strokeStyle='#31446655';ctx.lineWidth=1;for(let x=ARENA.min+32;x<ARENA.max;x+=32){ctx.beginPath();ctx.moveTo(x,ARENA.min);ctx.lineTo(x,ARENA.max);ctx.stroke()}for(let y=ARENA.min+32;y<ARENA.max;y+=32){ctx.beginPath();ctx.moveTo(ARENA.min,y);ctx.lineTo(ARENA.max,y);ctx.stroke()}
  ctx.strokeStyle='#56dce52a';ctx.lineWidth=2;for(let i=0;i<8;i++){const x=ARENA.min+16+i*106;ctx.beginPath();ctx.arc(x,ARENA.min+10,2,0,Math.PI*2);ctx.stroke()}
  // dotted center markings
@@ -1905,8 +1905,8 @@ setAuthMode('login');
 <script id="zombie-bolt-update">
 (()=>{
   // 볼트는 일반 전사와 같은 계정/도감/상점 흐름을 사용한다.
-  HEROES.bolt={id:'bolt',name:'볼트',hp:90,speed:235,r:22,ultMax:5,ultMode:'self',reloadInterval:2.0,short:'지정 위치 번개 낙하',basic:'엘리 궁극기 범위의 4배까지 위치를 조준해. 조준한 곳에 0.5초 예고 표시가 나온 뒤 번개가 내려쳐 피해 6을 줘. 적중할 때마다 궁극기가 충전돼.',ult:'일반 공격 5회 적중으로 충전. 자신을 중심으로 360° 전기파를 방출해. 기본 피해 4, 기본 범위는 엘리 궁극기의 절반이며 0.5초 기절시켜. 5회 초과 명중할 때마다 범위 10%와 피해 1이 증가해. 범위 증가는 최대 100%, 피해는 최대 10이야.',desc:'번개 마법사가 되고 싶은 귀염둥이.',unlock:'상점에서 원코인 1500개로 구매',unlockAt:-1,price:1500,currency:'coins'};
-  const BOLT_BASIC_RANGE=ELLIE_ULT_RANGE*4;
+  HEROES.bolt={id:'bolt',name:'볼트',hp:90,speed:235,r:22,ultMax:5,ultMode:'self',reloadInterval:2.0,short:'지정 위치 번개 낙하',basic:'기존보다 1.4배 넓어진 범위까지 원하는 위치를 조준해. 조준한 곳에 0.5초 예고 표시가 나온 뒤 번개가 내려쳐 피해 6을 줘. 적중할 때마다 궁극기가 충전돼.',ult:'일반 공격 5회 적중으로 충전. 자신을 중심으로 360° 전기파를 방출해. 기본 피해 4, 기본 범위는 엘리 궁극기의 절반이며 0.5초 기절시켜. 5회 초과 명중할 때마다 범위 10%와 피해 1이 증가해. 범위 증가는 최대 100%, 피해는 최대 10이야.',desc:'번개 마법사가 되고 싶은 귀염둥이.',unlock:'상점에서 원코인 1500개로 구매',unlockAt:-1,price:1500,currency:'coins'};
+  const BOLT_BASIC_RANGE=ELLIE_ULT_RANGE*4*1.4;
   const ZOMBIE_ARENA_MAX=ARENA.min+(ARENA.max-ARENA.min)*2;
   function getZombieCameraOffset(){
     if(!game||game.mode!=='zombie')return {x:0,y:0};
@@ -1916,6 +1916,8 @@ setAuthMode('login');
       y:clamp(p.y-450,0,Math.max(0,ARENA.max-852))
     };
   }
+  // drawGame() lives outside this update IIFE; expose the shared camera helper to it.
+  window.getZombieCameraOffset=getZombieCameraOffset;
   const originalCanvasPointFromEvent=canvasPointFromEvent;
   canvasPointFromEvent=function(e){
     const point=originalCanvasPointFromEvent(e);
@@ -1982,15 +1984,15 @@ setAuthMode('login');
     if(actor.isPlayer)showToast(`볼트 전기파! 피해 ${hitDamage} · 범위 ${Math.round(radius)} · ${count}명 적중`);updateHUD();return true;
   };
 
-  // Bolt's mobile basic attack uses the same hold-and-drag placement flow as Ellie's ultimate.
+  // Bolt uses the same hold-drag targeting state, distance mapping and release flow as Ellie's ultimate.
   const oldBeginInputGesture=beginInputGesture;
   beginInputGesture=function(kind,source,pointerId=null,x=0,y=0,element=null){
     if(kind==='attack'&&game?.player?.heroId==='bolt'){
       if(!game||game.ended)return;
       if(element&&pointerId!==null)element.setPointerCapture?.(pointerId);
       inputGesture={kind,source,pointerId,startX:x,startY:y,dir:null,dragged:false,boltPlace:true,hasTarget:false,boltPoint:null};
-      const button=$('#touch-attack');button?.classList.add('aiming');
-      game.boltAimPoint=null;game.ellieAimPoint=null;
+      $('#touch-attack')?.classList.add('aiming');
+      game.boltAimPoint=null;game.ellieAimPoint=null;game.aimPreview=null;
       if(source==='touch')aimSource='touch';
       return;
     }
@@ -2005,6 +2007,7 @@ setAuthMode('login');
       const dx=e.clientX-g.startX,dy=e.clientY-g.startY,len=Math.hypot(dx,dy);
       if(len>10)g.dragged=true;
       if(!g.dragged)return;
+      // This is the same mapping used by Ellie's ultimate targeting.
       const dir=vecNorm(dx,dy),maxDrag=Math.max(48,Math.min(120,Math.min(rect.width,rect.height)*1.5));
       const reach=BOLT_BASIC_RANGE*Math.min(1,Math.max(.12,len/maxDrag));
       const point={x:clamp(game.player.x+dir.x*reach,ARENA.min+8,ARENA.max-8),y:clamp(game.player.y+dir.y*reach,ARENA.min+8,ARENA.max-8)};
@@ -2014,22 +2017,27 @@ setAuthMode('login');
     }
     return oldMoveInputGesture(e);
   };
-  // Capture the final touch position before the registered release handler finishes the gesture.
+  // The base button registered its original move handler before this wrapper existed.
+  // Capture pointermove here so Bolt's shared placement handler updates the marker live.
+  $('#touch-attack')?.addEventListener('pointermove',e=>{if(game?.player?.heroId==='bolt')moveInputGesture(e);},true);
+  // Capture the final finger position before the normal button release handler completes the gesture.
   $('#touch-attack')?.addEventListener('pointerup',e=>{if(game?.player?.heroId==='bolt')moveInputGesture(e);},true);
   const oldCancelInputGesture=cancelInputGesture;
   cancelInputGesture=function(pointerId=null){
     const prior=inputGesture;oldCancelInputGesture(pointerId);
-    if(prior?.boltPlace&&game){game.boltAimPoint=null;game.ellieAimPoint=null;}
+    if(prior?.boltPlace&&game){game.boltAimPoint=null;game.ellieAimPoint=null;$('#touch-attack')?.classList.remove('aiming');}
   };
   const oldFinishInputGesture=finishInputGesture;
   finishInputGesture=function(pointerId=null){
     const g=inputGesture;
     if(g?.boltPlace&&game&&(pointerId===null||g.pointerId===pointerId)){
       inputGesture=null;$('#touch-attack')?.classList.remove('aiming');game.aimPreview=null;
-      const point=g.boltPoint;
-      if(g.hasTarget&&point){
-        const dir=g.dir||vecNorm(point.x-game.player.x,point.y-game.player.y);
-        fireBasic(game.player,dir,point);
+      if(g.hasTarget&&g.boltPoint){
+        const dir=g.dir||vecNorm(g.boltPoint.x-game.player.x,g.boltPoint.y-game.player.y);
+        fireBasic(game.player,dir,g.boltPoint);
+      }else if(g.source==='gamepad'&&g.dir){
+        const pt={x:clamp(game.player.x+g.dir.x*BOLT_BASIC_RANGE,ARENA.min+8,ARENA.max-8),y:clamp(game.player.y+g.dir.y*BOLT_BASIC_RANGE,ARENA.min+8,ARENA.max-8)};
+        fireBasic(game.player,g.dir,pt);
       }
       game.boltAimPoint=null;game.ellieAimPoint=null;return;
     }
@@ -2094,7 +2102,7 @@ setAuthMode('login');
   const originalStartMatch=startMatch;
   startMatch=function(mode,onlineInfo=null,towerFloor=null){
     if(mode!=='zombie'){ARENA.max=852;return originalStartMatch(mode,onlineInfo,towerFloor);}
-    ARENA.max=852;originalStartMatch('ai');if(!game)return;game.mode='zombie';ARENA.max=ZOMBIE_ARENA_MAX;game.cameraX=0;game.cameraY=0;game.onlineInfo=null;game.time=999999;game.bossIntro=0;game.zombieWave=1;game.zombieHighestCleared=0;game.zombieRewardPending=0;game.zombieIntermission=0;game.zombieRestTimer=0;game.boltStrikes=[];game.boltPulses=[];game.player.boltHitCount=0;game.player.ultCharge=0;spawnZombieWave(1);game.simLabel='좀비모드 · 1웨이브';$('#game-mode-label').textContent=game.simLabel;if(game.player.heroId==='bolt')$('#game-tip').textContent='볼트: 엘리 궁 조준처럼 공격 버튼을 누른 채 끌어 원하는 곳을 지정해. 사거리 안의 위치에 0.5초 뒤 피해 6 번개가 떨어져. 5회 명중으로 360° 번개파가 충전되고, 추가 명중마다 범위와 피해가 증가해.';$('#enemy-hud-name').textContent='일반좀비';if(game.player.heroId==='bolt')$('#touch-ult').textContent='번개파';$('#ult-key-label').textContent=game.player.heroId==='bolt'?'E 즉시 사용':$('#ult-key-label').textContent;updateHUD();
+    ARENA.max=852;originalStartMatch('ai');if(!game)return;game.mode='zombie';ARENA.max=ZOMBIE_ARENA_MAX;game.player.x=450;game.player.y=450;game.player.vx=0;game.player.vy=0;game.cameraX=0;game.cameraY=0;game.onlineInfo=null;game.time=999999;game.bossIntro=0;game.zombieWave=1;game.zombieHighestCleared=0;game.zombieRewardPending=0;game.zombieIntermission=0;game.zombieRestTimer=0;game.boltStrikes=[];game.boltPulses=[];game.player.boltHitCount=0;game.player.ultCharge=0;spawnZombieWave(1);game.simLabel='좀비모드 · 1웨이브';$('#game-mode-label').textContent=game.simLabel;if(game.player.heroId==='bolt')$('#game-tip').textContent='볼트: 엘리 궁 조준처럼 공격 버튼을 누른 채 끌어 원하는 곳을 지정해. 사거리 안의 위치에 0.5초 뒤 피해 6 번개가 떨어져. 5회 명중으로 360° 번개파가 충전되고, 추가 명중마다 범위와 피해가 증가해.';$('#enemy-hud-name').textContent='일반좀비';if(game.player.heroId==='bolt')$('#touch-ult').textContent='번개파';$('#ult-key-label').textContent=game.player.heroId==='bolt'?'E 즉시 사용':$('#ult-key-label').textContent;updateHUD();
   };
 
   // Keep the normal update engine for the player, projectiles and effects. Only zombie
@@ -2124,7 +2132,7 @@ setAuthMode('login');
   drawFighter=function(f,t){if(f?.isZombie){if(f.alive)drawZombieFighter(f,t);return;}if(f?.heroId==='bolt'){if(f.alive)drawBoltFighter(f,t);return;}return originalDrawFighter(f,t);};
   const originalDrawGame=drawGame;
   drawGame=function(t){
-    originalDrawGame(t);if(!game)return;ctx.save();if(game.mode==='zombie')ctx.translate(-(game.cameraX||0),-(game.cameraY||0));
+    originalDrawGame(t);if(!game)return;ctx.save();if(game.mode==='zombie'){ctx.beginPath();ctx.rect(ARENA.min,ARENA.min,804,804);ctx.clip();ctx.translate(-(game.cameraX||0),-(game.cameraY||0));}
     // Bolt uses Ellie's placement-style preview: full reach circle plus a movable landing marker.
     if(game.player?.heroId==='bolt'&&(inputGesture?.boltPlace||game.boltAimPoint)){
       const p=game.player,pt=game.boltAimPoint||inputGesture?.boltPoint;
