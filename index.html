@@ -877,7 +877,7 @@ function fireBasic(attacker,dir){if(!game||game.ended||!attacker.alive||attacker
 function ultimateChargeGainForHit(source,charge=true,chargeOverride=null){if(!source||!charge||(source.heroId==='hammer'&&source.buffTime>0)||(source.heroId==='adam'&&source.adamAwakenTime>0))return 0;const hasOverride=chargeOverride!==null&&chargeOverride!==undefined&&chargeOverride!==''&&Number.isFinite(Number(chargeOverride));const gain=hasOverride?Math.max(0,Number(chargeOverride)):(source.heroId==='adam'?7:source.heroId==='glover'?20:1);return Math.min(40,gain)}
 function addOnlineHitSpark(x,y,heroId='spider'){if(!game||game.mode!=='user')return;const palette={spider:'#aefaff',hammer:'#ffd37a',meto:'#a8ffd4',bujijik:'#c58a56',adam:'#ff536f',yure:'#ffe16a',joki:'#ff9edb',gumi:'#ff8bd0',sniff:'#ff9b37',kuro:'#a9e9ff',glover:'#ff906f',ellie:'#dff8ff',nova:'#9bffe9',bit:'#eaffaa',prma:'#d8c5ff',teemo:'#b8f36a'};game.effects.push({type:'online-hit-spark',x:clamp(Number(x)||0,0,900),y:clamp(Number(y)||0,0,900),time:.25,max:.25,color:palette[heroId]||'#fff'});}
 function applyPoisonStack(target,duration,source){if(!target||!target.alive)return;const seconds=Math.max(0,Math.min(10,Number(duration)||0));if(seconds<=0)return;let timers=Array.isArray(target.poisonStackTimers)?target.poisonStackTimers.filter(t=>Number(t)>0):[];if(!timers.length&&Number(target.poisonStacks)>0&&Number(target.poisonTime)>0)timers=Array(Math.max(1,Math.min(10,Math.floor(Number(target.poisonStacks)||1)))).fill(Number(target.poisonTime));if(timers.length<10)timers.push(seconds);else timers[timers.length-1]=Math.max(timers[timers.length-1],seconds);target.poisonStackTimers=timers;target.poisonStacks=timers.length;target.poisonTime=Math.max(...timers);if(source)target.poisonOwner=source;if(!Number.isFinite(target.poisonTick)||target.poisonTick<=0)target.poisonTick=1}
-function damage(target,amount,source,charge=true,stun=0,slow=0,chargeOverride=null,impactMeta=null,reportOnline=true){if(!target||!target.alive||game.ended||(target.invulnTime||0)>0)return;const taken=Math.max(0,amount*(target.buffTime>0?.7:1));target.hp=Math.max(0,target.hp-taken);target.flash=.15;if(slow>0)target.slowTime=Math.max(target.slowTime||0,Math.min(4,slow));if(taken>0){playHitSound();const away=source?vecNorm(target.x-source.x,target.y-source.y):vecNorm(Math.random()-.5,Math.random()-.5);game.effects.push({type:'blood-splatter',x:target.x,y:target.y,dir:away,time:.48,max:.48,particles:Array.from({length:18},(_,i)=>({a:Math.atan2(away.y,away.x)+(i-8.5)*.19+(Math.random()-.5)*.42,s:48+Math.random()*118,r:2.2+Math.random()*3.6,tail:5+Math.random()*9,bright:i%4===0}))});}if(taken>0)game.effects.push({type:'damage',x:target.x,y:target.y-25,text:'-'+Math.round(taken),time:.7,max:.7,color:'#ff7a91'});if(target.heroId==='glover'&&taken>0)target.ultCharge=Math.min(target.ultMax,target.ultCharge+5);if(target.heroId==='magnet'&&taken>0)target.ultCharge=Math.min(target.ultMax,target.ultCharge+5);if(source&&source!==target&&charge&&!(source.heroId==='hammer'&&source.buffTime>0)&&!(source.heroId==='adam'&&source.adamAwakenTime>0)){const chargeGain=ultimateChargeGainForHit(source,charge,chargeOverride);source.ultCharge=Math.min(source.ultMax,source.ultCharge+chargeGain);game.hitCount++;if(source.heroId==='adam')source.hp=Math.min(source.maxHp,source.hp+(source.adamAwakenTime>0?4:2))}else if(source?.heroId==='adam'&&source.adamAwakenTime>0&&taken>0){source.hp=Math.min(source.maxHp,source.hp+4)}if(source?.heroId==='nova'&&(source.novaCrystalTime||0)>0&&taken>0){source.hp=Math.min(source.maxHp,source.hp+4);game.effects.push({type:'damage',x:source.x,y:source.y-25,text:'+4',time:.65,max:.65,color:'#8fffe8'})}if(game.mode==='user'&&taken>0)addOnlineHitSpark(target.x,target.y,source?.heroId||'spider');if(impactMeta?.kind!=='poison-tick'&&game.mode==='user'&&target===game.enemy&&window.wonjeokSocket?.connected){const fallbackKind=source?.heroId==='adam'?'adam-punch':source?.heroId==='glover'?'glover-punch':source?.heroId==='hammer'?'hammer-strike':'hit';window.wonjeokSocket.emit('battle:damage',{amount:Math.max(0,Number(amount)||0),stun:Math.max(0,Math.min(2,Number(stun)||0)),slow:Math.max(0,Math.min(4,Number(slow)||0)),poison:impactMeta?.kind==='poison-tick'?0:Math.max(0,Math.min(10,Number(impactMeta?.poison)||0)),charm:Math.max(0,Math.min(2,Number(impactMeta?.charm)||0)),kind:String(impactMeta?.kind||fallbackKind),heroId:source?.heroId||'spider',skinId:source?.skinId||null,x:target.x,y:target.y,facing:source?.facing||{x:1,y:0}})}if(reportOnline&&game.mode==='user'&&target===game.player&&source?.isPlayer===false){reportOnlineImpact(target,source,{...(impactMeta||{}),amount:taken,stun,slow,poison:impactMeta?.poison||0,charm:impactMeta?.charm||0})}if(target.hp<=0){target.alive=false;game.effects.push({type:'explosion',x:target.x,y:target.y,time:1.05,max:1.05,r:target.r,color:(game.enemies||[game.enemy]).includes(target)?'#ffbd69':'#69e8ff'});const isPlayer=target===game.player;const enemies=(game.enemies||[game.enemy]);const allEnemiesDown=enemies.every(enemy=>!enemy.alive);if(isPlayer||allEnemiesDown){game.ended=true;game.finishing=true;game.finishTimer=1.05;game.finishResult=isPlayer?'lose':'win';game.finishReason='ko';mouse.down=false;mobile.attackHeld=false;game.ultArmed=false}}}
+function damage(target,amount,source,charge=true,stun=0,slow=0,chargeOverride=null,impactMeta=null,reportOnline=true){if(!target||!target.alive||game.ended||(target.invulnTime||0)>0)return;const taken=Math.max(0,amount*(target.buffTime>0?.7:1));target.hp=Math.max(0,target.hp-taken);target.flash=.15;if(slow>0)target.slowTime=Math.max(target.slowTime||0,Math.min(4,slow));if(taken>0){playHitSound();const away=source?vecNorm(target.x-source.x,target.y-source.y):vecNorm(Math.random()-.5,Math.random()-.5);game.effects.push({type:'blood-splatter',x:target.x,y:target.y,dir:away,time:.48,max:.48,particles:Array.from({length:18},(_,i)=>({a:Math.atan2(away.y,away.x)+(i-8.5)*.19+(Math.random()-.5)*.42,s:48+Math.random()*118,r:2.2+Math.random()*3.6,tail:5+Math.random()*9,bright:i%4===0}))});}if(taken>0)game.effects.push({type:'damage',x:target.x,y:target.y-25,text:'-'+Math.round(taken),time:.7,max:.7,color:'#ff7a91'});if(target.heroId==='glover'&&taken>0)target.ultCharge=Math.min(target.ultMax,target.ultCharge+5);if(target.heroId==='magnet'&&taken>0)target.ultCharge=Math.min(target.ultMax,target.ultCharge+5);if(source&&source!==target&&charge&&!(source.heroId==='hammer'&&source.buffTime>0)&&!(source.heroId==='adam'&&source.adamAwakenTime>0)){const chargeGain=ultimateChargeGainForHit(source,charge,chargeOverride);source.ultCharge=Math.min(source.ultMax,source.ultCharge+chargeGain);game.hitCount++;if(source.heroId==='adam')source.hp=Math.min(source.maxHp,source.hp+(source.adamAwakenTime>0?4:2))}else if(source?.heroId==='adam'&&source.adamAwakenTime>0&&taken>0){source.hp=Math.min(source.maxHp,source.hp+4)}if(source?.heroId==='nova'&&(source.novaCrystalTime||0)>0&&taken>0){source.hp=Math.min(source.maxHp,source.hp+4);game.effects.push({type:'damage',x:source.x,y:source.y-25,text:'+4',time:.65,max:.65,color:'#8fffe8'})}if(game.mode==='user'&&taken>0)addOnlineHitSpark(target.x,target.y,source?.heroId||'spider');if(impactMeta?.kind!=='poison-tick'&&game.mode==='user'&&target===game.enemy&&window.wonjeokSocket?.connected){const fallbackKind=source?.heroId==='adam'?'adam-punch':source?.heroId==='glover'?'glover-punch':source?.heroId==='hammer'?'hammer-strike':'hit';window.wonjeokSocket.emit('battle:damage',{amount:Math.max(0,Number(amount)||0),stun:Math.max(0,Math.min(2,Number(stun)||0)),slow:Math.max(0,Math.min(4,Number(slow)||0)),poison:impactMeta?.kind==='poison-tick'?0:Math.max(0,Math.min(10,Number(impactMeta?.poison)||0)),charm:Math.max(0,Math.min(2,Number(impactMeta?.charm)||0)),kind:String(impactMeta?.kind||fallbackKind),heroId:source?.heroId||'spider',skinId:source?.skinId||null,x:target.x,y:target.y,facing:source?.facing||{x:1,y:0}})}if(reportOnline&&game.mode==='user'&&target===game.player&&source?.isPlayer===false){reportOnlineImpact(target,source,{...(impactMeta||{}),amount:taken,stun,slow,poison:impactMeta?.poison||0,charm:impactMeta?.charm||0})}if(target.hp<=0){target.alive=false;game.effects.push({type:'explosion',x:target.x,y:target.y,time:1.05,max:1.05,r:target.r,color:(game.enemies||[game.enemy]).includes(target)?'#ffbd69':'#69e8ff'});const isPlayer=target===game.player;const enemies=(game.enemies||[game.enemy]);const allEnemiesDown=enemies.every(enemy=>!enemy.alive);if(isPlayer||(allEnemiesDown&&game.mode!=='zombie')){game.ended=true;game.finishing=true;game.finishTimer=1.05;game.finishResult=isPlayer?'lose':'win';game.finishReason='ko';mouse.down=false;mobile.attackHeld=false;game.ultArmed=false}}}
 function updateGloverDash(actor,dt){const dash=actor.gloverDash;if(!dash||!game)return;const step=Math.min(dash.speed*dt,dash.remaining),dir=dash.dir;const targets=actor.isPlayer?(game.enemies||[game.enemy]):[game.player];let collision=null,bestAlong=Infinity;for(const target of targets){if(!target?.alive||target.heroId==='kuro'&&(target.invulnTime||0)>0)continue;const dx=target.x-actor.x,dy=target.y-actor.y,along=dx*dir.x+dy*dir.y,lateral=Math.abs(dx*dir.y-dy*dir.x);if(along>=-actor.r*.25&&along<=step+actor.r+target.r&&lateral<target.r+actor.r*.58&&along<bestAlong){collision=target;bestAlong=along}}if(collision){const stop=Math.max(0,Math.min(step,bestAlong-(actor.r+collision.r)*.62));actor.x=clamp(actor.x+dir.x*stop,ARENA.min+actor.r,ARENA.max-actor.r);actor.y=clamp(actor.y+dir.y*stop,ARENA.min+actor.r,ARENA.max-actor.r);damage(collision,9,actor,false,0,0,null,{kind:'glover-dash'});collision.pull={source:{x:clamp(collision.x+dir.x*225,ARENA.min+collision.r,ARENA.max-collision.r),y:clamp(collision.y+dir.y*225,ARENA.min+collision.r,ARENA.max-collision.r)},time:.38,style:'glover-knock'};game.effects.push({type:'explosion',x:collision.x,y:collision.y,time:.46,max:.46,r:38,color:'#ff7543'});game.effects.push({type:'glover-dash',x:actor.x,y:actor.y,dir:{...dir},time:.2,max:.2});playGloverImpactSound();emitOnlineAttack(actor,{kind:'glover-dash',heroId:'glover',x:actor.x,y:actor.y,facing:dir,hit:true});actor.gloverDash=null;return}actor.x=clamp(actor.x+dir.x*step,ARENA.min+actor.r,ARENA.max-actor.r);actor.y=clamp(actor.y+dir.y*step,ARENA.min+actor.r,ARENA.max-actor.r);dash.remaining-=step;actor.gloverDashFxTimer-=dt;if(actor.gloverDashFxTimer<=0){game.effects.push({type:'glover-dash',x:actor.x,y:actor.y,dir:{...dir},time:.16,max:.16});actor.gloverDashFxTimer=.045}if(dash.remaining<=0||actor.x<=ARENA.min+actor.r+1||actor.x>=ARENA.max-actor.r-1||actor.y<=ARENA.min+actor.r+1||actor.y>=ARENA.max-actor.r-1)actor.gloverDash=null}
 
 function useUltimate(actor,dir){
@@ -1965,23 +1965,17 @@ setAuthMode('login');
   damage=function(target,amount,source,charge=true,stun=0,slow=0,chargeOverride=null,impactMeta=null,reportOnline=true){
     const zombieBattle=game?.mode==='zombie';
     const zombieTarget=zombieBattle&&target&&target!==game.player&&(game.enemies||[]).includes(target);
-    const aliveZombies=zombieBattle?(game.enemies||[]).filter(z=>z.alive):[];
-    const holdFinal=zombieTarget&&target.alive&&aliveZombies.length===1;
     const originalList=game?.enemies;
-    if(holdFinal)game.enemies=[...originalList,{alive:true,isWaveSentinel:true}];
     const wasAlive=!!target?.alive,beforeHp=Number(target?.hp)||0;
     originalDamage(target,amount,source,charge,stun,slow,chargeOverride,impactMeta,reportOnline);
     if(zombieTarget&&wasAlive&&!target.alive){
-      // The base combat damage routine ends a match as soon as every opponent is down.
-      // Zombie mode must instead clear the current wave and start its intermission.
-      if(originalList){game.enemies=originalList;game.enemy=originalList.find(z=>z.alive)||originalList[0]||null;}
-      const noLivingZombies=(originalList||[]).every(z=>!z?.alive);
-      if(noLivingZombies&&game.zombieClearedWave!==game.zombieWave){
+      // A zombie KO never ends the run. Clear only after the final living zombie is gone.
+      const alive=(originalList||[]).filter(z=>z?.isZombie&&z.alive&&Number(z.hp)>0);
+      game.enemy=alive[0]||(originalList||[]).find(z=>z?.isZombie)||null;
+      if(alive.length===0&&game.zombieClearedWave!==game.zombieWave){
         if(game.ended){game.ended=false;game.finishing=false;game.finishTimer=0;game.finishResult=null;game.finishReason=null;}
         handleZombieWaveClear();
       }
-    }else if(holdFinal&&originalList){
-      game.enemies=originalList;game.enemy=originalList.find(z=>z.alive)||originalList[0]||null;
     }
     if(source?.heroId==='bolt'&&source!==target&&charge&&wasAlive&&(Number(target?.hp)||0)<beforeHp){const bonus=game?.mode==='zombie'&&zombieHasPerk('charge')?1.3:1;source.boltHitCount=Math.min(30,(Number(source.boltHitCount)||0)+bonus);source.ultCharge=Math.min(source.ultMax,source.boltHitCount);if(game)updateHUD();}
   };
@@ -2443,44 +2437,52 @@ setAuthMode('login');
   },true);
 
 
-  // Final safety net: a normal match's last-enemy KO must not end zombie mode.
-  // Some damage paths can set game.ended before the regular wave-clear callback runs.
+  // Zombie mode can only end when the player is defeated. The RAF loop below calls
+  // this before its game.ended branch, so a stale regular-match result cannot freeze input.
   function recoverZombieWaveTransition(){
     if(!game||game.mode!=='zombie'||!game.player?.alive||game.zombieCardPicking)return;
-    const wave=Math.max(1,Number(game.zombieWave)||1);
-    const zombies=Array.from(new Set([...(game.enemies||[]),game.enemy].filter(f=>f?.isZombie)));
-    if(!zombies.length)return;
-    const activeZombie=zombies.find(z=>z.alive)||null;
-    if(activeZombie)game.enemy=activeZombie;
-    // A stale ordinary-match win can leave one zombie alive while locking all input.
-    // Zombie mode only ends when the player is defeated, so reopen this false end state.
-    if(activeZombie&&(game.ended||game.finishing)){
+
+    // The ordinary battle loop skips updateGame() once ended=true. Clear a false KO here,
+    // outside that skipped update path, and hide any stale result overlay as well.
+    if(game.ended||game.finishing){
       game.ended=false;game.finishing=false;game.finishTimer=0;
       game.finishResult=null;game.finishReason=null;
+      mouse.down=false;mobile.attackHeld=false;game.ultArmed=false;
+      if(game.aimPreview)game.aimPreview=null;
+      $('#result-overlay')?.classList.add('hidden');
     }
-    if(Number(game.zombieClearedWave)===wave||Number(game.zombieIntermission)>0||activeZombie)return;
-    // All zombies are gone. Clear any stale win state and run the shared wave-clear path
-    // so rewards, healing, perk cards and the rest timer all run exactly once.
-    game.ended=false;game.finishing=false;game.finishTimer=0;
-    game.finishResult=null;game.finishReason=null;
+
+    const zombies=Array.from(new Set([...(game.enemies||[]),game.enemy].filter(f=>f?.isZombie)));
+    const wave=Math.max(1,Number(game.zombieWave)||1);
+    const active=zombies.filter(z=>z.alive&&Number(z.hp)>0);
+    if(active.length){
+      // Keep the legacy single-enemy pointer on a live zombie for HUD/aim helpers.
+      if(!game.enemy?.alive||!game.enemy?.isZombie)game.enemy=active[0];
+      return;
+    }
+
+    // A completed wave is already in its six-second intermission; never clear twice.
+    if(Number(game.zombieIntermission)>0||Number(game.zombieClearedWave)===wave)return;
+    if(!zombies.length){
+      // Defensive recovery for a lost enemy array: rebuild the current wave rather than
+      // leaving the player alone in a live-but-empty arena.
+      spawnZombieWave(wave);
+      return;
+    }
     game.enemy=zombies[0];
     handleZombieWaveClear();
   }
 
-  // If a zombie target receives a hit while a stale end flag is set, allow the hit to land.
+  // Damage/effect paths normally reach this wrapper; the RAF-level check below is the
+  // fallback for state changes that bypass damage() entirely.
   const previousDamageWithZombieWaveRecovery=damage;
   damage=function(target,...args){
-    if(game?.mode==='zombie'&&target?.isZombie&&game.player?.alive&&game.ended&&game.zombieClearedWave!==game.zombieWave){
-      game.ended=false;game.finishing=false;game.finishTimer=0;
-      game.finishResult=null;game.finishReason=null;
-    }
     const wasAlive=!!target?.alive;
     const result=previousDamageWithZombieWaveRecovery(target,...args);
     if(game?.mode==='zombie'&&target?.isZombie&&wasAlive&&!target.alive)recoverZombieWaveTransition();
     return result;
   };
 
-  // Catch both ordinary damage and effects that remove the final zombie indirectly.
   const previousUpdateWithZombieWaveRecovery=updateGame;
   updateGame=function(dt){
     recoverZombieWaveTransition();
@@ -2489,19 +2491,12 @@ setAuthMode('login');
     return result;
   };
 
-  // A regular all-enemies-down callback is a wave clear here, not a match victory.
-  const previousEndMatchWithZombieWaveRecovery=endMatch;
-  endMatch=function(result,reason='ko',force=false){
-    if(game?.mode==='zombie'&&!force&&result==='win'&&game.player?.alive){
-      const zombies=Array.from(new Set([...(game.enemies||[]),game.enemy].filter(f=>f?.isZombie)));
-      if(zombies.length&&zombies.every(z=>!z.alive)){
-        game.ended=false;game.finishing=false;game.finishTimer=0;
-        game.finishResult=null;game.finishReason=null;
-        if(game.zombieClearedWave!==game.zombieWave)handleZombieWaveClear();
-        return;
-      }
-    }
-    return previousEndMatchWithZombieWaveRecovery(result,reason,force);
+  // CRITICAL: this runs before loop() checks game.ended. Recovery inside updateGame alone
+  // cannot run when the outer loop has already switched to its frozen/result branch.
+  const previousLoopWithZombieWaveRecovery=loop;
+  loop=function(now){
+    if(game?.mode==='zombie'&&game.player?.alive)recoverZombieWaveTransition();
+    return previousLoopWithZombieWaveRecovery(now);
   };
 
   // Remove any visible perk prompt on leaving/restarting zombie mode.
