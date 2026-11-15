@@ -551,10 +551,10 @@ function playHeroSound(heroId,action='attack'){const ctx=getSfxContext();if(!ctx
 function playGloverImpactSound(){const ctx=getSfxContext();if(!ctx)return;sfxNoise(ctx,.2,900,.14,0,'lowpass');sfxNoise(ctx,.07,3000,.055,.012,'highpass');sfxTone(ctx,125,38,.22,'triangle',.14);sfxTone(ctx,420,115,.12,'square',.045,.025)}
 
 const PRE_GAME_TRACK='AztRbo-sUQM';const HALLOWEEN_BOSS_TRACK='McYj38M_F9Q';
-const HALLOWEEN_EVENT_START=Date.parse('2026-10-31T21:18:00+09:00');const HALLOWEEN_EVENT_END=HALLOWEEN_EVENT_START+7*24*60*60*1000;
-function isHalloweenEventActive(){return true}
+const HALLOWEEN_EVENT_START=Date.parse('2026-10-31T21:18:00+09:00');const HALLOWEEN_EVENT_END=Date.parse('2026-11-30T00:00:00+09:00');
+function isHalloweenEventActive(){return Date.now()<HALLOWEEN_EVENT_END}
 function showEventUnavailable(){const el=$('#event-expired-toast');if(!el)return;el.textContent='아직 이벤트 없습니다';el.classList.add('show');clearTimeout(showEventUnavailable.timer);showEventUnavailable.timer=setTimeout(()=>el.classList.remove('show'),2600)}
-function updateHalloweenEventClock(){const period=$('#halloween-event-period'),layout=$('.halloween-layout'),empty=$('#halloween-no-event');if(!period||!layout||!empty)return;const fmt=d=>new Date(d).toLocaleString('ko-KR',{timeZone:'Asia/Seoul',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false});if(Date.now()<HALLOWEEN_EVENT_START){const wait=HALLOWEEN_EVENT_START-Date.now();period.textContent=`이벤트 기간: ${fmt(HALLOWEEN_EVENT_START)} ~ ${fmt(HALLOWEEN_EVENT_END)} (KST) · 시작까지 ${Math.ceil(wait/60000)}분`;layout.hidden=true;empty.classList.remove('hidden');empty.textContent='🎃 이벤트 시작 전입니다';return}if(!isHalloweenEventActive()){period.textContent=`이벤트 종료: ${fmt(HALLOWEEN_EVENT_END)} (KST)`;layout.hidden=true;empty.classList.remove('hidden');empty.textContent='🎃 아직 이벤트 없습니다';return}const remain=HALLOWEEN_EVENT_END-Date.now(),days=Math.floor(remain/86400000),hours=Math.floor(remain%86400000/3600000),mins=Math.floor(remain%3600000/60000),secs=Math.floor(remain%60000/1000);period.textContent=`이벤트 기간: ${fmt(HALLOWEEN_EVENT_START)} ~ ${fmt(HALLOWEEN_EVENT_END)} (KST) · 남은 시간 ${days}일 ${hours}시간 ${mins}분 ${secs}초`;layout.hidden=false;empty.classList.add('hidden')}
+function updateHalloweenEventClock(){const period=$('#halloween-event-period'),layout=$('.halloween-layout'),empty=$('#halloween-no-event'),menuBtn=$('#halloween-btn');if(!period||!layout||!empty)return;const fmt=d=>new Date(d).toLocaleString('ko-KR',{timeZone:'Asia/Seoul',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false});if(Date.now()<HALLOWEEN_EVENT_START){const wait=HALLOWEEN_EVENT_START-Date.now();period.textContent=`이벤트 기간: ${fmt(HALLOWEEN_EVENT_START)} ~ ${fmt(HALLOWEEN_EVENT_END)} (KST) · 시작까지 ${Math.ceil(wait/60000)}분`;layout.hidden=true;empty.classList.remove('hidden');empty.textContent='✨ 이벤트 시작 전입니다';if(menuBtn){menuBtn.disabled=true;menuBtn.textContent='천국 이벤트 준비 중'}return}if(!isHalloweenEventActive()){period.textContent=`천국 이벤트 종료 · ${fmt(HALLOWEEN_EVENT_END)} (KST)`;layout.hidden=true;empty.classList.remove('hidden');empty.textContent='👼 천국 이벤트가 종료되었습니다.';if(menuBtn){menuBtn.disabled=true;menuBtn.textContent='천국 이벤트 종료';menuBtn.setAttribute('aria-label','천국 이벤트 종료')}if(game?.mode==='halloween'&&!game.ended&&!window.__heavenExpiredMatchClosed){window.__heavenExpiredMatchClosed=true;stopGame();refreshMenu();showScreen('menu-screen');showToast('천국 이벤트가 종료되어 보스전이 끝났어.')}return}if(menuBtn){menuBtn.disabled=false;menuBtn.textContent='천국 이벤트';menuBtn.removeAttribute('aria-label')}const remain=HALLOWEEN_EVENT_END-Date.now(),days=Math.floor(remain/86400000),hours=Math.floor(remain%86400000/3600000),mins=Math.floor(remain%3600000/60000),secs=Math.floor(remain%60000/1000);period.textContent=`천국 이벤트 기간: ${fmt(HALLOWEEN_EVENT_START)} ~ ${fmt(HALLOWEEN_EVENT_END)} (KST) · 남은 시간 ${days}일 ${hours}시간 ${mins}분 ${secs}초`;layout.hidden=false;empty.classList.add('hidden')}
 updateHalloweenEventClock();setInterval(updateHalloweenEventClock,1000);
 const GAME_TRACKS=['ZXG66exDoho','KK3KXAECte4','xV4pZgTe94E','pMXxxFeZAPg','OEs6SGTkXMo','wbO3p7_Mf30'];
 const TOWER_TRACKS=['C_5enfN8V8w','mLsWDkF_LIc','e9YJ1D6HbAU'];const TOWER_51_TRACKS=['42kI2lT0x6U','NH-GAwLAO30','tBdLO8u-0L8'];const TOWER_91_TRACKS=['vBjscyFC3jo','mLsWDkF_LIc'];const BOSS_TRACK='wbO3p7_Mf30';const FINAL_BOSS_TRACK='Ki3wYxWlohk';
@@ -2807,13 +2807,31 @@ setAuthMode('login');
   window.__heavenEventIntegrated = true;
   const $ = (s) => document.querySelector(s);
   const clampN = (v,a,b) => Math.max(a,Math.min(b,v));
-  // The former Halloween screen is now the permanent Heaven event screen.
-  window.isHalloweenEventActive = () => true;
-  window.updateHalloweenEventClock = function(){
-    const period=$('#halloween-event-period'),layout=$('.halloween-layout'),empty=$('#halloween-no-event');
-    if(period)period.textContent='천계의 문이 열렸어! 미션을 완료하고 천사사탕을 모아 메르시를 영입하자.';
-    if(layout)layout.hidden=false;if(empty)empty.classList.add('hidden');
+  // Heaven event runs through Nov 29; it closes at 00:00 KST on Nov 30, 2026.
+  const HEAVEN_EVENT_END_AT = Date.parse('2026-11-30T00:00:00+09:00');
+  window.isHalloweenEventActive = () => Date.now() < HEAVEN_EVENT_END_AT;
+  window.showEventUnavailable = function(){
+    const el=$('#event-expired-toast');if(!el)return;
+    el.textContent=window.isHalloweenEventActive()?'아직 이벤트 없습니다':'천국 이벤트가 종료되었습니다.';
+    el.classList.add('show');clearTimeout(window.showEventUnavailable.timer);
+    window.showEventUnavailable.timer=setTimeout(()=>el.classList.remove('show'),2600);
   };
+  window.updateHalloweenEventClock = function(){
+    const period=$('#halloween-event-period'),layout=$('.halloween-layout'),empty=$('#halloween-no-event'),menuBtn=$('#halloween-btn');
+    if(!period||!layout||!empty)return;
+    const endLabel='2026년 11월 30일 00:00 (한국 시간)';
+    if(!window.isHalloweenEventActive()){
+      period.textContent=`천국 이벤트 종료 · ${endLabel}`;layout.hidden=true;empty.classList.remove('hidden');empty.textContent='👼 천국 이벤트가 종료되었습니다.';
+      if(menuBtn){menuBtn.disabled=true;menuBtn.textContent='천국 이벤트 종료';menuBtn.setAttribute('aria-label','천국 이벤트 종료');}
+      if(game?.mode==='halloween'&&!game.ended&&!window.__heavenExpiredMatchClosed){window.__heavenExpiredMatchClosed=true;stopGame();refreshMenu();showScreen('menu-screen');showToast('천국 이벤트가 종료되어 보스전이 끝났어.');}
+      return;
+    }
+    if(menuBtn){menuBtn.disabled=false;menuBtn.textContent='천국 이벤트';menuBtn.removeAttribute('aria-label');}
+    const remain=HEAVEN_EVENT_END_AT-Date.now(),days=Math.floor(remain/86400000),hours=Math.floor(remain%86400000/3600000),mins=Math.floor(remain%3600000/60000),secs=Math.floor(remain%60000/1000);
+    period.textContent=`천계의 문이 열렸어! 천사사탕을 모아 메르시를 영입하자. · 종료까지 ${days}일 ${hours}시간 ${mins}분 ${secs}초`;
+    layout.hidden=false;empty.classList.add('hidden');
+  };
+  window.setInterval(window.updateHalloweenEventClock,1000);
   const originalSyncUnlocks = syncUnlocks;
   syncUnlocks = function(){
     originalSyncUnlocks();
@@ -2847,18 +2865,20 @@ setAuthMode('login');
     {key:'tower',title:'탑 모드 15층까지 클리어',desc:()=>`최고 기록 ${Math.max(0,Number(currentUser?.towerCompleted)||0)} / 15층`,goal:()=>Number(currentUser?.towerCompleted)>=15,reward:5}
   ];
   window.awardHalloweenMission = function(key){
+    if(!window.isHalloweenEventActive())return false;
     const e=eventData();if(!e)return false;
     const map={ai:'ai',zombie:'zombie',boss:'boss',tower:'tower'};const k=map[key]||key;
     if(k==='boss')e.bossWins+=1;
     if(k==='tower'){} // Tower mission is checked against the persistent best-floor record.
     saveProfile();renderHalloweenEvent();return true;
   };
-  window.addHalloweenBossClearCandy = function(){const e=eventData();if(!e)return;e.candy=Math.min(30,e.candy+1);saveProfile();refreshMenu();renderHalloweenEvent();showToast('천계 보스 격파! 천사사탕 1개 획득!');};
-  window.recordHalloweenAIWin = function(){const e=eventData();if(!e)return;e.aiWins=Math.min(5,e.aiWins+1);saveProfile();renderHalloweenEvent();};
+  window.addHalloweenBossClearCandy = function(){if(!window.isHalloweenEventActive())return;const e=eventData();if(!e)return;e.candy=Math.min(30,e.candy+1);saveProfile();refreshMenu();renderHalloweenEvent();showToast('천계 보스 격파! 천사사탕 1개 획득!');};
+  window.recordHalloweenAIWin = function(){if(!window.isHalloweenEventActive())return;const e=eventData();if(!e)return;e.aiWins=Math.min(5,e.aiWins+1);saveProfile();renderHalloweenEvent();};
   window.syncHalloweenTowerMission = function(){renderHalloweenEvent();};
   window.renderHalloweenEvent = function(){
     if(!currentUser)return;const e=eventData();updateHalloweenEventClock();
     const list=$('#halloween-mission-list');
+    if(!window.isHalloweenEventActive())return;
     if(list)list.innerHTML=missions.map(m=>{
       const done=!!e.claimed[m.key],ready=!!m.goal();
       return `<div class="halloween-mission ${done?'done':''}"><div><b>${done?'✓ ':''}${m.title}</b><small>${m.desc()}</small></div><div class="mission-reward">${done?'수령 완료':`🍬 ${m.reward}개`}<button type="button" class="heaven-claim-btn" data-heaven-claim="${m.key}" ${(!ready||done)?'disabled':''}>${done?'완료':ready?'받기':'진행 중'}</button></div></div>`;
@@ -2870,15 +2890,16 @@ setAuthMode('login');
     if(reward)reward.textContent=has?'👼 메르시 영입 완료! 원 도감에서 메르시를 선택할 수 있어.':candy>=30?'천사사탕 30개를 모았어! 메르시 영입 버튼을 눌러!':`천사사탕 ${30-candy}개가 더 필요해. 천계 보스 승리 때마다 1개를 받아!`;
     list?.querySelectorAll('[data-heaven-claim]').forEach(btn=>btn.addEventListener('click',()=>{
       const key=btn.dataset.heavenClaim,mission=missions.find(m=>m.key===key),fresh=eventData();
-      if(!mission||fresh.claimed[key]||!mission.goal())return;
+      if(!window.isHalloweenEventActive()){showEventUnavailable();renderHalloweenEvent();return;}
+      if(!mission||!fresh||fresh.claimed[key]||!mission.goal())return;
       fresh.claimed[key]=true;fresh.candy=Math.min(30,fresh.candy+mission.reward);saveProfile();refreshMenu();renderHalloweenEvent();showToast(`미션 보상! 천사사탕 ${mission.reward}개 획득!`);
     }));
   };
   // Menu entry and reward button now point to the Heaven event / Mercy limited unlock.
-  $('#halloween-btn')?.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();renderHalloweenEvent();showScreen('halloween-screen');},true);
-  $('#halloween-boss-start')?.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();startMatch('halloween');},true);
+  $('#halloween-btn')?.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();if(!window.isHalloweenEventActive()){showEventUnavailable();return;}renderHalloweenEvent();showScreen('halloween-screen');},true);
+  $('#halloween-boss-start')?.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();if(!window.isHalloweenEventActive()){showEventUnavailable();return;}startMatch('halloween');},true);
   $('#halloween-sniff-unlock')?.addEventListener('click',e=>{
-    e.preventDefault();e.stopImmediatePropagation();const d=eventData();if(!d)return;
+    e.preventDefault();e.stopImmediatePropagation();if(!window.isHalloweenEventActive()){showEventUnavailable();return;}const d=eventData();if(!d)return;
     if(currentUser.unlocked?.mercy||d.mercyClaimed){showToast('메르시는 이미 영입했어!');renderHalloweenEvent();return;}
     if(d.candy<30){showToast('천사사탕 30개가 필요해!');return;}
     d.candy-=30;d.mercyClaimed=true;currentUser.unlocked=currentUser.unlocked||{};currentUser.unlocked.mercy=true;currentUser.selectedHero='mercy';saveProfile();syncUnlocks();refreshMenu();renderHalloweenEvent();showToast('👼 한정 전사 메르시 영입 완료!');
@@ -2894,7 +2915,7 @@ setAuthMode('login');
         const cleared=Math.max(Number(active.zombieHighestCleared)||0,Number(currentUser.zombieBestWave)||0);
         const e=eventData();if(e&&cleared>e.zombieWaves){e.zombieWaves=cleared;saveProfile();}
       }
-      if(active.mode==='halloween'&&!active.ended){
+      if(active.mode==='halloween'&&!active.ended&&window.isHalloweenEventActive()){
         active.celestialStarTimer=(Number.isFinite(active.celestialStarTimer)?active.celestialStarTimer:10)-dt;
         if(active.celestialStarTimer<=0){
           if(Math.random()<.85)active.powerups.push({type:'celestial-star',x:ARENA.min+34+Math.random()*(ARENA.max-ARENA.min-68),y:ARENA.min+34+Math.random()*(ARENA.max-ARENA.min-68),life:18});
@@ -2921,7 +2942,7 @@ setAuthMode('login');
   drawGame=function(t){const ret=originalDrawGame(t);for(const item of (game?.powerups||[])){if(item.type!=='celestial-star')continue;ctx.save();ctx.translate(item.x,item.y);ctx.rotate((performance.now()/1000)*1.8);ctx.shadowColor='#d9c8ff';ctx.shadowBlur=22;ctx.fillStyle='#f4edff';ctx.strokeStyle='#b99bea';ctx.lineWidth=2;ctx.beginPath();for(let k=0;k<8;k++){const a=-Math.PI/2+k*Math.PI/4,r=k%2===0?16:6;ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r);}ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();}return ret;};
   // Use the existing Halloween boss skill pattern as the Heavenly boss; only rename its HUD and text.
   const originalStartMatch=startMatch;
-  startMatch=function(mode,info=null,floor=null){const ret=originalStartMatch(mode,info,floor);if(game&&mode==='halloween'){game.simLabel='천국 이벤트 · 천계 보스전';$('#game-mode-label').textContent=game.simLabel;$('#enemy-hud-name').textContent='천계 보스';$('#game-tip').textContent='천계 보스는 천사 외형을 한 보스야. 기존 할로윈 보스의 기술 배치를 유지하며, 5초마다 80% 확률로 회복 구슬, 10초마다 85% 확률로 천상 표창을 소환해. 표창을 먹으면 보스에게 유도 피해 25를 줘.';for(const boss of (game.enemies||[game.enemy])){if(boss){boss.celestialBossVisual=true;boss.name='천계 보스';}}game.celestialStarTimer=10;game.powerupTimer=5;}return ret;};
+  startMatch=function(mode,info=null,floor=null){if(mode==='halloween'&&!window.isHalloweenEventActive()){showEventUnavailable();return null;}const ret=originalStartMatch(mode,info,floor);if(game&&mode==='halloween'){game.simLabel='천국 이벤트 · 천계 보스전';$('#game-mode-label').textContent=game.simLabel;$('#enemy-hud-name').textContent='천계 보스';$('#game-tip').textContent='천계 보스는 천사 외형을 한 보스야. 기존 할로윈 보스의 기술 배치를 유지하며, 5초마다 80% 확률로 회복 구슬, 10초마다 85% 확률로 천상 표창을 소환해. 표창을 먹으면 보스에게 유도 피해 25를 줘.';for(const boss of (game.enemies||[game.enemy])){if(boss){boss.celestialBossVisual=true;boss.name='천계 보스';}}game.celestialStarTimer=10;game.powerupTimer=5;}return ret;};
   // The Heavenly boss keeps the original Halloween boss AI and attacks, but renders with Mercy's angel appearance.
   const previousDrawFighterForCelestialBoss=drawFighter;
   drawFighter=function(f,t){
@@ -2945,7 +2966,7 @@ setAuthMode('login');
   };
   // On AI win, update mission progress via the existing hook; boss victory awards one candy and mission progress.
   const originalFinishGame=finishGame;
-  finishGame=function(win,reason){const mode=game?.mode;const ret=originalFinishGame(win,reason);if(win&&mode==='halloween'){const e=eventData();if(e){e.bossWins=Math.max(0,e.bossWins);saveProfile();renderHalloweenEvent();}}return ret;};
+  finishGame=function(win,reason){const mode=game?.mode;if(mode==='halloween'&&!window.isHalloweenEventActive()){stopGame();refreshMenu();showScreen('menu-screen');showToast('천국 이벤트가 종료되어 보상을 받을 수 없어.');return;}const ret=originalFinishGame(win,reason);if(win&&mode==='halloween'&&window.isHalloweenEventActive()){const e=eventData();if(e){e.bossWins=Math.max(0,e.bossWins);saveProfile();renderHalloweenEvent();}}return ret;};
   // Start with clean event UI, no legacy Halloween expiration.
   if(currentUser){syncUnlocks();renderHalloweenEvent();}
 })();
