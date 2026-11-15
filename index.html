@@ -692,6 +692,7 @@ function renderCollection(){
   const art=document.createElement('div');art.className='fighter-art';const orb=document.createElement('div');orb.className=heroOrbClass(hero.id);if(hero.id==='spider'&&currentUser.equippedSkins?.spider==='venom-spider')orb.classList.add('venom-equipped');if(hero.id==='bujijik'&&currentUser.equippedSkins?.bujijik==='rainbow-bujijik')orb.classList.add('rainbow-equipped');if(hero.id==='meto'&&currentUser.equippedSkins?.meto==='mentos-meto')orb.classList.add('mentos-equipped');if(hero.id==='adam'&&currentUser.equippedSkins?.adam==='thunder-adam')orb.classList.add('thunder-equipped');if(hero.id==='hammer'&&currentUser.equippedSkins?.hammer==='thorboy-hammer')orb.classList.add('thor-equipped');art.appendChild(orb);
   if(hero.id==='sniff'){card.classList.add('sniff-limited-card');art.classList.add('sniff-limited-art');const ribbon=document.createElement('div');ribbon.className='sniff-edition-tag';ribbon.textContent='🎃 HALLOWEEN LIMITED';art.appendChild(ribbon)}
   if(hero.id==='nova'){card.classList.add('nova-limited-card');art.classList.add('nova-limited-art');const ribbon=document.createElement('div');ribbon.className='nova-edition-tag';ribbon.textContent='✦ CELESTIAL LIMITED';art.appendChild(ribbon)}
+  if(hero.id==='mercy'){card.classList.add('mercy-limited-card');art.classList.add('mercy-limited-art');const ribbon=document.createElement('div');ribbon.className='mercy-edition-tag';ribbon.textContent='✧ HEAVEN LIMITED';art.appendChild(ribbon)}
   const meta=document.createElement('div');meta.className='fighter-meta';
   const p=document.createElement('p');p.textContent=hero.desc||'';meta.appendChild(Object.assign(document.createElement('h2'),{textContent:hero.name}));
   const actions=document.createElement('div');actions.style.display='flex';actions.style.flexWrap='wrap';actions.style.gap='8px';
@@ -2526,6 +2527,22 @@ setAuthMode('login');
     }
   };
 
+  // Mercy's detail modal receives the same premium limited-edition presentation as the other event fighters.
+  const previousShowFighterDetails = showFighterDetails;
+  showFighterDetails = function(hero) {
+    if (hero?.id !== 'mercy') return previousShowFighterDetails(hero);
+    const overlay=document.createElement('div');overlay.className='fighter-detail-backdrop mercy-detail-backdrop';
+    overlay.addEventListener('click',e=>{if(e.target===overlay)overlay.remove()});
+    const panel=document.createElement('section');panel.className='fighter-detail-panel mercy-detail-panel';
+    const ribbon=document.createElement('div');ribbon.className='mercy-profile-kicker';ribbon.textContent='✧ HEAVEN EVENT · LIMITED FIGHTER';
+    const title=document.createElement('h2');title.textContent='👼 메르시';
+    const intro=document.createElement('p');intro.textContent='순수하고 사랑스러운 분위기를 가진 여성 천사 전사. 금빛 천사 링과 긴 크림색 금발, 커다란 흰 리본, 보라색 눈동자와 흰색·연보라색 천사 드레스가 특징이야.';
+    const stats=document.createElement('div');stats.className='mercy-profile-details';
+    stats.innerHTML='<div><b>체력</b>　100　 <b>재장전</b>　1.7초　 <b>등급</b>　천국 이벤트 한정</div><div style="margin-top:8px"><b>일반 공격 · 성폭탄</b><br>중거리 투척 공격. 기본 탄환의 2.5배 크기이며 적중 시 7 피해를 줘.</div><div style="margin-top:8px"><b>궁극기 · 미니 천사 소환</b><br>일반 공격 적중마다 15% 충전. 양옆에 체력 5, 천사창 피해 5의 미니 천사 2명을 5초 동안 소환해. 다시 사용하면 기존 천사들은 새 소환으로 교체돼.</div><span class="mercy-profile-flavor">“천상의 빛으로 전장을 지켜줄게.”</span>';
+    const close=document.createElement('button');close.className='detail-close';close.textContent='닫기';close.addEventListener('click',()=>overlay.remove());
+    panel.append(ribbon,title,intro,stats,close);overlay.appendChild(panel);document.body.appendChild(overlay);
+  };
+
   // Add the new fighter to the existing shop purchase flow.
   const previousRenderShop = renderShop;
   renderShop = function(tab = 'fighters') {
@@ -2767,6 +2784,20 @@ setAuthMode('login');
 #menu-screen .featured-graphic .mercy-orb{transform:scale(.82);filter:drop-shadow(0 7px 12px #0006)}
 .shop-art .mercy-orb,.fighter-art .mercy-orb{width:76px;height:76px}
 @media(max-width:600px){.shop-art .mercy-orb,.fighter-art .mercy-orb{width:66px;height:66px}}
+/* Mercy's collection card follows the same limited-edition treatment as Nova and Sniff. */
+.mercy-limited-card{border-color:#c5a9e9;background:radial-gradient(ellipse at 12% 0%,#f2e4ff2e,transparent 48%),radial-gradient(ellipse at 90% 100%,#d9b96b20,transparent 48%),linear-gradient(145deg,#28213f,#191b31 62%,#29213c);box-shadow:inset 0 0 26px #e5d2ff1c,0 0 0 1px #f3e6ff18}
+.mercy-limited-card.selected{border-color:#ffe6a2;box-shadow:inset 0 0 0 1px #ffe6a255,0 0 25px #d9c0ff35,0 0 15px #f4dc9b1c}
+.mercy-limited-art{position:relative;overflow:hidden;border:1px solid #c6a9e9;background:radial-gradient(circle at 50% 55%,#f4e8ff38,transparent 48%),radial-gradient(circle at 50% 100%,#b99ae955,transparent 68%),linear-gradient(145deg,#19172e,#30264c 62%,#1d2037)}
+.mercy-limited-art:before,.mercy-limited-art:after{content:'✦';position:absolute;z-index:2;color:#fff0b8;text-shadow:0 0 8px #e8d1ff,0 0 16px #c5a3ff;animation:mercy-limited-sparkle 2.6s ease-in-out infinite;pointer-events:none}
+.mercy-limited-art:before{left:13px;top:24px;font-size:19px}.mercy-limited-art:after{right:14px;bottom:18px;font-size:15px;animation-delay:-1.25s}
+.mercy-edition-tag{position:absolute;left:7px;top:7px;z-index:3;padding:5px 7px;border:1px solid #e6cc8b;border-radius:7px;background:linear-gradient(100deg,#3b2b58,#69528d 65%,#806b9f);color:#fff0bf;font-size:8px;font-weight:1000;letter-spacing:.08em;box-shadow:0 3px 10px #0008}
+.mercy-limited-card .fighter-meta h2{color:#f4e5ff;text-shadow:0 0 14px #d5b4ff70}
+.mercy-limited-card .fighter-meta p{color:#e2d5ef}
+.mercy-detail-panel{border-color:#c5a9e9;background:radial-gradient(ellipse at 100% 0%,#b99ae933,transparent 45%),linear-gradient(145deg,#2c2442,#151a2e);box-shadow:0 20px 60px #0009,inset 0 0 24px #e6d2ff15}.mercy-detail-panel h2{color:#f5e7ff;text-shadow:0 0 14px #d4b6ff66}.mercy-detail-panel>p{color:#e1d4ee;line-height:1.8}
+.mercy-profile-details{margin-top:12px;padding:14px;border:1px solid #c4a6e7;border-radius:14px;background:radial-gradient(circle at 100% 0%,#b99ae933,transparent 44%),linear-gradient(135deg,#332849,#1a1c32);color:#f7edff;font-size:11px;line-height:1.9;box-shadow:inset 0 0 20px #e7d4ff14,0 8px 24px #0004}
+.mercy-profile-details b{color:#ffe5a0}.mercy-profile-kicker{margin-bottom:8px;color:#e2c8ff;font-size:10px;font-weight:1000;letter-spacing:.13em}.mercy-profile-flavor{display:block;margin-top:8px;color:#e9d8ff;font-size:10px;line-height:1.75}
+@keyframes mercy-limited-sparkle{0%,100%{opacity:.35;transform:scale(.8) rotate(0)}50%{opacity:1;transform:scale(1.18) rotate(34deg)}}
+@media(max-width:600px){.mercy-limited-card{padding:13px}.mercy-profile-details{padding:11px;font-size:10px}}
 </style>
 
 
@@ -2890,7 +2921,28 @@ setAuthMode('login');
   drawGame=function(t){const ret=originalDrawGame(t);for(const item of (game?.powerups||[])){if(item.type!=='celestial-star')continue;ctx.save();ctx.translate(item.x,item.y);ctx.rotate((performance.now()/1000)*1.8);ctx.shadowColor='#d9c8ff';ctx.shadowBlur=22;ctx.fillStyle='#f4edff';ctx.strokeStyle='#b99bea';ctx.lineWidth=2;ctx.beginPath();for(let k=0;k<8;k++){const a=-Math.PI/2+k*Math.PI/4,r=k%2===0?16:6;ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r);}ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();}return ret;};
   // Use the existing Halloween boss skill pattern as the Heavenly boss; only rename its HUD and text.
   const originalStartMatch=startMatch;
-  startMatch=function(mode,info=null,floor=null){const ret=originalStartMatch(mode,info,floor);if(game&&mode==='halloween'){game.simLabel='천국 이벤트 · 천계 보스전';$('#game-mode-label').textContent=game.simLabel;$('#enemy-hud-name').textContent='천계 보스';$('#game-tip').textContent='천계 보스는 기존 할로윈 보스와 같은 기술을 사용해. 5초마다 80% 확률로 회복 구슬, 10초마다 85% 확률로 천상 표창을 소환해. 표창을 먹으면 보스에게 유도 피해 25를 줘.';game.celestialStarTimer=10;game.powerupTimer=5;}return ret;};
+  startMatch=function(mode,info=null,floor=null){const ret=originalStartMatch(mode,info,floor);if(game&&mode==='halloween'){game.simLabel='천국 이벤트 · 천계 보스전';$('#game-mode-label').textContent=game.simLabel;$('#enemy-hud-name').textContent='천계 보스';$('#game-tip').textContent='천계 보스는 천사 외형을 한 보스야. 기존 할로윈 보스의 기술 배치를 유지하며, 5초마다 80% 확률로 회복 구슬, 10초마다 85% 확률로 천상 표창을 소환해. 표창을 먹으면 보스에게 유도 피해 25를 줘.';for(const boss of (game.enemies||[game.enemy])){if(boss){boss.celestialBossVisual=true;boss.name='천계 보스';}}game.celestialStarTimer=10;game.powerupTimer=5;}return ret;};
+  // The Heavenly boss keeps the original Halloween boss AI and attacks, but renders with Mercy's angel appearance.
+  const previousDrawFighterForCelestialBoss=drawFighter;
+  drawFighter=function(f,t){
+    if(!f?.celestialBossVisual)return previousDrawFighterForCelestialBoss(f,t);
+    const angelView={...f,heroId:'mercy',skinId:null};
+    ctx.save();
+    ctx.translate(f.x,f.y);ctx.scale(1.2,1.2);ctx.translate(-f.x,-f.y);
+    previousDrawFighterForCelestialBoss(angelView,t);
+    ctx.restore();
+    // A larger golden halo and gentle orbiting starlight identify this as the event boss.
+    ctx.save();
+    const pulse=.5+.5*Math.sin(t*3.4);
+    ctx.translate(f.x,f.y-f.r*.88);ctx.rotate(-.16);
+    ctx.shadowColor='#ffe6a0';ctx.shadowBlur=15+pulse*8;
+    ctx.strokeStyle='#e8c66e';ctx.lineWidth=4;ctx.beginPath();ctx.ellipse(0,0,f.r*.58,Math.max(5,f.r*.19),0,0,Math.PI*2);ctx.stroke();
+    ctx.strokeStyle='#fff4ca';ctx.lineWidth=1.5;ctx.beginPath();ctx.ellipse(0,-1,f.r*.48,Math.max(3,f.r*.13),0,0,Math.PI*2);ctx.stroke();
+    ctx.restore();
+    ctx.save();ctx.translate(f.x,f.y);ctx.rotate(t*.28);
+    for(let i=0;i<4;i++){const a=i*Math.PI/2,rr=f.r+15+Math.sin(t*2+i)*2;ctx.save();ctx.translate(Math.cos(a)*rr,Math.sin(a)*rr);ctx.rotate(-a+t*.5);ctx.fillStyle='#fff0b8';ctx.shadowColor='#e8ccff';ctx.shadowBlur=10;ctx.beginPath();for(let k=0;k<8;k++){const q=-Math.PI/2+k*Math.PI/4,r=k%2===0?4.5:1.8;ctx.lineTo(Math.cos(q)*r,Math.sin(q)*r);}ctx.closePath();ctx.fill();ctx.restore();}
+    ctx.restore();
+  };
   // On AI win, update mission progress via the existing hook; boss victory awards one candy and mission progress.
   const originalFinishGame=finishGame;
   finishGame=function(win,reason){const mode=game?.mode;const ret=originalFinishGame(win,reason);if(win&&mode==='halloween'){const e=eventData();if(e){e.bossWins=Math.max(0,e.bossWins);saveProfile();renderHalloweenEvent();}}return ret;};
