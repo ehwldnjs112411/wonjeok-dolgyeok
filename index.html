@@ -2252,7 +2252,7 @@ setAuthMode('login');
   const previousZombieWaveClearForCards=handleZombieWaveClear;
   handleZombieWaveClear=function(){
     const before=game?.zombieWave||0,alreadyCleared=game?.zombieClearedWave===before;
-    previousZombieWaveClear();
+    previousZombieWaveClearForCards();
     if(!game||game.mode!=='zombie'||alreadyCleared||game.zombieClearedWave!==before||before%5!==0)return;
     if((game.zombiePerks||[]).length>=ZOMBIE_PERK_CARDS.length)return;
     game.zombieCardPicking=true;
