@@ -807,7 +807,7 @@ function startMatch(mode,onlineInfo=null,towerFloor=null){
  $('#ult-charge-text').textContent=h.id==='adam'?'0% · 초당 +4%':h.id==='joki'?'??? · 랜덤 궁극기':h.id==='sniff'?'0 / 5 명중':h.id==='glover'?'0% · 주먹 적중 +20% / 피격당 +5%':h.id==='bit'?'0% · 기본 공격 적중 5%부터 거리 비례':'0 / '+game.player.ultMax+' 명중';
  const hMode=h.id==='joki'?'hybrid':h.ultMode;$('#ult-key-label').textContent=hMode==='self'?'E 즉시 사용':hMode==='hybrid'?'E 사용 / 기절형은 조준':'E + 클릭';
  const ctrl=$$('.control-row');if(ctrl[2])ctrl[2].lastElementChild.textContent=hMode==='self'?'E 즉시 사용':hMode==='hybrid'?'E 사용 / 기절형은 조준':'E → 클릭';
- $('#game-tip').textContent=pHero==='bit'?'비트: 총알은 가까운 적에게 2 피해, 전장 끝까지 날아갈수록 최대 16 피해를 줘. 적중 거리에 따라 궁극기가 최소 5%에서 최대 40%까지 충전돼. 궁극기는 자신의 주변 360도에 폭탄을 설치하고 1초 뒤 피해 9와 넉백을 줘.':pHero==='nova'?'노바: 별을 2번 연속 발사해 각각 3 피해를 주며 적을 관통해. 별 7회 명중 시 지정 위치로 돌진해 6초 동안 크리스탈로 변신하고, 근거리 검 공격은 6 피해와 적중당 체력 2 회복을 줘. 모바일·패드는 아래 궁극기 버튼을 누른 채 드래그해 조준하고 손을 떼면 발동해.':pHero==='ellie'?'엘리: 눈꽃을 3번 연속 던져 각각 3 피해를 주고 0.5초 둔화시켜. 눈꽃 10회 명중 시 눈사태를 조준해 설치할 수 있어.':pHero==='glover'?'글러버: 한 번 공격할 때 주먹 3연타, 적중당 3 피해. 주먹 적중마다 궁극기 20%, 피격 피해량의 5%도 충전돼.':pHero==='bujijik'?'뿌지직: 이전보다 더 빠르게 7발을 난사해. 총알 17개 명중으로 똥 소환 궁극기가 충전돼.':pHero==='adam'?'아담: 앞으로 뻗는 잽 2연타. 체력 80, 궁극기는 초당 4%·적중당 7% 충전. 궁 중 3초간 적중 회복이 4로 늘고, 무적은 없어.':pHero==='joki'?'조키: 사탕 1·2·3·4개 순서로 던져. 궁극기가 충전되면 무작위 효과가 공개돼.':pHero==='gumi'?'구미: 하트 탄환은 피해 7, 궁극기는 1초 동안 적을 매혹해.':pHero==='sniff'?'킁킁: 큰 호박탄 피해 6 · 느린 탄속 · 탄창 3발. 궁극기는 표창 4개가 각각 유도되며 개당 피해 4야.':pHero==='yure'?'유르: 기본 공격은 피해 2인 탄환 5연사, 궁극기는 더 큰 피해 3 탄환 10연사야. 탄환 15개 명중으로 충전돼.':pHero==='hammer'?'망치보이: 체력 110. 궁극기 중에는 충전되지 않고, 효과 종료 후 다시 충전돼.':'기본 공격을 적에게 맞춰 궁극기를 충전해.';
+ $('#game-tip').textContent=pHero==='bolt'?'볼트: 공격 버튼을 바로 눌렀다 떼면 가까운 적을 자동 조준하고, 누른 채 끌면 끄는 방향으로 직접 조준해. 사거리 엘리 궁극기의 1.4배 · 피해 6 · 3발 탄약.':pHero==='bit'?'비트: 총알은 가까운 적에게 2 피해, 전장 끝까지 날아갈수록 최대 16 피해를 줘. 적중 거리에 따라 궁극기가 최소 5%에서 최대 40%까지 충전돼. 궁극기는 자신의 주변 360도에 폭탄을 설치하고 1초 뒤 피해 9와 넉백을 줘.':pHero==='nova'?'노바: 별을 2번 연속 발사해 각각 3 피해를 주며 적을 관통해. 별 7회 명중 시 지정 위치로 돌진해 6초 동안 크리스탈로 변신하고, 근거리 검 공격은 6 피해와 적중당 체력 2 회복을 줘. 모바일·패드는 아래 궁극기 버튼을 누른 채 드래그해 조준하고 손을 떼면 발동해.':pHero==='ellie'?'엘리: 눈꽃을 3번 연속 던져 각각 3 피해를 주고 0.5초 둔화시켜. 눈꽃 10회 명중 시 눈사태를 조준해 설치할 수 있어.':pHero==='glover'?'글러버: 한 번 공격할 때 주먹 3연타, 적중당 3 피해. 주먹 적중마다 궁극기 20%, 피격 피해량의 5%도 충전돼.':pHero==='bujijik'?'뿌지직: 이전보다 더 빠르게 7발을 난사해. 총알 17개 명중으로 똥 소환 궁극기가 충전돼.':pHero==='adam'?'아담: 앞으로 뻗는 잽 2연타. 체력 80, 궁극기는 초당 4%·적중당 7% 충전. 궁 중 3초간 적중 회복이 4로 늘고, 무적은 없어.':pHero==='joki'?'조키: 사탕 1·2·3·4개 순서로 던져. 궁극기가 충전되면 무작위 효과가 공개돼.':pHero==='gumi'?'구미: 하트 탄환은 피해 7, 궁극기는 1초 동안 적을 매혹해.':pHero==='sniff'?'킁킁: 큰 호박탄 피해 6 · 느린 탄속 · 탄창 3발. 궁극기는 표창 4개가 각각 유도되며 개당 피해 4야.':pHero==='yure'?'유르: 기본 공격은 피해 2인 탄환 5연사, 궁극기는 더 큰 피해 3 탄환 10연사야. 탄환 15개 명중으로 충전돼.':pHero==='hammer'?'망치보이: 체력 110. 궁극기 중에는 충전되지 않고, 효과 종료 후 다시 충전돼.':'기본 공격을 적에게 맞춰 궁극기를 충전해.';
  $('#touch-ult').textContent=h.id==='nova'?'크리스탈':h.id==='ellie'?'눈사태':h.id==='bit'?'폭탄':h.id==='adam'?'각성':h.id==='sniff'?'호박표창':h.id==='joki'?'궁극기':h.ultMode==='self'?'강화':h.ultMode==='summon'?'소환':'궁극기';$('#touch-ult').classList.remove('ready');
  $('#matchmaking-screen .match-card h1').textContent='상대를 찾는 중...';$('#matchmaking-screen .match-spinner').style.animation='';$('#matchmaking-screen .match-spinner').style.borderTopColor='';$('#matchmaking-screen .match-spinner').style.borderRightColor='';
  if(mode==='tower')startRandomGameTrack('tower',floor);else if(mode==='halloween')startRandomGameTrack('halloween');else if(mode==='ai'||mode==='user')startRandomGameTrack(mode);
@@ -977,7 +977,7 @@ function moveInputGesture(e){
   return;
  }
  const dx=e.clientX-g.startX,dy=e.clientY-g.startY,len=Math.hypot(dx,dy);
- if(len>20){g.dragged=true;g.dir=vecNorm(dx,dy);aimSource='touch';game.player.facing=g.dir;game.aimPreview={kind:g.kind,dir:g.dir}}
+ if(len>(g.kind==='attack'&&game.player?.heroId==='bolt'?24:20)){g.dragged=true;g.dir=vecNorm(dx,dy);aimSource='touch';game.player.facing=g.dir;game.aimPreview={kind:g.kind,dir:g.dir}}
 }
 function finishInputGesture(pointerId=null){
  const g=inputGesture;if(!g||!game||(pointerId!==null&&g.pointerId!==pointerId))return;
@@ -991,7 +991,27 @@ function finishInputGesture(pointerId=null){
   return;
  }
  const dir=g.dragged&&g.dir?g.dir:(g.source==='gamepad'&&g.dir?g.dir:autoAim());
- if(g.kind==='ult')useUltimate(game.player,dir);else fireBasic(game.player,dir);
+ if(g.kind==='ult'){
+  useUltimate(game.player,dir);
+ }else if(g.source==='touch'&&game.player?.heroId==='bolt'&&g.dragged&&g.dir){
+  // Bolt tap = nearest-enemy auto-aim. Drag = manually choose a target along the dragged ray.
+  // The lightning strike is point-targeted, so pass the selected point explicitly rather than
+  // letting Bolt's default auto-target overwrite the player's manually aimed direction.
+  const player=game.player,range=ELLIE_ULT_RANGE*1.4,targets=(game.enemies||[game.enemy]).filter(enemy=>enemy?.alive);
+  let chosen=null,bestScore=Infinity;
+  for(const enemy of targets){
+   const dx=enemy.x-player.x,dy=enemy.y-player.y,along=dx*dir.x+dy*dir.y;
+   if(along<=0||along>range+(enemy.r||0))continue;
+   const side=Math.abs(dx*dir.y-dy*dir.x),corridor=(enemy.r||18)+40;
+   if(side>corridor)continue;
+   const score=side*4+along*.001;
+   if(score<bestScore){bestScore=score;chosen=enemy;}
+  }
+  const aimPoint=chosen?{x:chosen.x,y:chosen.y}:{x:player.x+dir.x*range,y:player.y+dir.y*range};
+  fireBasic(player,dir,aimPoint);
+ }else{
+  fireBasic(game.player,dir);
+ }
 }
 function cancelInputGesture(pointerId=null){
  if(inputGesture&&(pointerId===null||inputGesture.pointerId===pointerId)){
@@ -1189,7 +1209,7 @@ function drawGame(t){if(!game)return;ctx.setTransform(1,0,0,1,0,0);ctx.clearRect
  for(let k=0;k<3;k++){const q=t*5+k*Math.PI*2/3,rr=pr.r+5+(k%2)*2;ctx.globalAlpha=.75;ctx.fillStyle=k===1?'#b8eaff':'#fff5bd';ctx.beginPath();ctx.arc(Math.cos(q)*rr,Math.sin(q)*rr,1.5,0,Math.PI*2);ctx.fill();}
  ctx.restore();continue;
 }if(pr.kind==='prma-starburst'){ctx.translate(pr.x,pr.y);ctx.rotate(Math.atan2(pr.vy,pr.vx));ctx.shadowColor='#a66cff';ctx.shadowBlur=23;const trail=ctx.createLinearGradient(-34,0,7,0);trail.addColorStop(0,'rgba(158,104,255,0)');trail.addColorStop(.55,'rgba(175,137,255,.48)');trail.addColorStop(1,'rgba(255,255,255,.95)');ctx.fillStyle=trail;ctx.beginPath();ctx.moveTo(-35,-7);ctx.lineTo(5,-9);ctx.lineTo(13,0);ctx.lineTo(5,9);ctx.lineTo(-35,7);ctx.closePath();ctx.fill();ctx.fillStyle='#fff';ctx.beginPath();ctx.ellipse(0,0,13,8,0,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#c6a3ff';ctx.lineWidth=3;ctx.beginPath();ctx.ellipse(0,0,15,10,0,0,Math.PI*2);ctx.stroke();ctx.fillStyle='#9b5cff';ctx.beginPath();ctx.arc(0,0,5,0,Math.PI*2);ctx.fill();ctx.restore();continue;}if(pr.kind==='ellie-snowflake'){ctx.translate(pr.x,pr.y);ctx.rotate(Math.atan2(pr.vy,pr.vx)+t*2.5);ctx.shadowColor='#8ee7ff';ctx.shadowBlur=17;ctx.strokeStyle='#f5fdff';ctx.lineWidth=3;ctx.lineCap='round';for(let k=0;k<6;k++){const a=k*Math.PI/3;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(Math.cos(a)*pr.r,Math.sin(a)*pr.r);ctx.moveTo(Math.cos(a)*pr.r*.62-Math.cos(a-.55)*4,Math.sin(a)*pr.r*.62-Math.sin(a-.55)*4);ctx.lineTo(Math.cos(a)*pr.r*.62,Math.sin(a)*pr.r*.62);ctx.lineTo(Math.cos(a)*pr.r*.62-Math.cos(a+.55)*4,Math.sin(a)*pr.r*.62-Math.sin(a+.55)*4);ctx.stroke()}ctx.fillStyle='#b8eeff';ctx.beginPath();ctx.arc(0,0,3.2,0,Math.PI*2);ctx.fill();ctx.fillStyle='#ffffff';ctx.beginPath();ctx.ellipse(-2.1,-.5,1.3,1.8,0,0,Math.PI*2);ctx.ellipse(2.1,-.5,1.3,1.8,0,0,Math.PI*2);ctx.fill();ctx.fillStyle='#367ca5';ctx.beginPath();ctx.arc(-2,-.4,.65,0,Math.PI*2);ctx.arc(2.2,-.4,.65,0,Math.PI*2);ctx.fill();ctx.restore();continue;}if(pr.kind==='sniff-pumpkin'){ctx.translate(pr.x,pr.y);ctx.rotate(Math.atan2(pr.vy,pr.vx));ctx.font='46px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.shadowColor='#ff8d28';ctx.shadowBlur=22;ctx.fillText('🎃',0,0);ctx.restore();continue;}if(pr.kind==='sniff-homing'){ctx.shadowColor='#eaff39';ctx.shadowBlur=22;ctx.fillStyle='#ff8b27';ctx.beginPath();ctx.arc(pr.x,pr.y,pr.r+1,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#eaff39';ctx.lineWidth=4;ctx.beginPath();ctx.arc(pr.x,pr.y,pr.r+1,0,Math.PI*2);ctx.stroke();ctx.restore();continue;}if(pr.kind==='halloween-candy-homing'){ctx.translate(pr.x,pr.y);ctx.rotate(Math.atan2(pr.vy,pr.vx));ctx.font='25px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';ctx.shadowColor='#ffdf48';ctx.shadowBlur=22;ctx.fillText('🍬',0,0);ctx.restore();continue;}if(pr.kind==='kuro-shuriken'){ctx.translate(pr.x,pr.y);ctx.rotate(Math.atan2(pr.vy,pr.vx));ctx.shadowColor=pr.color;ctx.shadowBlur=16;ctx.fillStyle=pr.color;ctx.strokeStyle='#f1fcff';ctx.lineWidth=1.5;ctx.beginPath();for(let q=0;q<8;q++){const a=q*Math.PI/4;const r=q%2?4:11;if(q===0)ctx.moveTo(Math.cos(a)*r,Math.sin(a)*r);else ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r)}ctx.closePath();ctx.fill();ctx.stroke();ctx.shadowBlur=0;ctx.fillStyle='#16344a';ctx.beginPath();ctx.arc(0,0,2.3,0,Math.PI*2);ctx.fill();ctx.restore();continue;}if(pr.kind==='gumi-heart'||pr.kind==='gumi-charm'||pr.kind==='joki-stun-orb'){ctx.translate(pr.x,pr.y);ctx.rotate(Math.atan2(pr.vy,pr.vx));ctx.fillStyle=pr.color;ctx.shadowColor=pr.color;ctx.shadowBlur=18;ctx.strokeStyle='#ffffff';ctx.lineWidth=2;ctx.beginPath();ctx.arc(0,0,pr.kind==='joki-stun-orb'?13:11,0,Math.PI*2);ctx.fillStyle=pr.kind==='joki-stun-orb'?'#18384e':pr.color;ctx.fill();ctx.stroke();ctx.font=`bold ${(pr.kind==='gumi-charm'||pr.kind==='joki-stun-orb')?22:21}px system-ui`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle=pr.kind==='joki-stun-orb'?'#dffaff':'#ffffff';ctx.fillText(pr.kind==='joki-stun-orb'?'⚡':'♥',0,0);ctx.restore();continue;}ctx.strokeStyle=pr.color;ctx.lineWidth=3;ctx.globalAlpha=.55;ctx.beginPath();ctx.moveTo(pr.x-pr.vx*.025,pr.y-pr.vy*.025);ctx.lineTo(pr.x,pr.y);ctx.stroke();ctx.globalAlpha=1;ctx.shadowColor=pr.color;ctx.shadowBlur=12;ctx.fillStyle=pr.color;ctx.beginPath();ctx.arc(pr.x,pr.y,pr.r,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;ctx.strokeStyle='#fff';ctx.lineWidth=1;ctx.beginPath();ctx.arc(pr.x,pr.y,pr.r+3,0,Math.PI*2);ctx.stroke();ctx.restore()}
- for(const summon of game.summons)drawSummon(summon,t);for(const rs of (game.remoteSummons||[])){drawSummon({x:rs.x,y:rs.y,r:17,hp:rs.hp,maxHp:20,alive:rs.alive,skinId:rs.skinId,flash:0},t)}drawFighter(game.player,t);for(const enemy of (game.enemies||[game.enemy]))drawFighter(enemy,t);if(game.aimPreview){const p=game.player,dir=game.aimPreview.dir||p.facing;ctx.save();ctx.strokeStyle=game.aimPreview.kind==='ult'?'#dc9cff':'#ffe2a0';ctx.lineWidth=3;ctx.setLineDash([8,7]);ctx.globalAlpha=.9;ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p.x+dir.x*(game.aimPreview.kind==='ult'?460:230),p.y+dir.y*(game.aimPreview.kind==='ult'?460:230));ctx.stroke();ctx.setLineDash([]);ctx.restore()}if(game.ultArmed){const p=game.player;ctx.save();ctx.strokeStyle='#d4a7ff';ctx.lineWidth=3;ctx.setLineDash([9,7]);ctx.globalAlpha=.8;if(p.heroId==='ellie'||p.heroId==='nova'||p.heroId==='prma'||p.heroId==='root'){const rr=p.heroId==='prma'?PRMA_ULT_RANGE:ELLIE_ULT_RANGE;ctx.beginPath();ctx.arc(p.x,p.y,rr,0,Math.PI*2);ctx.stroke();const pt=game.ellieAimPoint||{x:mouse.x,y:mouse.y};if(Math.hypot(pt.x-p.x,pt.y-p.y)<=rr){ctx.fillStyle=p.heroId==='prma'?'#a66cff22':p.heroId==='root'?'#76cb5530':'#a9e9ff22';ctx.beginPath();ctx.arc(pt.x,pt.y,p.heroId==='prma'?125:p.heroId==='root'?92:96,0,Math.PI*2);ctx.fill();ctx.strokeStyle=p.heroId==='prma'?'#e5d3ff':p.heroId==='root'?'#e8ffd8':'#dff8ff';ctx.beginPath();ctx.arc(pt.x,pt.y,p.heroId==='prma'?125:p.heroId==='root'?92:96,0,Math.PI*2);ctx.stroke();}}else{ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p.x+p.facing.x*490,p.y+p.facing.y*490);ctx.stroke();}ctx.setLineDash([]);ctx.restore()}
+ for(const summon of game.summons)drawSummon(summon,t);for(const rs of (game.remoteSummons||[])){drawSummon({x:rs.x,y:rs.y,r:17,hp:rs.hp,maxHp:20,alive:rs.alive,skinId:rs.skinId,flash:0},t)}drawFighter(game.player,t);for(const enemy of (game.enemies||[game.enemy]))drawFighter(enemy,t);if(game.aimPreview){const p=game.player,dir=game.aimPreview.dir||p.facing;ctx.save();ctx.strokeStyle=game.aimPreview.kind==='ult'?'#dc9cff':'#ffe2a0';ctx.lineWidth=3;ctx.setLineDash([8,7]);ctx.globalAlpha=.9;ctx.beginPath();ctx.moveTo(p.x,p.y);const previewRange=game.aimPreview.kind==='ult'?460:(p.heroId==='bolt'?ELLIE_ULT_RANGE*1.4:230);ctx.lineTo(p.x+dir.x*previewRange,p.y+dir.y*previewRange);ctx.stroke();ctx.setLineDash([]);ctx.restore()}if(game.ultArmed){const p=game.player;ctx.save();ctx.strokeStyle='#d4a7ff';ctx.lineWidth=3;ctx.setLineDash([9,7]);ctx.globalAlpha=.8;if(p.heroId==='ellie'||p.heroId==='nova'||p.heroId==='prma'||p.heroId==='root'){const rr=p.heroId==='prma'?PRMA_ULT_RANGE:ELLIE_ULT_RANGE;ctx.beginPath();ctx.arc(p.x,p.y,rr,0,Math.PI*2);ctx.stroke();const pt=game.ellieAimPoint||{x:mouse.x,y:mouse.y};if(Math.hypot(pt.x-p.x,pt.y-p.y)<=rr){ctx.fillStyle=p.heroId==='prma'?'#a66cff22':p.heroId==='root'?'#76cb5530':'#a9e9ff22';ctx.beginPath();ctx.arc(pt.x,pt.y,p.heroId==='prma'?125:p.heroId==='root'?92:96,0,Math.PI*2);ctx.fill();ctx.strokeStyle=p.heroId==='prma'?'#e5d3ff':p.heroId==='root'?'#e8ffd8':'#dff8ff';ctx.beginPath();ctx.arc(pt.x,pt.y,p.heroId==='prma'?125:p.heroId==='root'?92:96,0,Math.PI*2);ctx.stroke();}}else{ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p.x+p.facing.x*490,p.y+p.facing.y*490);ctx.stroke();}ctx.setLineDash([]);ctx.restore()}
  ctx.restore();
  if(game.mode==='zombie'){
   ctx.save();ctx.beginPath();ctx.rect(ARENA.min,ARENA.min,804,804);ctx.clip();ctx.translate(-(game.cameraX||0),-(game.cameraY||0));
@@ -1905,7 +1925,7 @@ setAuthMode('login');
 <script id="zombie-bolt-update">
 (()=>{
   // 볼트는 일반 전사와 같은 계정/도감/상점 흐름을 사용한다.
-  HEROES.bolt={id:'bolt',name:'볼트',hp:90,speed:235,r:22,ultMax:5,ultMode:'self',reloadInterval:2.0,short:'지정 위치 번개 낙하',basic:'엘리 궁극기 사거리의 1.4배 범위에서 가까운 적을 자동 조준해. 조준한 곳에 0.5초 예고 표시가 나온 뒤 번개가 내려쳐 피해 6을 줘. 적중할 때마다 궁극기가 충전돼.',ult:'일반 공격 5회 적중으로 충전. 자신을 중심으로 360° 전기파를 방출해. 기본 피해 4, 기본 범위는 엘리 궁극기의 절반이며 0.5초 기절시켜. 5회 초과 명중할 때마다 범위 10%와 피해 1이 증가해. 범위 증가는 최대 100%, 피해는 최대 10이야.',desc:'번개 마법사가 되고 싶은 귀염둥이.',unlock:'상점에서 원코인 1500개로 구매',unlockAt:-1,price:1500,currency:'coins'};
+  HEROES.bolt={id:'bolt',name:'볼트',hp:90,speed:235,r:22,ultMax:5,ultMode:'self',reloadInterval:2.0,short:'지정 위치 번개 낙하',basic:'모바일은 공격 버튼을 바로 눌렀다 떼면 가까운 적을 자동 조준하고, 누른 채 끌면 끄는 방향으로 직접 조준해. 엘리 궁극기 사거리의 1.4배까지 조준할 수 있어. 0.5초 예고 후 피해 6의 번개가 떨어지고 적중할 때마다 궁극기가 충전돼.',ult:'일반 공격 5회 적중으로 충전. 자신을 중심으로 360° 전기파를 방출해. 기본 피해 4, 기본 범위는 엘리 궁극기의 절반이며 0.5초 기절시켜. 5회 초과 명중할 때마다 범위 10%와 피해 1이 증가해. 범위 증가는 최대 100%, 피해는 최대 10이야.',desc:'번개 마법사가 되고 싶은 귀염둥이.',unlock:'상점에서 원코인 1500개로 구매',unlockAt:-1,price:1500,currency:'coins'};
   const BOLT_BASIC_RANGE=ELLIE_ULT_RANGE*1.4;
   const ZOMBIE_ARENA_MAX=ARENA.min+(ARENA.max-ARENA.min)*2;
   function getZombieCameraOffset(){
@@ -2003,13 +2023,7 @@ setAuthMode('login');
     return originalBoltAutoAim(actor);
   };
 
-  // Bolt mobile attack is a simple tap: the dedicated pointer handler below auto-aims on press.
-  // Keep touch movement from changing Bolt's target or creating an Ellie's-style drag preview.
-  const previousBoltMoveInputGesture=moveInputGesture;
-  moveInputGesture=function(e){
-    if(inputGesture?.kind==='attack'&&inputGesture.source==='touch'&&game?.player?.heroId==='bolt')return;
-    return previousBoltMoveInputGesture(e);
-  };
+  // Bolt touch input uses the shared hold-drag gesture: release without dragging auto-aims.
 
   // Zombie waves are built from ordinary fighter objects so the existing hit, projectile,
   // collision and HUD systems can continue to operate without changing AI/Tower battles.
@@ -2086,7 +2100,7 @@ setAuthMode('login');
   const originalStartMatch=startMatch;
   startMatch=function(mode,onlineInfo=null,towerFloor=null){
     if(mode!=='zombie'){ARENA.max=852;return originalStartMatch(mode,onlineInfo,towerFloor);}
-    ARENA.max=852;originalStartMatch('ai');if(!game)return;game.mode='zombie';ARENA.max=ZOMBIE_ARENA_MAX;startRandomGameTrack('zombie');const zombieWorldCenter=(ARENA.min+ZOMBIE_ARENA_MAX)/2;game.player.x=zombieWorldCenter;game.player.y=zombieWorldCenter;game.player.vx=0;game.player.vy=0;game.cameraX=0;game.cameraY=0;game.onlineInfo=null;game.time=999999;game.bossIntro=0;game.zombieWave=1;game.zombieHighestCleared=0;game.zombieRewardPending=0;game.zombieIntermission=0;game.zombieRestTimer=0;game.zombieSpawnedAfterClear=0;game.zombiePerks=[];game.zombieCardPicking=false;game.zombieUndyingUsed=false;game.zombieDoubleCoinNext=false;game.zombieShadowClone={active:false,time:0,cooldown:10,damageTimer:.6};game.boltStrikes=[];game.boltPulses=[];game.boltAimPoint=null;game.ellieAimPoint=null;game.player.boltHitCount=0;game.player.ultCharge=0;game.player.ammo=3;game.player.maxAmmo=3;game.player.reloadTimer=0;game.player.reloadInterval=game.player.heroId==='bolt'?2.0:game.player.reloadInterval;spawnZombieWave(1);game.simLabel='좀비모드 · 1웨이브';$('#game-mode-label').textContent=game.simLabel;if(game.player.heroId==='bolt')$('#game-tip').textContent='볼트: 모바일은 일반 공격 버튼을 누르면 가까운 좀비를 자동 조준해. 3발 탄약 · 0.5초 예고 후 번개 피해 6 · 사거리 엘리 궁극기의 1.4배. 5회 명중으로 번개파가 충전돼.';$('#enemy-hud-name').textContent='일반좀비';if(game.player.heroId==='bolt')$('#touch-ult').textContent='번개파';$('#ult-key-label').textContent=game.player.heroId==='bolt'?'E 즉시 사용':$('#ult-key-label').textContent;updateHUD();
+    ARENA.max=852;originalStartMatch('ai');if(!game)return;game.mode='zombie';ARENA.max=ZOMBIE_ARENA_MAX;startRandomGameTrack('zombie');const zombieWorldCenter=(ARENA.min+ZOMBIE_ARENA_MAX)/2;game.player.x=zombieWorldCenter;game.player.y=zombieWorldCenter;game.player.vx=0;game.player.vy=0;game.cameraX=0;game.cameraY=0;game.onlineInfo=null;game.time=999999;game.bossIntro=0;game.zombieWave=1;game.zombieHighestCleared=0;game.zombieRewardPending=0;game.zombieIntermission=0;game.zombieRestTimer=0;game.zombieSpawnedAfterClear=0;game.zombiePerks=[];game.zombieCardPicking=false;game.zombieUndyingUsed=false;game.zombieDoubleCoinNext=false;game.zombieShadowClone={active:false,time:0,cooldown:10,damageTimer:.6};game.boltStrikes=[];game.boltPulses=[];game.boltAimPoint=null;game.ellieAimPoint=null;game.player.boltHitCount=0;game.player.ultCharge=0;game.player.ammo=3;game.player.maxAmmo=3;game.player.reloadTimer=0;game.player.reloadInterval=game.player.heroId==='bolt'?2.0:game.player.reloadInterval;spawnZombieWave(1);game.simLabel='좀비모드 · 1웨이브';$('#game-mode-label').textContent=game.simLabel;if(game.player.heroId==='bolt')$('#game-tip').textContent='볼트: 공격 버튼을 바로 눌렀다 떼면 가까운 좀비를 자동 조준하고, 누른 채 끌면 끄는 방향으로 직접 조준해. 3발 탄약 · 0.5초 예고 후 번개 피해 6 · 5회 명중으로 번개파가 충전돼.';$('#enemy-hud-name').textContent='일반좀비';if(game.player.heroId==='bolt')$('#touch-ult').textContent='번개파';$('#ult-key-label').textContent=game.player.heroId==='bolt'?'E 즉시 사용':$('#ult-key-label').textContent;updateHUD();
   };
 
   // Keep the normal update engine for the player, projectiles and effects. Only zombie
@@ -2344,10 +2358,7 @@ setAuthMode('login');
     }
   };
 
-  // Bolt's mobile attack button is tap-to-auto-aim; prevent the original target-phase drag handler from overriding it.
-  $('#touch-attack')?.addEventListener('pointermove',e=>{
-    if(game?.player?.heroId==='bolt'&&inputGesture?.kind==='attack'&&inputGesture?.source==='touch')e.stopImmediatePropagation();
-  },true);
+  // The shared attack-button pointermove handler now remains active for Bolt, too.
 
   // Freeze the whole zombie battle while the player is choosing one of the two cards.
   const previousUpdateForCardPause=updateGame;
@@ -2424,18 +2435,7 @@ setAuthMode('login');
     ctx.restore();
   };
 
-  // Bolt mobile: pressing the basic-attack button immediately fires one auto-aimed strike.
-  // This deliberately bypasses the normal drag-to-aim gesture used by other fighters.
-  const boltTapAttackButton=$('#touch-attack');
-  boltTapAttackButton?.addEventListener('pointerdown',e=>{
-    if(game?.player?.heroId!=='bolt')return;
-    e.preventDefault();e.stopImmediatePropagation();
-    if(!game||game.ended||game.zombieCardPicking)return;
-    const direction=autoAim(game.player);
-    game.player.facing=direction;
-    fireBasic(game.player,direction);
-  },true);
-
+  // Bolt no longer fires on pointer-down: tap auto-aims on release; hold-drag fires in the chosen direction.
 
   // Zombie mode can only end when the player is defeated. The RAF loop below calls
   // this before its game.ended branch, so a stale regular-match result cannot freeze input.
