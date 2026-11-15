@@ -68,7 +68,7 @@ async function initDb() {
       wins INTEGER NOT NULL DEFAULT 0,
       losses INTEGER NOT NULL DEFAULT 0,
       selected_hero VARCHAR(16) NOT NULL DEFAULT 'spider',
-      unlocked JSONB NOT NULL DEFAULT '{"spider":true,"hammer":false,"meto":false,"bujijik":false,"adam":false,"yure":false,"joki":true,"gumi":false,"sniff":false,"kuro":false,"glover":false,"root":false,"magnet":false,"bolt":false}'::jsonb,
+      unlocked JSONB NOT NULL DEFAULT '{"spider":true,"hammer":false,"meto":false,"bujijik":false,"adam":false,"yure":false,"joki":true,"gumi":false,"sniff":false,"kuro":false,"glover":false,"root":false,"magnet":false,"bolt":false,"mercy":false}'::jsonb,
       coins INTEGER NOT NULL DEFAULT 0 CHECK (coins >= 0),
       mail_reward_claimed BOOLEAN NOT NULL DEFAULT FALSE,
       mail_reward_read BOOLEAN NOT NULL DEFAULT FALSE,
@@ -161,7 +161,7 @@ app.get("/api/profile", authRequired, async (req, res) => {
 app.put("/api/profile", authRequired, async (req, res) => {
   try {
     await dbReady();
-    const allowedHeroes = new Set(["spider", "hammer", "meto", "bujijik", "adam", "yure", "joki", "gumi", "sniff", "kuro", "glover", "ellie", "nova", "bit", "prma", "teemo", "sera", "root", "magnet", "bolt"]);
+    const allowedHeroes = new Set(["spider", "hammer", "meto", "bujijik", "adam", "yure", "joki", "gumi", "sniff", "kuro", "glover", "ellie", "nova", "bit", "prma", "teemo", "sera", "root", "magnet", "bolt", "mercy"]);
     const selected = allowedHeroes.has(req.body.selectedHero) ? req.body.selectedHero : "spider";
     const result = await pool.query("SELECT trophies, unlocked FROM players WHERE id=$1", [req.user.id]);
     if (!result.rows[0]) return res.status(404).json({ error: "계정을 찾을 수 없습니다." });
@@ -187,7 +187,8 @@ app.put("/api/profile", authRequired, async (req, res) => {
       sera: Boolean(old.sera),
       root: Boolean(old.root),
       magnet: Boolean(old.magnet),
-      bolt: Boolean(old.bolt)
+      bolt: Boolean(old.bolt),
+      mercy: Boolean(old.mercy)
     };
     const safeSelected = unlocked[selected] ? selected : "spider";
     const saved = await pool.query(
@@ -242,7 +243,7 @@ io.on("connection", socket => {
       socketId: socket.id,
       since: Date.now(),
       name: String(payload?.name || "플레이어").slice(0, 24),
-      hero: ["spider", "hammer", "meto", "bujijik", "adam", "yure", "joki", "gumi", "sniff", "kuro", "glover", "ellie", "nova", "bit", "prma", "teemo", "sera", "root", "magnet", "bolt"].includes(payload?.hero) ? payload.hero : "spider"
+      hero: ["spider", "hammer", "meto", "bujijik", "adam", "yure", "joki", "gumi", "sniff", "kuro", "glover", "ellie", "nova", "bit", "prma", "teemo", "sera", "root", "magnet", "bolt", "mercy"].includes(payload?.hero) ? payload.hero : "spider"
     };
     while (waiting.length) {
       const other = waiting.shift();
@@ -274,7 +275,7 @@ io.on("connection", socket => {
       facing: { x: Math.max(-1, Math.min(1, Number(data.facing?.x) || 0)), y: Math.max(-1, Math.min(1, Number(data.facing?.y) || 0)) },
       hp: Math.max(0, Math.min(200, Number(data.hp) || 0)),
       maxHp: Math.max(1, Math.min(200, Number(data.maxHp) || 100)),
-      alive: Boolean(data.alive), ultCharge: Math.max(0, Math.min(100, Number(data.ultCharge) || 0)), heroId: ["spider", "hammer", "meto", "bujijik", "adam", "yure", "joki", "gumi", "sniff", "kuro", "glover", "ellie", "nova", "bit", "prma", "teemo", "sera", "root", "magnet", "bolt"].includes(data.heroId) ? data.heroId : "spider",
+      alive: Boolean(data.alive), ultCharge: Math.max(0, Math.min(100, Number(data.ultCharge) || 0)), heroId: ["spider", "hammer", "meto", "bujijik", "adam", "yure", "joki", "gumi", "sniff", "kuro", "glover", "ellie", "nova", "bit", "prma", "teemo", "sera", "root", "magnet", "bolt", "mercy"].includes(data.heroId) ? data.heroId : "spider",
       skinId: (data.heroId === "spider" && data.skinId === "venom-spider") || (data.heroId === "bujijik" && data.skinId === "rainbow-bujijik") || (data.heroId === "meto" && data.skinId === "mentos-meto") || (data.heroId === "adam" && data.skinId === "thunder-adam") || (data.heroId === "hammer" && data.skinId === "thorboy-hammer") ? data.skinId : null,
       name: String(data.name || "플레이어").slice(0, 24),
       buffTime: Math.max(0, Math.min(10, Number(data.buffTime) || 0)),
@@ -289,7 +290,7 @@ io.on("connection", socket => {
       slowTime: Math.max(0, Math.min(4, Number(data.slowTime) || 0)),
       poisonTime: Math.max(0, Math.min(10, Number(data.poisonTime) || 0)),
       poisonStacks: Math.max(0, Math.min(10, Number(data.poisonStacks) || 0)),
-      summons: Array.isArray(data.summons) ? data.summons.slice(0, 8).map(s => ({ id: String(s?.id || "").slice(0, 80), x: Math.max(48, Math.min(852, Number(s?.x) || 450)), y: Math.max(48, Math.min(852, Number(s?.y) || 450)), hp: Math.max(0, Math.min(20, Number(s?.hp) || 0)), alive: Boolean(s?.alive), facing: { x: Math.max(-1, Math.min(1, Number(s?.facing?.x) || 0)), y: Math.max(-1, Math.min(1, Number(s?.facing?.y) || 0)) }, skinId: data.heroId === "bujijik" && s?.skinId === "rainbow-bujijik" ? "rainbow-bujijik" : null })) : []
+      summons: Array.isArray(data.summons) ? data.summons.slice(0, 8).map(s => ({ id: String(s?.id || "").slice(0, 80), kind: data.heroId === "mercy" && s?.kind === "mercy-angel" ? "mercy-angel" : null, x: Math.max(48, Math.min(852, Number(s?.x) || 450)), y: Math.max(48, Math.min(852, Number(s?.y) || 450)), hp: Math.max(0, Math.min(data.heroId === "mercy" && s?.kind === "mercy-angel" ? 5 : 20, Number(s?.hp) || 0)), maxHp: Math.max(1, Math.min(data.heroId === "mercy" && s?.kind === "mercy-angel" ? 5 : 20, Number(s?.maxHp) || (data.heroId === "mercy" && s?.kind === "mercy-angel" ? 5 : 20))), side: Number(s?.side) === -1 ? -1 : 1, alive: Boolean(s?.alive), facing: { x: Math.max(-1, Math.min(1, Number(s?.facing?.x) || 0)), y: Math.max(-1, Math.min(1, Number(s?.facing?.y) || 0)) }, skinId: data.heroId === "bujijik" && s?.skinId === "rainbow-bujijik" ? "rainbow-bujijik" : null })) : []
     };
     socket.to(match.roomCode).emit("battle:state", safe);
   });
@@ -303,7 +304,7 @@ io.on("connection", socket => {
       skinId: (data.heroId === "spider" && data.skinId === "venom-spider") || (data.heroId === "bujijik" && data.skinId === "rainbow-bujijik") || (data.heroId === "meto" && data.skinId === "mentos-meto") || (data.heroId === "adam" && data.skinId === "thunder-adam") || (data.heroId === "hammer" && data.skinId === "thorboy-hammer") ? data.skinId : null,
       hit: Boolean(data.hit),
       punchSide: Number(data.punchSide) === 1 ? 1 : 0,
-      heroId: ["spider", "hammer", "meto", "bujijik", "adam", "yure", "joki", "gumi", "sniff", "kuro", "glover", "ellie", "nova", "bit", "prma", "teemo", "sera", "root", "magnet", "bolt"].includes(data.heroId) ? data.heroId : "spider",
+      heroId: ["spider", "hammer", "meto", "bujijik", "adam", "yure", "joki", "gumi", "sniff", "kuro", "glover", "ellie", "nova", "bit", "prma", "teemo", "sera", "root", "magnet", "bolt", "mercy"].includes(data.heroId) ? data.heroId : "spider",
       id: String(data.id || "").slice(0, 80),
       x: Math.max(48, Math.min(852, Number(data.x) || 450)),
       y: Math.max(48, Math.min(852, Number(data.y) || 450)),
@@ -330,7 +331,7 @@ io.on("connection", socket => {
   });
   socket.on('battle:hit-confirm', data => {
     const match = socketUsers.get(socket.id);
-    const heroIds = new Set(['spider','hammer','meto','bujijik','adam','yure','joki','gumi','sniff','kuro','glover','ellie','nova','bit','prma','teemo','sera','root','magnet','bolt']);
+    const heroIds = new Set(['spider','hammer','meto','bujijik','adam','yure','joki','gumi','sniff','kuro','glover','ellie','nova','bit','prma','teemo','sera','root','magnet','bolt','mercy']);
     const heroId = String(data?.heroId || '');
     const charge = Math.max(0, Math.min(40, Number(data?.charge) || 0));
     if (match?.roomCode && heroIds.has(heroId) && charge > 0) {
@@ -340,7 +341,7 @@ io.on("connection", socket => {
   socket.on("battle:impact", data => {
     const match = socketUsers.get(socket.id);
     if (!match?.roomCode || !data || typeof data !== "object") return;
-    const validHeroes = new Set(["spider", "hammer", "meto", "bujijik", "adam", "yure", "joki", "gumi", "sniff", "kuro", "glover", "ellie", "nova", "bit", "prma", "teemo", "sera", "root", "magnet", "bolt"]);
+    const validHeroes = new Set(["spider", "hammer", "meto", "bujijik", "adam", "yure", "joki", "gumi", "sniff", "kuro", "glover", "ellie", "nova", "bit", "prma", "teemo", "sera", "root", "magnet", "bolt", "mercy"]);
     const safe = {
       id: String(data.id || "").slice(0, 80),
       roomCode: match.roomCode,
@@ -377,7 +378,7 @@ io.on("connection", socket => {
     const charm = Math.max(0, Math.min(2, Number(data?.charm) || 0));
     const slow = Math.max(0, Math.min(4, Number(data?.slow) || 0));
     const poison = Math.max(0, Math.min(10, Number(data?.poison) || 0));
-    const heroIds = new Set(["spider", "hammer", "meto", "bujijik", "adam", "yure", "joki", "gumi", "sniff", "kuro", "glover", "ellie", "nova", "bit", "prma", "teemo", "sera", "root", "magnet", "bolt"]);
+    const heroIds = new Set(["spider", "hammer", "meto", "bujijik", "adam", "yure", "joki", "gumi", "sniff", "kuro", "glover", "ellie", "nova", "bit", "prma", "teemo", "sera", "root", "magnet", "bolt", "mercy"]);
     const skinId = ["venom-spider", "rainbow-bujijik", "mentos-meto", "thunder-adam", "thorboy-hammer"].includes(data?.skinId) ? data.skinId : null;
     const safe = {
       amount, stun, charm, slow, poison,
