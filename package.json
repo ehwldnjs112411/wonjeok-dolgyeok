@@ -1,8 +1,8 @@
 {
   "name": "wonjeok-dolgyeok",
-  "version": "2.6.0",
+  "version": "2.7.0",
   "private": true,
-  "description": "원격돌격 좀비모드 및 볼트 모바일 조작 개선, 신규 전사 메르시 추가",
+  "description": "원격돌격 천국 이벤트 및 메르시 한정 전사 업데이트",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"

@@ -331,7 +331,7 @@ button,input{font:inherit}button{cursor:pointer;border:0;color:var(--text);font-
 
 <section id="menu-screen" class="screen" data-screen>
   <header class="topbar"><div class="top-brand"><div class="mini-logo"></div><div class="brand"><span class="round">원</span>격돌격</div></div><div class="profile"><div class="profile-chip"><span>⚡</span><span id="menu-user">플레이어</span></div><div class="profile-chip"><span class="trophy-icon">🏆</span><span id="menu-trophies">0</span></div><div class="profile-chip coin-chip"><span>🪙</span><span id="menu-coins">0</span></div><button class="logout" id="logout-btn">로그아웃</button></div></header>
-  <div class="menu-music-slot"><aside id="music-dock" aria-label="배경 음악"><span id="music-title">대기 음악</span><button type="button" id="music-toggle-btn" aria-label="음악 끄기">음악 끄기</button><iframe id="music-frame" title="배경 음악 오디오" src="https://www.youtube-nocookie.com/embed/AztRbo-sUQM?autoplay=0&enablejsapi=1&playsinline=1&controls=0&rel=0" allow="autoplay; encrypted-media" tabindex="-1"></iframe><span id="music-caption" class="music-status">대기 음악</span></aside><button type="button" class="halloween-menu-btn" id="halloween-btn">이벤트</button></div>
+  <div class="menu-music-slot"><aside id="music-dock" aria-label="배경 음악"><span id="music-title">대기 음악</span><button type="button" id="music-toggle-btn" aria-label="음악 끄기">음악 끄기</button><iframe id="music-frame" title="배경 음악 오디오" src="https://www.youtube-nocookie.com/embed/AztRbo-sUQM?autoplay=0&enablejsapi=1&playsinline=1&controls=0&rel=0" allow="autoplay; encrypted-media" tabindex="-1"></iframe><span id="music-caption" class="music-status">대기 음악</span></aside><button type="button" class="halloween-menu-btn" id="halloween-btn">천국 이벤트</button></div>
   <div class="menu-hero"><div class="menu-hero-actions"><button class="menu-tile menu-hero-tile" id="user-match-btn"><span class="arrow">↗</span><div class="tile-icon">🌐</div><h3>유저 매칭</h3><p>매칭 모드로 전장에 입장해.</p></button><button class="menu-tile menu-hero-tile" id="shop-btn"><span class="arrow">↗</span><div class="tile-icon">🛒</div><h3>상점</h3><p>원코인으로 특별한 전사를 구매해.</p></button></div><button type="button" class="featured featured-clickable" id="featured-collection-btn" title="클릭하면 원 도감으로 이동해"><div class="featured-top"><span class="eyebrow">SELECTED FIGHTER</span><span class="tiny" id="featured-status">기본 지급</span></div><div class="featured-graphic"><div class="fighter-orb" id="featured-orb"></div></div><div><h3 id="featured-name">스피디</h3><p id="featured-desc">거미줄 3연사 · 거미줄 이동 궁극기</p></div></button></div>
   <div class="menu-grid">
     <button class="menu-tile" id="ai-match-btn"><span class="arrow">↗</span><div class="tile-icon">⚔️</div><h3>AI 매칭</h3><p>AI 전사와 실력을 겨뤄봐.</p></button>
@@ -343,13 +343,13 @@ button,input{font:inherit}button{cursor:pointer;border:0;color:var(--text);font-
 </section>
 
 <section id="halloween-screen" class="screen" data-screen>
- <header class="topbar"><div class="top-brand"><div class="mini-logo"></div><div class="brand"><span class="round">원</span>격돌격</div></div><div class="profile"><div class="profile-chip">🎃 <span id="halloween-candy-header">사탕 0 / 20</span></div><div class="profile-chip coin-chip">🪙 <span id="halloween-coins">0</span></div><button class="back-btn" data-menu-back>← 메뉴</button></div></header>
- <div class="section-head"><div><div class="eyebrow">LIMITED HALLOWEEN EVENT</div><h1>🎃 할로윈 이벤트</h1><div class="tiny">할로윈 보스전에 도전하고 미션을 완료해 한정 전사 킁킁을 얻어 봐!</div></div></div>
- <div id="halloween-event-period" class="event-period">이벤트 기간을 불러오는 중…</div>
- <div id="halloween-no-event" class="halloween-no-event hidden">🎃 아직 이벤트 없습니다</div>
+ <header class="topbar"><div class="top-brand"><div class="mini-logo"></div><div class="brand"><span class="round">원</span>격돌격</div></div><div class="profile"><div class="profile-chip">🍬 <span id="halloween-candy-header">천사사탕 0 / 30</span></div><div class="profile-chip coin-chip">🪙 <span id="halloween-coins">0</span></div><button class="back-btn" data-menu-back>← 메뉴</button></div></header>
+ <div class="section-head"><div><div class="eyebrow">LIMITED HEAVEN EVENT</div><h1>✨ 천국 이벤트</h1><div class="tiny">천계 보스와 미션에 도전하고 천사사탕 30개를 모아 한정 전사 메르시를 영입해!</div></div></div>
+ <div id="halloween-event-period" class="event-period">천계의 문이 열렸어! 천사사탕을 모아 메르시를 영입하자.</div>
+ <div id="halloween-no-event" class="halloween-no-event hidden">✨ 천국 이벤트</div>
  <div class="halloween-layout">
-  <article class="halloween-boss-card"><div class="halloween-art">🎃</div><div class="eyebrow">SPECIAL BATTLE</div><h2>할로윈 보스전</h2><p>으스스한 할로윈 보스와 대결해! 보스를 이길 때마다 사탕 1개를 받고, 첫 승리 미션을 완료하면 사탕 5개를 추가로 얻어.</p><div class="halloween-boss-stats"><span>보스 체력 500</span><span>주기적 충전 공격</span><span>클리어 보상 사탕 1개</span></div><button id="halloween-boss-start" class="primary-small">🎃 할로윈 보스전 시작</button></article>
-  <article class="halloween-mission-card"><div class="eyebrow">CANDY MISSIONS</div><h2>할로윈 미션</h2><div id="halloween-mission-list" class="halloween-mission-list"></div><div class="halloween-candy-meter"><div class="halloween-candy-meter-head"><b>모은 사탕</b><strong id="halloween-candy-count">0 / 20</strong><button type="button" id="halloween-sniff-unlock" class="halloween-unlock-btn" disabled>킁킁 잠금 해제</button></div><div class="halloween-candy-rail"><span id="halloween-candy-fill"></span></div></div><div id="halloween-sniff-reward" class="halloween-sniff-reward">🍬 사탕 20개를 모은 뒤 버튼을 눌러 킁킁을 해금해!</div></article>
+  <article class="halloween-boss-card"><div class="halloween-art">👼</div><div class="eyebrow">CELESTIAL BOSS BATTLE</div><h2>천계 보스</h2><p>체력 500의 천계 보스를 쓰러뜨려! 기존 할로윈 보스와 같은 기술을 사용하며, 회복 구슬과 천상 표창을 전장에 소환해.</p><div class="halloween-boss-stats"><span>보스 체력 500</span><span>5초마다 회복 구슬 80%</span><span>10초마다 천상 표창 85%</span><span>승리할 때마다 천사사탕 1개</span></div><button id="halloween-boss-start" class="primary-small">✨ 천계 보스 도전</button></article>
+  <article class="halloween-mission-card"><div class="eyebrow">ANGEL CANDY MISSIONS</div><h2>천국 미션</h2><div id="halloween-mission-list" class="halloween-mission-list"></div><div class="halloween-candy-meter"><div class="halloween-candy-meter-head"><b>모은 천사사탕</b><strong id="halloween-candy-count">0 / 30</strong><button type="button" id="halloween-sniff-unlock" class="halloween-unlock-btn" disabled>메르시 영입</button></div><div class="halloween-candy-rail"><span id="halloween-candy-fill"></span></div></div><div id="halloween-sniff-reward" class="halloween-sniff-reward">🍬 천사사탕 30개를 모아 메르시를 영입해!</div></article>
  </div>
 </section>
 
@@ -552,7 +552,7 @@ function playGloverImpactSound(){const ctx=getSfxContext();if(!ctx)return;sfxNoi
 
 const PRE_GAME_TRACK='AztRbo-sUQM';const HALLOWEEN_BOSS_TRACK='McYj38M_F9Q';
 const HALLOWEEN_EVENT_START=Date.parse('2026-10-31T21:18:00+09:00');const HALLOWEEN_EVENT_END=HALLOWEEN_EVENT_START+7*24*60*60*1000;
-function isHalloweenEventActive(){return Date.now()>=HALLOWEEN_EVENT_START&&Date.now()<HALLOWEEN_EVENT_END}
+function isHalloweenEventActive(){return true}
 function showEventUnavailable(){const el=$('#event-expired-toast');if(!el)return;el.textContent='아직 이벤트 없습니다';el.classList.add('show');clearTimeout(showEventUnavailable.timer);showEventUnavailable.timer=setTimeout(()=>el.classList.remove('show'),2600)}
 function updateHalloweenEventClock(){const period=$('#halloween-event-period'),layout=$('.halloween-layout'),empty=$('#halloween-no-event');if(!period||!layout||!empty)return;const fmt=d=>new Date(d).toLocaleString('ko-KR',{timeZone:'Asia/Seoul',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false});if(Date.now()<HALLOWEEN_EVENT_START){const wait=HALLOWEEN_EVENT_START-Date.now();period.textContent=`이벤트 기간: ${fmt(HALLOWEEN_EVENT_START)} ~ ${fmt(HALLOWEEN_EVENT_END)} (KST) · 시작까지 ${Math.ceil(wait/60000)}분`;layout.hidden=true;empty.classList.remove('hidden');empty.textContent='🎃 이벤트 시작 전입니다';return}if(!isHalloweenEventActive()){period.textContent=`이벤트 종료: ${fmt(HALLOWEEN_EVENT_END)} (KST)`;layout.hidden=true;empty.classList.remove('hidden');empty.textContent='🎃 아직 이벤트 없습니다';return}const remain=HALLOWEEN_EVENT_END-Date.now(),days=Math.floor(remain/86400000),hours=Math.floor(remain%86400000/3600000),mins=Math.floor(remain%3600000/60000),secs=Math.floor(remain%60000/1000);period.textContent=`이벤트 기간: ${fmt(HALLOWEEN_EVENT_START)} ~ ${fmt(HALLOWEEN_EVENT_END)} (KST) · 남은 시간 ${days}일 ${hours}시간 ${mins}분 ${secs}초`;layout.hidden=false;empty.classList.add('hidden')}
 updateHalloweenEventClock();setInterval(updateHalloweenEventClock,1000);
@@ -1063,11 +1063,11 @@ function updateGame(dt){if(!game||game.ended)return;if(game.bossIntro>0){game.bo
   }
  }
  // 100F boss arena drops a +10 HP pickup every 5 seconds with 80% probability.
- if((game.mode==='tower'&&game.towerFloor===100)||game.mode==='halloween'){game.powerupTimer=(game.powerupTimer||5)-dt;if(game.powerupTimer<=0){const spawnChance=game.mode==='halloween'?.9:.8;if(Math.random()<spawnChance)game.powerups.push({type:'heal',x:ARENA.min+35+Math.random()*(ARENA.max-ARENA.min-70),y:ARENA.min+35+Math.random()*(ARENA.max-ARENA.min-70),life:12});game.powerupTimer=5}for(let i=game.powerups.length-1;i>=0;i--){const item=game.powerups[i];if(item.type!=='heal')continue;item.life-=dt;if(Math.hypot(p.x-item.x,p.y-item.y)<p.r+13){p.hp=Math.min(p.maxHp,p.hp+10);game.effects.push({type:'damage',x:p.x,y:p.y-30,text:'+10',time:.65,max:.65,color:'#73f5af'});game.powerups.splice(i,1)}else if(item.life<=0)game.powerups.splice(i,1)}}
+ if((game.mode==='tower'&&game.towerFloor===100)||game.mode==='halloween'){game.powerupTimer=(game.powerupTimer||5)-dt;if(game.powerupTimer<=0){const spawnChance=game.mode==='halloween'?.8:.8;if(Math.random()<spawnChance)game.powerups.push({type:'heal',x:ARENA.min+35+Math.random()*(ARENA.max-ARENA.min-70),y:ARENA.min+35+Math.random()*(ARENA.max-ARENA.min-70),life:12});game.powerupTimer=5}for(let i=game.powerups.length-1;i>=0;i--){const item=game.powerups[i];if(item.type!=='heal')continue;item.life-=dt;if(Math.hypot(p.x-item.x,p.y-item.y)<p.r+13){p.hp=Math.min(p.maxHp,p.hp+10);game.effects.push({type:'damage',x:p.x,y:p.y-30,text:'+10',time:.65,max:.65,color:'#73f5af'});game.powerups.splice(i,1)}else if(item.life<=0)game.powerups.splice(i,1)}}
  // Halloween: candy appears every 10 seconds with a 70% chance. Collecting it sends a 15-damage homing candy to the boss.
- if(game.mode==='halloween'){game.halloweenCandyTimer=(game.halloweenCandyTimer??10)-dt;if(game.halloweenCandyTimer<=0){if(Math.random()<.7)game.powerups.push({type:'halloween-candy',x:ARENA.min+32+Math.random()*(ARENA.max-ARENA.min-64),y:ARENA.min+32+Math.random()*(ARENA.max-ARENA.min-64),life:16});game.halloweenCandyTimer=10;}for(let i=game.powerups.length-1;i>=0;i--){const item=game.powerups[i];if(item.type!=='halloween-candy')continue;item.life-=dt;if(Math.hypot(p.x-item.x,p.y-item.y)<p.r+16){const boss=(game.enemies||[game.enemy]).find(e=>e?.alive);if(boss){const dir=vecNorm(boss.x-p.x,boss.y-p.y);game.projectiles.push({owner:p,x:p.x+dir.x*(p.r+9),y:p.y+dir.y*(p.r+9),vx:dir.x*470,vy:dir.y*470,r:13,damage:25,life:4,color:'#ffdc50',kind:'halloween-candy-homing',charge:false,homingTarget:boss,homingSpeed:470,originX:p.x,originY:p.y});game.effects.push({type:'explosion',x:p.x,y:p.y,time:.28,max:.28,r:22,color:'#ffd84b'});const pickupCtx=getSfxContext();if(pickupCtx)sfxTone(pickupCtx,780,1320,.12,'triangle',.07);showToast('사탕 획득! 보스를 향해 유도탄 발사!');}game.powerups.splice(i,1);}else if(item.life<=0)game.powerups.splice(i,1);}}
+ if(game.mode==='halloween'){game.halloweenCandyTimer=(game.halloweenCandyTimer??10)-dt;if(game.halloweenCandyTimer<=0){if(Math.random()<0)game.powerups.push({type:'halloween-candy',x:ARENA.min+32+Math.random()*(ARENA.max-ARENA.min-64),y:ARENA.min+32+Math.random()*(ARENA.max-ARENA.min-64),life:16});game.halloweenCandyTimer=10;}for(let i=game.powerups.length-1;i>=0;i--){const item=game.powerups[i];if(item.type!=='halloween-candy')continue;item.life-=dt;if(Math.hypot(p.x-item.x,p.y-item.y)<p.r+16){const boss=(game.enemies||[game.enemy]).find(e=>e?.alive);if(boss){const dir=vecNorm(boss.x-p.x,boss.y-p.y);game.projectiles.push({owner:p,x:p.x+dir.x*(p.r+9),y:p.y+dir.y*(p.r+9),vx:dir.x*470,vy:dir.y*470,r:13,damage:25,life:4,color:'#ffdc50',kind:'halloween-candy-homing',charge:false,homingTarget:boss,homingSpeed:470,originX:p.x,originY:p.y});game.effects.push({type:'explosion',x:p.x,y:p.y,time:.28,max:.28,r:22,color:'#ffd84b'});const pickupCtx=getSfxContext();if(pickupCtx)sfxTone(pickupCtx,780,1320,.12,'triangle',.07);showToast('사탕 획득! 보스를 향해 유도탄 발사!');}game.powerups.splice(i,1);}else if(item.life<=0)game.powerups.splice(i,1);}}
  updateSummons(dt);
-  for(let i=game.projectiles.length-1;i>=0;i--){const pr=game.projectiles[i];if(pr.kind==='halloween-candy-homing'&&pr.homingTarget?.alive){const hdir=vecNorm(pr.homingTarget.x-pr.x,pr.homingTarget.y-pr.y);pr.vx=hdir.x*(pr.homingSpeed||470);pr.vy=hdir.y*(pr.homingSpeed||470);}else if(pr.kind==='sniff-homing'&&pr.homingTarget?.alive){const dOwner=Math.hypot(pr.homingTarget.x-(pr.owner?.x??pr.originX),pr.homingTarget.y-(pr.owner?.y??pr.originY));if(dOwner<=470){const hdir=vecNorm(pr.homingTarget.x-pr.x,pr.homingTarget.y-pr.y);pr.vx=hdir.x*(pr.homingSpeed||430);pr.vy=hdir.y*(pr.homingSpeed||430)}else pr.homingTarget=null;}const prevX=pr.x,prevY=pr.y;pr.x+=pr.vx*dt;pr.y+=pr.vy*dt;pr.life-=dt;if(pr.visualOnly){if(pr.life<=0||pr.x<ARENA.min-35||pr.x>ARENA.max+35||pr.y<ARENA.min-35||pr.y>ARENA.max+35)game.projectiles.splice(i,1);continue}pr.hitTargets=pr.hitTargets||[];const hitSummon=[...(game.summons||[]),...(game.remoteSummons||[])].find(s=>s.alive&&s.isPlayer!==pr.owner.isPlayer&&(!pr.pierce||!pr.hitTargets.includes(s))&&distanceSqToSegment(s.x,s.y,prevX,prevY,pr.x,pr.y)<(pr.r+s.r)*(pr.r+s.r));if(hitSummon){damageSummon(hitSummon,pr.damage,pr.owner);if(pr.remote)reportOnlineImpact(hitSummon,pr.owner,{id:pr.networkId,kind:pr.kind,amount:pr.damage,targetType:'summon',targetId:hitSummon.remoteId||hitSummon.id,pierce:!!pr.pierce});if(pr.pierce){pr.hitTargets.push(hitSummon);continue;}if(pr.kind==='root-cactus')detonateRootCactus(pr);game.projectiles.splice(i,1);continue}const targets=pr.remote?[p]:(pr.owner?.isPlayer?(game.enemies||[game.enemy]).filter(enemy=>enemy.alive):[p]);const target=targets.find(enemy=>enemy.alive&&(!pr.pierce||!pr.hitTargets.includes(enemy))&&distanceSqToSegment(enemy.x,enemy.y,prevX,prevY,pr.x,pr.y)<(pr.r+enemy.r)*(pr.r+enemy.r));if(target){if((target.invulnTime||0)>0){if(pr.remote)reportOnlineImpact(target,pr.owner,{id:pr.networkId,kind:'blocked',amount:0,pierce:!!pr.pierce});if(pr.pierce){pr.hitTargets.push(target);continue;}if(pr.kind==='root-cactus')detonateRootCactus(pr);game.projectiles.splice(i,1);continue;}if(pr.kind==='gumi-charm'){target.stunTime=Math.max(target.stunTime||0,1);target.charmTime=1;target.charmOwner=pr.owner;game.effects.push({type:'stun',x:target.x,y:target.y,time:1,max:1});if(pr.owner?.heroId==='gumi'){pr.owner.hp=Math.min(pr.owner.maxHp,pr.owner.hp+9);game.effects.push({type:'damage',x:pr.owner.x,y:pr.owner.y-26,text:'+9',time:.7,max:.7,color:'#ff8bd0'});}if(pr.remote)reportOnlineImpact(target,pr.owner,{id:pr.networkId,kind:'gumi-charm',amount:0,stun:1,charm:1,pierce:!!pr.pierce});if(game.mode==='user'&&pr.owner?.isPlayer&&window.wonjeokSocket?.connected)window.wonjeokSocket.emit('battle:damage',{amount:0,stun:1,charm:1});}else{let chargeHit=pr.charge!==false;if(pr.chargeGroup&&pr.owner?.heroId==='kuro'){pr.owner.kuroChargedGroups=pr.owner.kuroChargedGroups||new Set();if(pr.owner.kuroChargedGroups.has(pr.chargeGroup))chargeHit=false;else pr.owner.kuroChargedGroups.add(pr.chargeGroup)}const travelled=pr.damageByRange?Math.hypot(pr.x-(Number(pr.originX)||pr.x),pr.y-(Number(pr.originY)||pr.y)):0;const hitDamage=pr.damageByRange?Math.min(16,2+14*Math.min(1,travelled/(Number(pr.rangeCap)||804))):pr.damage;const isCrit=pr.critChance>0&&Math.random()<Math.min(.8,pr.critChance);const finalHitDamage=hitDamage+(isCrit?Math.max(0,Number(pr.critBonus)||0):0);const bitCharge=pr.damageByRange?Math.max(5,Math.min(40,hitDamage*2.5)):null;const chargeOverride=pr.chargeOverride==null?bitCharge:pr.chargeOverride;damage(target,finalHitDamage,pr.owner,chargeHit,pr.stun||0,pr.slow||0,chargeOverride,{id:pr.networkId,kind:pr.kind,basicAttack:!!pr.zombieBasic,charm:pr.charm||0,poison:pr.poison||0,pierce:!!pr.pierce});if(isCrit)game.effects.push({type:'damage',x:target.x,y:target.y-43,text:'치명타! 5 피해',time:.8,max:.8,color:'#ffd66b'});if(pr.remote&&window.wonjeokSocket?.connected&&pr.owner?.heroId){const confirmedCharge=ultimateChargeGainForHit(pr.owner,chargeHit,chargeOverride);if(confirmedCharge>0)window.wonjeokSocket.emit('battle:hit-confirm',{heroId:pr.owner.heroId,charge:confirmedCharge});}if(pr.poison){applyPoisonStack(target,pr.poison,pr.owner);game.effects.push({type:'teemo-poison',x:target.x,y:target.y,time:.45,max:.45})}if(pr.kind==='mercy-holy-bomb')game.effects.push({type:'explosion',x:target.x,y:target.y,time:.38,max:.38,r:24,color:'#f3dcff'});if(pr.kind==='mercy-spear')game.effects.push({type:'explosion',x:target.x,y:target.y,time:.24,max:.24,r:10,color:'#fff0ad'});if(pr.kind==='prma-starburst')game.effects.push({type:'prma-impact',x:target.x,y:target.y,time:.46,max:.46});if(pr.kind==='sniff-pumpkin')game.effects.push({type:'sniff-pumpkin-impact',x:target.x,y:target.y,time:.58,max:.58,seed:Math.random()*6.28});if(pr.kind==='sniff-homing')game.effects.push({type:'sniff-ult-impact',x:target.x,y:target.y,time:.62,max:.62,seed:Math.random()*6.28});if(pr.kind==='nova-star')game.effects.push({type:'nova-star-impact',x:target.x,y:target.y,time:.46,max:.46,seed:(target.x*7+target.y*11)})}if(pr.stun&&!(target.heroId==='kuro'&&(target.invulnTime||0)>0)){target.stunTime=Math.max(target.stunTime||0,pr.stun);game.effects.push({type:'stun',x:target.x,y:target.y,time:pr.stun,max:pr.stun,rainbow:pr.owner?.skinId==='mentos-meto'});if(pr.owner.isPlayer)showToast('명중! 적이 1초 동안 기절했어!')}if(pr.pierce){pr.hitTargets.push(target);continue;}if(pr.kind==='root-cactus')detonateRootCactus(pr);game.projectiles.splice(i,1);continue}if(pr.life<=0||pr.x<ARENA.min-10||pr.x>ARENA.max+10||pr.y<ARENA.min-10||pr.y>ARENA.max+10){if(pr.kind==='root-cactus')detonateRootCactus(pr);game.projectiles.splice(i,1)}}
+  for(let i=game.projectiles.length-1;i>=0;i--){const pr=game.projectiles[i];if((pr.kind==='halloween-candy-homing'||pr.kind==='celestial-star-homing')&&pr.homingTarget?.alive){const hdir=vecNorm(pr.homingTarget.x-pr.x,pr.homingTarget.y-pr.y);pr.vx=hdir.x*(pr.homingSpeed||470);pr.vy=hdir.y*(pr.homingSpeed||470);}else if(pr.kind==='sniff-homing'&&pr.homingTarget?.alive){const dOwner=Math.hypot(pr.homingTarget.x-(pr.owner?.x??pr.originX),pr.homingTarget.y-(pr.owner?.y??pr.originY));if(dOwner<=470){const hdir=vecNorm(pr.homingTarget.x-pr.x,pr.homingTarget.y-pr.y);pr.vx=hdir.x*(pr.homingSpeed||430);pr.vy=hdir.y*(pr.homingSpeed||430)}else pr.homingTarget=null;}const prevX=pr.x,prevY=pr.y;pr.x+=pr.vx*dt;pr.y+=pr.vy*dt;pr.life-=dt;if(pr.visualOnly){if(pr.life<=0||pr.x<ARENA.min-35||pr.x>ARENA.max+35||pr.y<ARENA.min-35||pr.y>ARENA.max+35)game.projectiles.splice(i,1);continue}pr.hitTargets=pr.hitTargets||[];const hitSummon=[...(game.summons||[]),...(game.remoteSummons||[])].find(s=>s.alive&&s.isPlayer!==pr.owner.isPlayer&&(!pr.pierce||!pr.hitTargets.includes(s))&&distanceSqToSegment(s.x,s.y,prevX,prevY,pr.x,pr.y)<(pr.r+s.r)*(pr.r+s.r));if(hitSummon){damageSummon(hitSummon,pr.damage,pr.owner);if(pr.remote)reportOnlineImpact(hitSummon,pr.owner,{id:pr.networkId,kind:pr.kind,amount:pr.damage,targetType:'summon',targetId:hitSummon.remoteId||hitSummon.id,pierce:!!pr.pierce});if(pr.pierce){pr.hitTargets.push(hitSummon);continue;}if(pr.kind==='root-cactus')detonateRootCactus(pr);game.projectiles.splice(i,1);continue}const targets=pr.remote?[p]:(pr.owner?.isPlayer?(game.enemies||[game.enemy]).filter(enemy=>enemy.alive):[p]);const target=targets.find(enemy=>enemy.alive&&(!pr.pierce||!pr.hitTargets.includes(enemy))&&distanceSqToSegment(enemy.x,enemy.y,prevX,prevY,pr.x,pr.y)<(pr.r+enemy.r)*(pr.r+enemy.r));if(target){if((target.invulnTime||0)>0){if(pr.remote)reportOnlineImpact(target,pr.owner,{id:pr.networkId,kind:'blocked',amount:0,pierce:!!pr.pierce});if(pr.pierce){pr.hitTargets.push(target);continue;}if(pr.kind==='root-cactus')detonateRootCactus(pr);game.projectiles.splice(i,1);continue;}if(pr.kind==='gumi-charm'){target.stunTime=Math.max(target.stunTime||0,1);target.charmTime=1;target.charmOwner=pr.owner;game.effects.push({type:'stun',x:target.x,y:target.y,time:1,max:1});if(pr.owner?.heroId==='gumi'){pr.owner.hp=Math.min(pr.owner.maxHp,pr.owner.hp+9);game.effects.push({type:'damage',x:pr.owner.x,y:pr.owner.y-26,text:'+9',time:.7,max:.7,color:'#ff8bd0'});}if(pr.remote)reportOnlineImpact(target,pr.owner,{id:pr.networkId,kind:'gumi-charm',amount:0,stun:1,charm:1,pierce:!!pr.pierce});if(game.mode==='user'&&pr.owner?.isPlayer&&window.wonjeokSocket?.connected)window.wonjeokSocket.emit('battle:damage',{amount:0,stun:1,charm:1});}else{let chargeHit=pr.charge!==false;if(pr.chargeGroup&&pr.owner?.heroId==='kuro'){pr.owner.kuroChargedGroups=pr.owner.kuroChargedGroups||new Set();if(pr.owner.kuroChargedGroups.has(pr.chargeGroup))chargeHit=false;else pr.owner.kuroChargedGroups.add(pr.chargeGroup)}const travelled=pr.damageByRange?Math.hypot(pr.x-(Number(pr.originX)||pr.x),pr.y-(Number(pr.originY)||pr.y)):0;const hitDamage=pr.damageByRange?Math.min(16,2+14*Math.min(1,travelled/(Number(pr.rangeCap)||804))):pr.damage;const isCrit=pr.critChance>0&&Math.random()<Math.min(.8,pr.critChance);const finalHitDamage=hitDamage+(isCrit?Math.max(0,Number(pr.critBonus)||0):0);const bitCharge=pr.damageByRange?Math.max(5,Math.min(40,hitDamage*2.5)):null;const chargeOverride=pr.chargeOverride==null?bitCharge:pr.chargeOverride;damage(target,finalHitDamage,pr.owner,chargeHit,pr.stun||0,pr.slow||0,chargeOverride,{id:pr.networkId,kind:pr.kind,basicAttack:!!pr.zombieBasic,charm:pr.charm||0,poison:pr.poison||0,pierce:!!pr.pierce});if(isCrit)game.effects.push({type:'damage',x:target.x,y:target.y-43,text:'치명타! 5 피해',time:.8,max:.8,color:'#ffd66b'});if(pr.remote&&window.wonjeokSocket?.connected&&pr.owner?.heroId){const confirmedCharge=ultimateChargeGainForHit(pr.owner,chargeHit,chargeOverride);if(confirmedCharge>0)window.wonjeokSocket.emit('battle:hit-confirm',{heroId:pr.owner.heroId,charge:confirmedCharge});}if(pr.poison){applyPoisonStack(target,pr.poison,pr.owner);game.effects.push({type:'teemo-poison',x:target.x,y:target.y,time:.45,max:.45})}if(pr.kind==='mercy-holy-bomb')game.effects.push({type:'explosion',x:target.x,y:target.y,time:.38,max:.38,r:24,color:'#f3dcff'});if(pr.kind==='mercy-spear')game.effects.push({type:'explosion',x:target.x,y:target.y,time:.24,max:.24,r:10,color:'#fff0ad'});if(pr.kind==='prma-starburst')game.effects.push({type:'prma-impact',x:target.x,y:target.y,time:.46,max:.46});if(pr.kind==='sniff-pumpkin')game.effects.push({type:'sniff-pumpkin-impact',x:target.x,y:target.y,time:.58,max:.58,seed:Math.random()*6.28});if(pr.kind==='sniff-homing')game.effects.push({type:'sniff-ult-impact',x:target.x,y:target.y,time:.62,max:.62,seed:Math.random()*6.28});if(pr.kind==='nova-star')game.effects.push({type:'nova-star-impact',x:target.x,y:target.y,time:.46,max:.46,seed:(target.x*7+target.y*11)})}if(pr.stun&&!(target.heroId==='kuro'&&(target.invulnTime||0)>0)){target.stunTime=Math.max(target.stunTime||0,pr.stun);game.effects.push({type:'stun',x:target.x,y:target.y,time:pr.stun,max:pr.stun,rainbow:pr.owner?.skinId==='mentos-meto'});if(pr.owner.isPlayer)showToast('명중! 적이 1초 동안 기절했어!')}if(pr.pierce){pr.hitTargets.push(target);continue;}if(pr.kind==='root-cactus')detonateRootCactus(pr);game.projectiles.splice(i,1);continue}if(pr.life<=0||pr.x<ARENA.min-10||pr.x>ARENA.max+10||pr.y<ARENA.min-10||pr.y>ARENA.max+10){if(pr.kind==='root-cactus')detonateRootCactus(pr);game.projectiles.splice(i,1)}}
  for(let i=game.effects.length-1;i>=0;i--){const fx=game.effects[i];fx.time-=dt;if(fx.time<=0)game.effects.splice(i,1)}
 }
 function launchSniffOrbit(actor){if(!game||game.ended||!actor?.alive)return;const targets=(actor.isPlayer?(game.enemies||[game.enemy]):[game.player]).filter(t=>t?.alive&&Math.hypot(t.x-actor.x,t.y-actor.y)<=470);if(!targets.length){if(actor.isPlayer)showToast('중거리 안에 적이 없어 호박 표창이 발사되지 않았어.');return}const bullets=[];for(let i=0;i<4;i++){const target=targets[i%targets.length],spawnAngle=i*Math.PI/2+Math.PI/4;const sx=actor.x+Math.cos(spawnAngle)*(actor.r+18),sy=actor.y+Math.sin(spawnAngle)*(actor.r+18);const aim=Math.atan2(target.y-sy,target.x-sx)+(i-1.5)*.025;const pr={owner:actor,x:sx,y:sy,vx:Math.cos(aim)*430,vy:Math.sin(aim)*430,r:12,damage:4,life:2.5,color:'#ff9d36',kind:'sniff-homing',charge:false,homingTarget:target,homingSpeed:430,originX:actor.x,originY:actor.y};game.projectiles.push(pr);bullets.push(projectilePayload(pr))}game.effects.push({type:'explosion',x:actor.x,y:actor.y,time:.35,max:.35,r:28,color:'#ff9b37'});if(game.mode==='user'&&actor.isPlayer&&window.wonjeokSocket?.connected)window.wonjeokSocket.emit('battle:attack',{kind:'projectiles',heroId:'sniff',x:actor.x,y:actor.y,facing:actor.facing,bullets});if(actor.isPlayer)showToast('호박 표창 4개가 각각 흩어져 적을 추적해!')}
@@ -2629,7 +2629,7 @@ setAuthMode('login');
         id: `mercy-${Date.now().toString(36)}-${side}-${Math.random().toString(36).slice(2,6)}`,
         heroId: 'mercy', kind: 'mercy-angel', formationSide: side, name: '미니 천사',
         isPlayer: !!actor.isPlayer, owner: actor, x, y, vx: 0, vy: 0, r: 13,
-        hp: 5, maxHp: 5, facing: {...actor.facing}, attackCd: side < 0 ? .42 : .78,
+        hp: 5, maxHp: 5, life: 5, facing: {...actor.facing}, attackCd: side < 0 ? .42 : .78,
         attackAnim: 0, flash: 0, alive: true, remote: false
       });
     }
@@ -2768,6 +2768,136 @@ setAuthMode('login');
 .shop-art .mercy-orb,.fighter-art .mercy-orb{width:76px;height:76px}
 @media(max-width:600px){.shop-art .mercy-orb,.fighter-art .mercy-orb{width:66px;height:66px}}
 </style>
+
+
+<script id="heaven-event-and-mercy-limited-integration">
+(() => {
+  if (window.__heavenEventIntegrated) return;
+  window.__heavenEventIntegrated = true;
+  const $ = (s) => document.querySelector(s);
+  const clampN = (v,a,b) => Math.max(a,Math.min(b,v));
+  // The former Halloween screen is now the permanent Heaven event screen.
+  window.isHalloweenEventActive = () => true;
+  window.updateHalloweenEventClock = function(){
+    const period=$('#halloween-event-period'),layout=$('.halloween-layout'),empty=$('#halloween-no-event');
+    if(period)period.textContent='천계의 문이 열렸어! 미션을 완료하고 천사사탕을 모아 메르시를 영입하자.';
+    if(layout)layout.hidden=false;if(empty)empty.classList.add('hidden');
+  };
+  const originalSyncUnlocks = syncUnlocks;
+  syncUnlocks = function(){
+    originalSyncUnlocks();
+    if(!currentUser)return;
+    const ev=currentUser.heavenEvent||(currentUser.heavenEvent={aiWins:0,zombieWaves:0,bossWins:0,candy:0,claimed:{},mercyClaimed:false});
+    ev.claimed=ev.claimed||{};
+    currentUser.unlocked=currentUser.unlocked||{};
+    currentUser.unlocked.mercy=!!ev.mercyClaimed;
+    if(!currentUser.unlocked.mercy && currentUser.selectedHero==='mercy')currentUser.selectedHero='spider';
+  };
+  const originalRenderShop = renderShop;
+  renderShop = function(tab='fighters'){
+    originalRenderShop(tab);
+    const mercyCard=$('#shop-grid [data-hero-shop="mercy"]');if(mercyCard)mercyCard.remove();
+  };
+  // Existing paid Mercy ownership is converted to event-only ownership unless the event reward is claimed.
+  function eventData(){
+    if(!currentUser)return null;
+    const e=currentUser.heavenEvent||(currentUser.heavenEvent={});
+    e.aiWins=Math.max(0,Number(e.aiWins)||0);
+    e.zombieWaves=Math.max(0,Number(e.zombieWaves)||0);
+    e.bossWins=Math.max(0,Number(e.bossWins)||0);
+    e.candy=Math.max(0,Math.min(30,Number(e.candy)||0));
+    e.claimed=e.claimed||{};e.mercyClaimed=!!e.mercyClaimed;
+    return e;
+  }
+  const missions=[
+    {key:'ai',title:'AI 매칭 5판 이기기',desc:()=>`승리 ${Math.min(5,eventData()?.aiWins||0)} / 5`,goal:()=>eventData()?.aiWins>=5,reward:6},
+    {key:'zombie',title:'좀비모드 10웨이브까지 클리어',desc:()=>`최고 기록 ${Math.max(Number(currentUser?.zombieBestWave)||0,eventData()?.zombieWaves||0)} / 10웨이브`,goal:()=>Math.max(Number(currentUser?.zombieBestWave)||0,eventData()?.zombieWaves||0)>=10,reward:5},
+    {key:'boss',title:'천계 보스 한 번 클리어',desc:()=>`클리어 ${Math.min(1,eventData()?.bossWins||0)} / 1`,goal:()=>eventData()?.bossWins>=1,reward:6},
+    {key:'tower',title:'탑 모드 15층까지 클리어',desc:()=>`최고 기록 ${Math.max(0,Number(currentUser?.towerCompleted)||0)} / 15층`,goal:()=>Number(currentUser?.towerCompleted)>=15,reward:5}
+  ];
+  window.awardHalloweenMission = function(key){
+    const e=eventData();if(!e)return false;
+    const map={ai:'ai',zombie:'zombie',boss:'boss',tower:'tower'};const k=map[key]||key;
+    if(k==='boss')e.bossWins+=1;
+    if(k==='tower'){} // Tower mission is checked against the persistent best-floor record.
+    saveProfile();renderHalloweenEvent();return true;
+  };
+  window.addHalloweenBossClearCandy = function(){const e=eventData();if(!e)return;e.candy=Math.min(30,e.candy+1);saveProfile();refreshMenu();renderHalloweenEvent();showToast('천계 보스 격파! 천사사탕 1개 획득!');};
+  window.recordHalloweenAIWin = function(){const e=eventData();if(!e)return;e.aiWins=Math.min(5,e.aiWins+1);saveProfile();renderHalloweenEvent();};
+  window.syncHalloweenTowerMission = function(){renderHalloweenEvent();};
+  window.renderHalloweenEvent = function(){
+    if(!currentUser)return;const e=eventData();updateHalloweenEventClock();
+    const list=$('#halloween-mission-list');
+    if(list)list.innerHTML=missions.map(m=>{
+      const done=!!e.claimed[m.key],ready=!!m.goal();
+      return `<div class="halloween-mission ${done?'done':''}"><div><b>${done?'✓ ':''}${m.title}</b><small>${m.desc()}</small></div><div class="mission-reward">${done?'수령 완료':`🍬 ${m.reward}개`}<button type="button" class="heaven-claim-btn" data-heaven-claim="${m.key}" ${(!ready||done)?'disabled':''}>${done?'완료':ready?'받기':'진행 중'}</button></div></div>`;
+    }).join('');
+    const candy=e.candy,has=currentUser.unlocked?.mercy||e.mercyClaimed;
+    const count=$('#halloween-candy-count'),head=$('#halloween-candy-header'),fill=$('#halloween-candy-fill'),coins=$('#halloween-coins'),unlock=$('#halloween-sniff-unlock'),reward=$('#halloween-sniff-reward');
+    if(count)count.textContent=`${candy} / 30`;if(head)head.textContent=`천사사탕 ${candy} / 30`;if(fill)fill.style.width=(candy/30*100)+'%';if(coins)coins.textContent=String(currentUser.coins||0);
+    if(unlock){unlock.disabled=has||candy<30;unlock.textContent=has?'✓ 메르시 영입 완료':candy>=30?'메르시 영입':'천사사탕 30개 필요';}
+    if(reward)reward.textContent=has?'👼 메르시 영입 완료! 원 도감에서 메르시를 선택할 수 있어.':candy>=30?'천사사탕 30개를 모았어! 메르시 영입 버튼을 눌러!':`천사사탕 ${30-candy}개가 더 필요해. 천계 보스 승리 때마다 1개를 받아!`;
+    list?.querySelectorAll('[data-heaven-claim]').forEach(btn=>btn.addEventListener('click',()=>{
+      const key=btn.dataset.heavenClaim,mission=missions.find(m=>m.key===key),fresh=eventData();
+      if(!mission||fresh.claimed[key]||!mission.goal())return;
+      fresh.claimed[key]=true;fresh.candy=Math.min(30,fresh.candy+mission.reward);saveProfile();refreshMenu();renderHalloweenEvent();showToast(`미션 보상! 천사사탕 ${mission.reward}개 획득!`);
+    }));
+  };
+  // Menu entry and reward button now point to the Heaven event / Mercy limited unlock.
+  $('#halloween-btn')?.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();renderHalloweenEvent();showScreen('halloween-screen');},true);
+  $('#halloween-boss-start')?.addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();startMatch('halloween');},true);
+  $('#halloween-sniff-unlock')?.addEventListener('click',e=>{
+    e.preventDefault();e.stopImmediatePropagation();const d=eventData();if(!d)return;
+    if(currentUser.unlocked?.mercy||d.mercyClaimed){showToast('메르시는 이미 영입했어!');renderHalloweenEvent();return;}
+    if(d.candy<30){showToast('천사사탕 30개가 필요해!');return;}
+    d.candy-=30;d.mercyClaimed=true;currentUser.unlocked=currentUser.unlocked||{};currentUser.unlocked.mercy=true;currentUser.selectedHero='mercy';saveProfile();syncUnlocks();refreshMenu();renderHalloweenEvent();showToast('👼 한정 전사 메르시 영입 완료!');
+  },true);
+  // Mission claim buttons get compact styling.
+  const css=document.createElement('style');css.textContent='.heaven-claim-btn{display:block;margin:6px 0 0 auto;padding:6px 12px;border:1px solid #d9c18a;border-radius:8px;background:linear-gradient(135deg,#eee2ff,#c9b4f0);color:#32244c;font-weight:1000;font-size:11px}.heaven-claim-btn:disabled{opacity:.45;filter:saturate(.55)}.halloween-art{filter:hue-rotate(210deg)}';document.head.appendChild(css);
+  // Track zombie wave clears, including clears during the current run before game over.
+  const originalUpdateGame=updateGame;
+  updateGame=function(dt){
+    const active=game,ret=originalUpdateGame(dt);
+    if(active&&game===active&&currentUser){
+      if(active.mode==='zombie'){
+        const cleared=Math.max(Number(active.zombieHighestCleared)||0,Number(currentUser.zombieBestWave)||0);
+        const e=eventData();if(e&&cleared>e.zombieWaves){e.zombieWaves=cleared;saveProfile();}
+      }
+      if(active.mode==='halloween'&&!active.ended){
+        active.celestialStarTimer=(Number.isFinite(active.celestialStarTimer)?active.celestialStarTimer:10)-dt;
+        if(active.celestialStarTimer<=0){
+          if(Math.random()<.85)active.powerups.push({type:'celestial-star',x:ARENA.min+34+Math.random()*(ARENA.max-ARENA.min-68),y:ARENA.min+34+Math.random()*(ARENA.max-ARENA.min-68),life:18});
+          active.celestialStarTimer=10;
+        }
+        for(let i=active.powerups.length-1;i>=0;i--){const item=active.powerups[i];if(item.type!=='celestial-star')continue;item.life-=dt;
+          if(Math.hypot(active.player.x-item.x,active.player.y-item.y)<active.player.r+17){
+            const boss=(active.enemies||[active.enemy]).find(x=>x?.alive);if(boss){const dir=vecNorm(boss.x-active.player.x,boss.y-active.player.y);active.projectiles.push({owner:active.player,x:active.player.x+dir.x*(active.player.r+9),y:active.player.y+dir.y*(active.player.r+9),vx:dir.x*470,vy:dir.y*470,r:13,damage:25,life:4,color:'#e8dcff',kind:'celestial-star-homing',charge:false,homingTarget:boss,homingSpeed:470,originX:active.player.x,originY:active.player.y});active.effects.push({type:'explosion',x:active.player.x,y:active.player.y,time:.3,max:.3,r:25,color:'#e4d5ff'});showToast('천상 표창 발사! 유도 피해 25!');}
+            active.powerups.splice(i,1);
+          }else if(item.life<=0)active.powerups.splice(i,1);
+        }
+      }
+    }
+    return ret;
+  };
+  // Five-second summon lifetime; health remains exactly 5 HP.
+  const originalUpdateSummons=updateSummons;
+  updateSummons=function(dt){
+    if(game?.summons){for(const a of game.summons){if(a?.kind==='mercy-angel'&&a.alive){a.life=Number.isFinite(a.life)?a.life:5;a.life=Math.max(0,a.life-dt);if(a.life<=0){a.alive=false;game.effects.push({type:'explosion',x:a.x,y:a.y,time:.25,max:.25,r:14,color:'#e9dfff'});}}}}
+    return originalUpdateSummons(dt);
+  };
+  // Draw the heavenly star pickup instead of the generic heal marker.
+  const originalDrawGame=drawGame;
+  drawGame=function(t){const ret=originalDrawGame(t);for(const item of (game?.powerups||[])){if(item.type!=='celestial-star')continue;ctx.save();ctx.translate(item.x,item.y);ctx.rotate((performance.now()/1000)*1.8);ctx.shadowColor='#d9c8ff';ctx.shadowBlur=22;ctx.fillStyle='#f4edff';ctx.strokeStyle='#b99bea';ctx.lineWidth=2;ctx.beginPath();for(let k=0;k<8;k++){const a=-Math.PI/2+k*Math.PI/4,r=k%2===0?16:6;ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r);}ctx.closePath();ctx.fill();ctx.stroke();ctx.restore();}return ret;};
+  // Use the existing Halloween boss skill pattern as the Heavenly boss; only rename its HUD and text.
+  const originalStartMatch=startMatch;
+  startMatch=function(mode,info=null,floor=null){const ret=originalStartMatch(mode,info,floor);if(game&&mode==='halloween'){game.simLabel='천국 이벤트 · 천계 보스전';$('#game-mode-label').textContent=game.simLabel;$('#enemy-hud-name').textContent='천계 보스';$('#game-tip').textContent='천계 보스는 기존 할로윈 보스와 같은 기술을 사용해. 5초마다 80% 확률로 회복 구슬, 10초마다 85% 확률로 천상 표창을 소환해. 표창을 먹으면 보스에게 유도 피해 25를 줘.';game.celestialStarTimer=10;game.powerupTimer=5;}return ret;};
+  // On AI win, update mission progress via the existing hook; boss victory awards one candy and mission progress.
+  const originalFinishGame=finishGame;
+  finishGame=function(win,reason){const mode=game?.mode;const ret=originalFinishGame(win,reason);if(win&&mode==='halloween'){const e=eventData();if(e){e.bossWins=Math.max(0,e.bossWins);saveProfile();renderHalloweenEvent();}}return ret;};
+  // Start with clean event UI, no legacy Halloween expiration.
+  if(currentUser){syncUnlocks();renderHalloweenEvent();}
+})();
+</script>
 
 </body>
 </html>
