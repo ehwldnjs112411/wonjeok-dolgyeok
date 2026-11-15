@@ -1971,7 +1971,18 @@ setAuthMode('login');
     if(holdFinal)game.enemies=[...originalList,{alive:true,isWaveSentinel:true}];
     const wasAlive=!!target?.alive,beforeHp=Number(target?.hp)||0;
     originalDamage(target,amount,source,charge,stun,slow,chargeOverride,impactMeta,reportOnline);
-    if(holdFinal){game.enemies=originalList;game.enemy=originalList.find(z=>z.alive)||originalList[0]||null;if(wasAlive&&!target.alive&&!game.ended)handleZombieWaveClear();}
+    if(zombieTarget&&wasAlive&&!target.alive){
+      // The base combat damage routine ends a match as soon as every opponent is down.
+      // Zombie mode must instead clear the current wave and start its intermission.
+      if(originalList){game.enemies=originalList;game.enemy=originalList.find(z=>z.alive)||originalList[0]||null;}
+      const noLivingZombies=(originalList||[]).every(z=>!z?.alive);
+      if(noLivingZombies&&game.zombieClearedWave!==game.zombieWave){
+        if(game.ended){game.ended=false;game.finishing=false;game.finishTimer=0;game.finishResult=null;game.finishReason=null;}
+        handleZombieWaveClear();
+      }
+    }else if(holdFinal&&originalList){
+      game.enemies=originalList;game.enemy=originalList.find(z=>z.alive)||originalList[0]||null;
+    }
     if(source?.heroId==='bolt'&&source!==target&&charge&&wasAlive&&(Number(target?.hp)||0)<beforeHp){const bonus=game?.mode==='zombie'&&zombieHasPerk('charge')?1.3:1;source.boltHitCount=Math.min(30,(Number(source.boltHitCount)||0)+bonus);source.ultCharge=Math.min(source.ultMax,source.boltHitCount);if(game)updateHUD();}
   };
   const originalUseUltimate=useUltimate;
@@ -2026,8 +2037,25 @@ setAuthMode('login');
   }
   function updateZombieEnemies(dt){
     if(!game||game.mode!=='zombie'||game.ended)return;
-    if(game.zombieIntermission>0){game.zombieIntermission=Math.max(0,game.zombieIntermission-dt);if(game.zombieIntermission===0){spawnZombieWave(game.zombieWave+1);}return;}
+    if(game.zombieIntermission>0){
+      game.zombieIntermission=Math.max(0,game.zombieIntermission-dt);
+      if(game.zombieIntermission===0){
+        // Spawn exactly one next wave after the six-second break.
+        if(game.zombieSpawnedAfterClear!==game.zombieClearedWave){
+          game.zombieSpawnedAfterClear=game.zombieClearedWave;
+          spawnZombieWave(game.zombieWave+1);
+        }
+      }
+      return;
+    }
     const p=game.player;if(!p?.alive)return;
+    // Recovery guard: if all zombies were removed by an effect path that bypassed the
+    // normal final-hit callback, still complete the wave rather than freezing at WAVE 1.
+    const remainingZombies=(game.enemies||[]).filter(z=>z?.isZombie&&z.alive);
+    if(remainingZombies.length===0&&game.zombieClearedWave!==game.zombieWave){
+      handleZombieWaveClear();
+      return;
+    }
     for(const z of game.enemies){if(!z.alive)continue;z.flash=Math.max(0,(z.flash||0)-dt);z.stunTime=Math.max(0,(z.stunTime||0)-dt);z.slowTime=Math.max(0,(z.slowTime||0)-dt);z.attackCd=Math.max(0,(z.attackCd||0)-dt);
       // Match the regular fighter status order: pulls move the zombie toward their source.
       if(z.pull){const source=z.pull.source||p,dx=source.x-z.x,dy=source.y-z.y,d=Math.hypot(dx,dy),dir=vecNorm(dx,dy),step=Math.min(d,620*dt);z.x=clamp(z.x+dir.x*step,ARENA.min+z.r,ARENA.max-z.r);z.y=clamp(z.y+dir.y*step,ARENA.min+z.r,ARENA.max-z.r);z.pull.time-=dt;if(z.pull.time<=0||d<45)z.pull=null;continue;}
@@ -2064,7 +2092,7 @@ setAuthMode('login');
   const originalStartMatch=startMatch;
   startMatch=function(mode,onlineInfo=null,towerFloor=null){
     if(mode!=='zombie'){ARENA.max=852;return originalStartMatch(mode,onlineInfo,towerFloor);}
-    ARENA.max=852;originalStartMatch('ai');if(!game)return;game.mode='zombie';ARENA.max=ZOMBIE_ARENA_MAX;startRandomGameTrack('zombie');const zombieWorldCenter=(ARENA.min+ZOMBIE_ARENA_MAX)/2;game.player.x=zombieWorldCenter;game.player.y=zombieWorldCenter;game.player.vx=0;game.player.vy=0;game.cameraX=0;game.cameraY=0;game.onlineInfo=null;game.time=999999;game.bossIntro=0;game.zombieWave=1;game.zombieHighestCleared=0;game.zombieRewardPending=0;game.zombieIntermission=0;game.zombieRestTimer=0;game.zombiePerks=[];game.zombieCardPicking=false;game.zombieUndyingUsed=false;game.zombieDoubleCoinNext=false;game.zombieShadowClone={active:false,time:0,cooldown:10,damageTimer:.6};game.boltStrikes=[];game.boltPulses=[];game.boltAimPoint=null;game.ellieAimPoint=null;game.player.boltHitCount=0;game.player.ultCharge=0;game.player.ammo=3;game.player.maxAmmo=3;game.player.reloadTimer=0;game.player.reloadInterval=game.player.heroId==='bolt'?2.0:game.player.reloadInterval;spawnZombieWave(1);game.simLabel='좀비모드 · 1웨이브';$('#game-mode-label').textContent=game.simLabel;if(game.player.heroId==='bolt')$('#game-tip').textContent='볼트: 모바일은 일반 공격 버튼을 누르면 가까운 좀비를 자동 조준해. 3발 탄약 · 0.5초 예고 후 번개 피해 6 · 사거리 엘리 궁극기의 1.4배. 5회 명중으로 번개파가 충전돼.';$('#enemy-hud-name').textContent='일반좀비';if(game.player.heroId==='bolt')$('#touch-ult').textContent='번개파';$('#ult-key-label').textContent=game.player.heroId==='bolt'?'E 즉시 사용':$('#ult-key-label').textContent;updateHUD();
+    ARENA.max=852;originalStartMatch('ai');if(!game)return;game.mode='zombie';ARENA.max=ZOMBIE_ARENA_MAX;startRandomGameTrack('zombie');const zombieWorldCenter=(ARENA.min+ZOMBIE_ARENA_MAX)/2;game.player.x=zombieWorldCenter;game.player.y=zombieWorldCenter;game.player.vx=0;game.player.vy=0;game.cameraX=0;game.cameraY=0;game.onlineInfo=null;game.time=999999;game.bossIntro=0;game.zombieWave=1;game.zombieHighestCleared=0;game.zombieRewardPending=0;game.zombieIntermission=0;game.zombieRestTimer=0;game.zombieSpawnedAfterClear=0;game.zombiePerks=[];game.zombieCardPicking=false;game.zombieUndyingUsed=false;game.zombieDoubleCoinNext=false;game.zombieShadowClone={active:false,time:0,cooldown:10,damageTimer:.6};game.boltStrikes=[];game.boltPulses=[];game.boltAimPoint=null;game.ellieAimPoint=null;game.player.boltHitCount=0;game.player.ultCharge=0;game.player.ammo=3;game.player.maxAmmo=3;game.player.reloadTimer=0;game.player.reloadInterval=game.player.heroId==='bolt'?2.0:game.player.reloadInterval;spawnZombieWave(1);game.simLabel='좀비모드 · 1웨이브';$('#game-mode-label').textContent=game.simLabel;if(game.player.heroId==='bolt')$('#game-tip').textContent='볼트: 모바일은 일반 공격 버튼을 누르면 가까운 좀비를 자동 조준해. 3발 탄약 · 0.5초 예고 후 번개 피해 6 · 사거리 엘리 궁극기의 1.4배. 5회 명중으로 번개파가 충전돼.';$('#enemy-hud-name').textContent='일반좀비';if(game.player.heroId==='bolt')$('#touch-ult').textContent='번개파';$('#ult-key-label').textContent=game.player.heroId==='bolt'?'E 즉시 사용':$('#ult-key-label').textContent;updateHUD();
   };
 
   // Keep the normal update engine for the player, projectiles and effects. Only zombie
@@ -2413,6 +2441,68 @@ setAuthMode('login');
     game.player.facing=direction;
     fireBasic(game.player,direction);
   },true);
+
+
+  // Final safety net: a normal match's last-enemy KO must not end zombie mode.
+  // Some damage paths can set game.ended before the regular wave-clear callback runs.
+  function recoverZombieWaveTransition(){
+    if(!game||game.mode!=='zombie'||!game.player?.alive||game.zombieCardPicking)return;
+    const wave=Math.max(1,Number(game.zombieWave)||1);
+    const zombies=Array.from(new Set([...(game.enemies||[]),game.enemy].filter(f=>f?.isZombie)));
+    if(!zombies.length)return;
+    const activeZombie=zombies.find(z=>z.alive)||null;
+    if(activeZombie)game.enemy=activeZombie;
+    // A stale ordinary-match win can leave one zombie alive while locking all input.
+    // Zombie mode only ends when the player is defeated, so reopen this false end state.
+    if(activeZombie&&(game.ended||game.finishing)){
+      game.ended=false;game.finishing=false;game.finishTimer=0;
+      game.finishResult=null;game.finishReason=null;
+    }
+    if(Number(game.zombieClearedWave)===wave||Number(game.zombieIntermission)>0||activeZombie)return;
+    // All zombies are gone. Clear any stale win state and run the shared wave-clear path
+    // so rewards, healing, perk cards and the rest timer all run exactly once.
+    game.ended=false;game.finishing=false;game.finishTimer=0;
+    game.finishResult=null;game.finishReason=null;
+    game.enemy=zombies[0];
+    handleZombieWaveClear();
+  }
+
+  // If a zombie target receives a hit while a stale end flag is set, allow the hit to land.
+  const previousDamageWithZombieWaveRecovery=damage;
+  damage=function(target,...args){
+    if(game?.mode==='zombie'&&target?.isZombie&&game.player?.alive&&game.ended&&game.zombieClearedWave!==game.zombieWave){
+      game.ended=false;game.finishing=false;game.finishTimer=0;
+      game.finishResult=null;game.finishReason=null;
+    }
+    const wasAlive=!!target?.alive;
+    const result=previousDamageWithZombieWaveRecovery(target,...args);
+    if(game?.mode==='zombie'&&target?.isZombie&&wasAlive&&!target.alive)recoverZombieWaveTransition();
+    return result;
+  };
+
+  // Catch both ordinary damage and effects that remove the final zombie indirectly.
+  const previousUpdateWithZombieWaveRecovery=updateGame;
+  updateGame=function(dt){
+    recoverZombieWaveTransition();
+    const result=previousUpdateWithZombieWaveRecovery(dt);
+    recoverZombieWaveTransition();
+    return result;
+  };
+
+  // A regular all-enemies-down callback is a wave clear here, not a match victory.
+  const previousEndMatchWithZombieWaveRecovery=endMatch;
+  endMatch=function(result,reason='ko',force=false){
+    if(game?.mode==='zombie'&&!force&&result==='win'&&game.player?.alive){
+      const zombies=Array.from(new Set([...(game.enemies||[]),game.enemy].filter(f=>f?.isZombie)));
+      if(zombies.length&&zombies.every(z=>!z.alive)){
+        game.ended=false;game.finishing=false;game.finishTimer=0;
+        game.finishResult=null;game.finishReason=null;
+        if(game.zombieClearedWave!==game.zombieWave)handleZombieWaveClear();
+        return;
+      }
+    }
+    return previousEndMatchWithZombieWaveRecovery(result,reason,force);
+  };
 
   // Remove any visible perk prompt on leaving/restarting zombie mode.
   const previousStopZombiePerks=stopGame;
